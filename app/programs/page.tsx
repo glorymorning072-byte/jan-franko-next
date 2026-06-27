@@ -3,6 +3,7 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
+import gsap from "gsap";
 import {
   MapPin,
   Calendar,
@@ -25,7 +26,8 @@ import {
   ChevronLeft,
   ChevronRight,
   ClipboardList,
-  FileText
+  FileText,
+  Search
 } from "lucide-react";
 
 interface Program {
@@ -114,6 +116,8 @@ const ProgramsContent = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("newest");
   const [hasInitializedParams, setHasInitializedParams] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   // Modal & Apply Wizard States
   const [activeModalProgram, setActiveModalProgram] = useState<Program | null>(null);
@@ -180,7 +184,27 @@ const ProgramsContent = () => {
   const totalSteps = isHighDifficulty ? 5 : 4;
 
   const getSortedPrograms = () => {
-    const sorted = [...programs];
+    let sorted = [...programs];
+
+    // Filter by text search query first
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      sorted = sorted.filter((p) => {
+        const title = p.title.rendered.toLowerCase();
+        const subtitle = p.acf?.subtitle?.toLowerCase() || "";
+        const shortDesc = p.acf?.short_description?.toLowerCase() || "";
+        const location = p.acf?.main_location?.toLowerCase() || "";
+        const country = p.acf?.country?.toLowerCase() || "";
+        return (
+          title.includes(query) ||
+          subtitle.includes(query) ||
+          shortDesc.includes(query) ||
+          location.includes(query) ||
+          country.includes(query)
+        );
+      });
+    }
+
     if (sortBy === "title-asc") {
       sorted.sort((a, b) => a.title.rendered.localeCompare(b.title.rendered));
     } else if (sortBy === "title-desc") {
@@ -202,6 +226,68 @@ const ProgramsContent = () => {
     }
     return sorted;
   };
+
+  const getDifficultyIndex = (prog: Program) => {
+    const diffVal = prog.acf?.difficulty_level ? Number(prog.acf.difficulty_level) : 0;
+    if (diffVal === 195) return 1;
+    if (diffVal === 196) return 2;
+    if (diffVal === 197) return 3;
+    if (diffVal === 198) return 4;
+    
+    // Fallback to title keywords or skill_level taxonomy if ACF is missing
+    if (prog.skill_level?.includes(195)) return 1;
+    if (prog.skill_level?.includes(196)) return 2;
+    if (prog.skill_level?.includes(197)) return 3;
+    if (prog.skill_level?.includes(198)) return 4;
+    
+    const titleLower = prog.title.rendered.toLowerCase();
+    if (titleLower.includes("level 1")) return 1;
+    if (titleLower.includes("level 2")) return 2;
+    if (titleLower.includes("level 3")) return 3;
+    if (titleLower.includes("level 4")) return 4;
+    return 0;
+  };
+
+  const renderDifficultyMeter = (levelIndex: number) => {
+    if (levelIndex === 0) return null;
+    return (
+      <div className="flex items-center gap-1.5" title={`Difficulty: Level ${levelIndex}`}>
+        {[1, 2, 3, 4].map((dot) => (
+          <div
+            key={dot}
+            className={`w-3 h-3 rounded-full border flex items-center justify-center transition-all ${
+              dot <= levelIndex
+                ? "bg-accent border-accent text-[#0e3b2e]"
+                : "bg-transparent border-primary/20"
+            }`}
+          >
+            {/* Concentric inner dot to mimic an archery target face */}
+            {dot <= levelIndex && <div className="w-1 h-1 bg-[#0e3b2e] rounded-full" />}
+          </div>
+        ))}
+        <span className="text-[9px] text-[#7d603a] font-bold uppercase tracking-wider ml-1 font-sans">
+          L{levelIndex}
+        </span>
+      </div>
+    );
+  };
+
+  // GSAP Entrance Animations for Program Cards
+  useEffect(() => {
+    if (!isLoading && programs.length > 0) {
+      gsap.fromTo(
+        ".program-card",
+        { opacity: 0, y: 16 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.45,
+          stagger: 0.05,
+          ease: "power2.out"
+        }
+      );
+    }
+  }, [isLoading, programs, selectedType, selectedStatus, selectedSkill, selectedRegion, sortBy, searchQuery]);
 
   const searchParams = useSearchParams();
 
@@ -239,6 +325,22 @@ const ProgramsContent = () => {
 
     setHasInitializedParams(true);
   }, [searchParams, types, statuses, skills, regions, hasInitializedParams]);
+
+  // Listen to the 'open' query parameter to directly activate a program card modal
+  useEffect(() => {
+    const openSlug = searchParams.get("open");
+    if (openSlug && !isLoading && programs.length > 0) {
+      const match = programs.find(
+        (p) =>
+          p.slug === openSlug ||
+          p.id.toString() === openSlug ||
+          p.title.rendered.toLowerCase().includes(openSlug.toLowerCase())
+      );
+      if (match) {
+        setActiveModalProgram(match);
+      }
+    }
+  }, [searchParams, isLoading, programs]);
 
   // Reset apply wizard states on program transition
   useEffect(() => {
@@ -458,7 +560,30 @@ const ProgramsContent = () => {
             </h2>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Search Input */}
+            <div className="relative flex items-center w-full sm:w-48 md:w-56">
+              <span className="absolute left-3.5 pointer-events-none">
+                <Search className="w-3.5 h-3.5 text-primary/40" />
+              </span>
+              <input
+                type="text"
+                placeholder="Search programs..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white text-primary border border-primary/20 hover:border-primary/45 rounded-full pl-9 pr-8 py-2.5 text-xs outline-none focus:border-accent font-sans transition-all duration-300 shadow-sm"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 p-1 text-primary/40 hover:text-primary transition-colors cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
             {/* Sort By Dropdown */}
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold hidden sm:inline">
@@ -493,6 +618,64 @@ const ProgramsContent = () => {
             </button>
           </div>
         </div>
+
+        {/* Active Filters Row */}
+        {(selectedType || selectedStatus || selectedSkill || selectedRegion || searchQuery) && (
+          <div className="flex flex-wrap items-center gap-2 animate-in fade-in duration-300 mb-2">
+            <span className="text-[10px] uppercase tracking-wider text-[#7d603a] font-serif font-bold mr-1">
+              Active Filters:
+            </span>
+            {searchQuery && (
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+                Search: "{searchQuery}"
+                <button onClick={() => setSearchQuery("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </span>
+            )}
+            {selectedType && (
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+                Type: {types.find(t => t.id.toString() === selectedType)?.name || selectedType}
+                <button onClick={() => setSelectedType("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            {selectedStatus && (
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+                Status: {statuses.find(s => s.id.toString() === selectedStatus)?.name || selectedStatus}
+                <button onClick={() => setSelectedStatus("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            {selectedSkill && (
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+                Skill: {skills.find(sk => sk.id.toString() === selectedSkill)?.name || selectedSkill}
+                <button onClick={() => setSelectedSkill("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            {selectedRegion && (
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+                Region: {regions.find(r => r.id.toString() === selectedRegion)?.name || selectedRegion}
+                <button onClick={() => setSelectedRegion("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            )}
+            <button
+              onClick={() => {
+                resetFilters();
+                setSearchQuery("");
+              }}
+              className="text-[#7d603a] hover:text-[#0e3b2e] text-xs font-serif font-bold underline ml-2 cursor-pointer transition-colors"
+            >
+              Clear All
+            </button>
+          </div>
+        )}
 
         {/* Collapsible Filters Drawer */}
         <div
@@ -612,7 +795,7 @@ const ProgramsContent = () => {
                 <div
                   key={program.id}
                   onClick={() => setActiveModalProgram(program)}
-                  className="group bg-white border border-primary/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:border-accent/40 transition-all duration-300 flex flex-col h-[390px] cursor-pointer"
+                  className="program-card group bg-white border border-primary/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:border-accent/40 transition-all duration-300 flex flex-col h-[390px] cursor-pointer opacity-0"
                 >
                   {/* Top Image Banner */}
                   <div className="relative w-full h-[180px] bg-primary/10 overflow-hidden">
@@ -625,6 +808,12 @@ const ProgramsContent = () => {
                       />
                     ) : (
                       <div className="w-full h-full bg-primary/5" />
+                    )}
+                    {/* Difficulty Badge on Image */}
+                    {getDifficultyIndex(program) > 0 && (
+                      <div className="absolute top-4 left-4 z-10 bg-secondary/95 border border-primary/15 rounded-full px-2.5 py-1 text-xs shadow-sm flex items-center gap-1">
+                        {renderDifficultyMeter(getDifficultyIndex(program))}
+                      </div>
                     )}
                     {/* Status Badge */}
                     {statusName && (
@@ -764,6 +953,14 @@ const ProgramsContent = () => {
                         {activeModalProgram.acf?.five_elements_connection || "None"}
                       </span>
                     </div>
+                    {getDifficultyIndex(activeModalProgram) > 0 && (
+                      <div className="flex flex-col items-start col-span-2">
+                        <span className="block text-white/70 uppercase font-serif tracking-widest text-[10px] mb-1 font-bold">Difficulty</span>
+                        <div className="bg-white/5 border border-white/10 rounded-full px-3 py-1 flex items-center">
+                          {renderDifficultyMeter(getDifficultyIndex(activeModalProgram))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Dynamic Apply Action Button */}
@@ -884,12 +1081,16 @@ const ProgramsContent = () => {
                             const imgUrl = media[id];
                             if (!imgUrl) return null;
                             return (
-                              <div key={index} className="relative aspect-video rounded-xl overflow-hidden bg-primary/10 shadow-sm">
+                              <div
+                                key={index}
+                                onClick={() => setLightboxImage(imgUrl)}
+                                className="relative aspect-video rounded-xl overflow-hidden bg-primary/10 shadow-sm cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 group/gallery"
+                              >
                                 <Image
                                   src={imgUrl}
                                   alt={`Supplementary ${index + 1}`}
                                   fill
-                                  className="object-cover"
+                                  className="object-cover group-hover/gallery:opacity-90 transition-opacity"
                                 />
                               </div>
                             );
@@ -1469,6 +1670,29 @@ const ProgramsContent = () => {
             )}
           </div>
         )}
+
+        {/* Fullscreen Lightbox Overlay Viewer */}
+        {lightboxImage && (
+          <div
+            className="fixed inset-0 bg-[#0e3b2e]/90 backdrop-blur-xl z-[9999] flex items-center justify-center p-4 cursor-pointer select-none animate-in fade-in duration-200"
+            onClick={() => setLightboxImage(null)}
+          >
+            <button
+              onClick={() => setLightboxImage(null)}
+              className="absolute top-6 right-6 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all duration-300 cursor-pointer"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className="relative max-w-5xl max-h-[90vh] w-full h-full flex items-center justify-center">
+              <img
+                src={lightboxImage}
+                alt="Gallery Preview"
+                className="object-contain max-w-full max-h-[90vh] rounded-2xl shadow-2xl border border-white/10"
+              />
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

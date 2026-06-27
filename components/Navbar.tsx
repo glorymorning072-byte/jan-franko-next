@@ -92,7 +92,7 @@ const Navbar = () => {
             </Link>
 
             {/* MEGA MENU CONTAINER */}
-            <div className="absolute top-full left-0 w-full bg-white border-b border-primary/10 shadow-xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
+            <div className="absolute top-full left-0 w-full bg-white/90 backdrop-blur-xl border-t border-primary/5 border-b border-primary/10 rounded-b-3xl shadow-2xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
               <div className="max-w-7xl mx-auto px-12 py-10 grid grid-cols-4 gap-8">
                 {/* Column 1: Types */}
                 <div className="space-y-4">
@@ -180,7 +180,7 @@ const Navbar = () => {
                     </p>
                   </div>
                   <Link
-                    href="/programs?skill_level=advanced-expedition"
+                    href="/programs?open=inner-mongolia-steppe-horse-archery-camp"
                     className="inline-block text-center py-2.5 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-[10px] tracking-wider uppercase rounded-xl transition-all"
                   >
                     View Expedition
