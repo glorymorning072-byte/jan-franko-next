@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
-import { Search, Clock, BookOpen, Compass, Tag, ChevronRight, X } from "lucide-react";
+import { Search, Clock, BookOpen, Compass, Tag, ChevronRight, X, SlidersHorizontal } from "lucide-react";
 import { articles, categories, regions, Article } from "@/data/articles";
 
 const ScrollsContent = () => {
@@ -15,6 +15,8 @@ const ScrollsContent = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [sortBy, setSortBy] = useState("newest");
 
   // Sync URL search parameters on mount (e.g., redirect from mega menu)
   useEffect(() => {
@@ -39,7 +41,7 @@ const ScrollsContent = () => {
         overwrite: "auto"
       }
     );
-  }, [searchQuery, selectedRegion, selectedCategory]);
+  }, [searchQuery, selectedRegion, selectedCategory, sortBy]);
 
   // Filtering Logic
   const getFilteredArticles = () => {
@@ -73,6 +75,29 @@ const ScrollsContent = () => {
 
   const filteredArticles = getFilteredArticles();
   
+  // Sorting Logic
+  const getSortedArticles = (items: Article[]) => {
+    return [...items].sort((a, b) => {
+      if (sortBy === "title-asc") {
+        return a.title.localeCompare(b.title);
+      }
+      if (sortBy === "title-desc") {
+        return b.title.localeCompare(a.title);
+      }
+      if (sortBy === "read-time") {
+        const timeA = parseInt(a.readTime) || 0;
+        const timeB = parseInt(b.readTime) || 0;
+        return timeA - timeB;
+      }
+      // default: newest
+      const dateA = Date.parse(a.date) || 0;
+      const dateB = Date.parse(b.date) || 0;
+      return dateB - dateA;
+    });
+  };
+
+  const sortedArticles = getSortedArticles(filteredArticles);
+  
   // Determine if we should show the Featured Article banner
   // Only show when there are no active filters/search queries
   const isFiltersActive = searchQuery !== "" || selectedRegion !== "" || selectedCategory !== "";
@@ -80,8 +105,8 @@ const ScrollsContent = () => {
   
   // Exclude the featured article from the grid list if it is displayed in the featured spot
   const gridArticles = featuredArticle 
-    ? filteredArticles.filter((a) => a.slug !== featuredArticle.slug)
-    : filteredArticles;
+    ? sortedArticles.filter((a) => a.slug !== featuredArticle.slug)
+    : sortedArticles;
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
@@ -137,65 +162,90 @@ const ScrollsContent = () => {
               )}
             </div>
 
-            {/* Category Pills */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold mr-2">
-                Categories:
-              </span>
-              <button
-                onClick={() => setSelectedCategory("")}
-                className={`px-4 py-1.5 rounded-full text-xs font-serif uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-                  selectedCategory === ""
-                    ? "bg-primary text-secondary"
-                    : "bg-white border border-primary/10 text-primary/80 hover:border-primary/30"
-                }`}
-              >
-                All
-              </button>
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-4 py-1.5 rounded-full text-xs font-serif uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-                    selectedCategory === cat.id
-                      ? "bg-primary text-secondary"
-                      : "bg-white border border-primary/10 text-primary/80 hover:border-primary/30"
-                  }`}
+            {/* Right Controls: Sort & Filter Toggle */}
+            <div className="flex items-center justify-end gap-3 flex-wrap">
+              {/* Sort By Dropdown */}
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold hidden sm:inline">
+                  Sort By:
+                </span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="bg-secondary text-primary border border-primary/20 rounded-full px-4 py-2.5 text-xs font-serif uppercase tracking-wider outline-none focus:border-accent cursor-pointer"
                 >
-                  {cat.title}
-                </button>
-              ))}
+                  <option value="newest">Newest</option>
+                  <option value="title-asc">Title: A-Z</option>
+                  <option value="title-desc">Title: Z-A</option>
+                  <option value="read-time">Read Time</option>
+                </select>
+              </div>
+
+              {/* Filters Toggle Button */}
+              <button
+                onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+                className="flex items-center gap-2 px-5 py-2.5 bg-primary text-secondary rounded-full text-xs font-serif tracking-widest uppercase transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              >
+                <SlidersHorizontal className="w-4 h-4 text-accent" />
+                Filters
+              </button>
             </div>
           </div>
+        </div>
 
-          {/* Region Tabs */}
-          <div className="flex flex-wrap items-center gap-2 border-t border-primary/5 pt-4">
-            <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold mr-2">
-              Regions:
-            </span>
-            <button
-              onClick={() => setSelectedRegion("")}
-              className={`px-4 py-1.5 rounded-full text-xs font-sans font-medium transition-all duration-300 cursor-pointer ${
-                selectedRegion === ""
-                  ? "bg-[#c5a880]/20 border border-accent text-[#7d603a]"
-                  : "bg-white/40 border border-primary/10 text-primary/80 hover:border-primary/30"
-              }`}
-            >
-              All Regions
-            </button>
-            {regions.map((reg) => (
+        {/* Collapsible Filters Drawer */}
+        <div
+          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+            isFiltersOpen ? "max-h-[500px] opacity-100 mb-8" : "max-h-0 opacity-0 pointer-events-none"
+          }`}
+        >
+          <div className="bg-white border border-primary/5 p-6 rounded-3xl shadow-sm space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              
+              {/* Category Filter */}
+              <div className="flex flex-col space-y-2">
+                <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Category</label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent cursor-pointer"
+                >
+                  <option value="">All Categories</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>{cat.title}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Region Filter */}
+              <div className="flex flex-col space-y-2">
+                <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Region</label>
+                <select
+                  value={selectedRegion}
+                  onChange={(e) => setSelectedRegion(e.target.value)}
+                  className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent cursor-pointer"
+                >
+                  <option value="">All Regions</option>
+                  {regions.map((reg) => (
+                    <option key={reg.id} value={reg.id}>{reg.title}</option>
+                  ))}
+                </select>
+              </div>
+
+            </div>
+
+            {/* Reset Controls */}
+            <div className="flex justify-end pt-4 border-t border-primary/5">
               <button
-                key={reg.id}
-                onClick={() => setSelectedRegion(reg.id)}
-                className={`px-4 py-1.5 rounded-full text-xs font-sans font-medium transition-all duration-300 cursor-pointer ${
-                  selectedRegion === reg.id
-                    ? "bg-[#c5a880]/25 border border-accent text-[#7d603a] font-semibold"
-                    : "bg-white/40 border border-primary/10 text-primary/80 hover:border-primary/30"
-                }`}
+                onClick={() => {
+                  setSelectedCategory("");
+                  setSelectedRegion("");
+                }}
+                className="px-4 py-2 border border-primary/20 hover:border-primary text-primary text-xs font-serif uppercase tracking-wider rounded-xl transition-colors duration-300 cursor-pointer"
               >
-                {reg.title}
+                Reset Filters
               </button>
-            ))}
+            </div>
           </div>
         </div>
 

@@ -2,8 +2,10 @@
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Button } from "@/components/Button";
 
 // Register ScrollTrigger
 if (typeof window !== "undefined") {
@@ -77,12 +79,35 @@ const RegionRow = ({ region, index }: { region: RegionType; index: number }) => 
   const titleRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const countriesRef = useRef<HTMLElement>(null);
+  const buttonsRef = useRef<HTMLDivElement>(null);
+
+  const getRegionSlug = (id: number): string => {
+    switch (id) {
+      case 1: return "nordic-region";
+      case 2: return "europe";
+      case 3: return "central-asian-steppe-archery";
+      case 4: return "historical-turkic-ottoman-archery";
+      case 5: return "east-asian-archery";
+      default: return "";
+    }
+  };
+
+  const getScrollRegionSlug = (id: number): string => {
+    switch (id) {
+      case 1: return "nordic";
+      case 2: return "europe";
+      case 3: return "steppe";
+      case 4: return "ottoman";
+      case 5: return "east-asia";
+      default: return "";
+    }
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Animate text elements sliding up staggeredly when row enters viewport
       gsap.fromTo(
-        [titleRef.current, descRef.current, countriesRef.current],
+        [titleRef.current, descRef.current, countriesRef.current, buttonsRef.current],
         { opacity: 0, y: 40 },
         {
           opacity: 1,
@@ -118,6 +143,8 @@ const RegionRow = ({ region, index }: { region: RegionType; index: number }) => 
   }, [index]);
 
   const isOdd = index % 2 !== 0;
+  const progSlug = getRegionSlug(region.id);
+  const scrollSlug = getScrollRegionSlug(region.id);
 
   return (
     <div
@@ -129,12 +156,28 @@ const RegionRow = ({ region, index }: { region: RegionType; index: number }) => 
         ref={textColRef}
         className={`w-full min-h-[35vh] md:h-full md:w-2/5 text-center ${!isOdd ? 'bg-primary text-secondary' : 'bg-secondary text-primary'} flex flex-col items-center justify-center p-8 md:p-12 relative z-10`}
       >
-
-
         <div className="relative z-10 flex flex-col items-center justify-center">
           <h2 ref={titleRef} className="text-3xl md:text-4xl font-bold font-serif mb-4 md:mb-6">{region.title}</h2>
           <p ref={descRef} className="text-base md:text-lg mb-4 md:mb-6 max-w-md font-light leading-relaxed">{region.description}</p>
           <b ref={countriesRef} className="text-xs md:text-sm tracking-widest uppercase text-accent font-semibold">{region.countries.join(" • ")}</b>
+          
+          <div ref={buttonsRef} className="mt-8 flex flex-col sm:flex-row items-center gap-4 relative z-10">
+            <Button
+              href={progSlug ? `/programs?region=${progSlug}` : "/programs"}
+              variant="accent"
+            >
+              Explore Expeditions
+            </Button>
+            {scrollSlug && (
+              <Button
+                href={`/scrolls/region/${scrollSlug}`}
+                variant="outline"
+                className={!isOdd ? "border-white/30 hover:border-accent text-white hover:text-white" : ""}
+              >
+                Read Region Lore
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
