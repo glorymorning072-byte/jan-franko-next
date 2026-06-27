@@ -1,32 +1,23 @@
 import ExpeditionRegions from "@/components/Home/ExpeditionRegions";
-import Image from "next/image";
 import Institute from "@/components/Home/Institute";
 import FounderBlock from "@/components/Home/FounderBlock";
+import Hero from "@/components/Home/Hero";
+import HeroMobile from "@/components/Home/HeroMobile";
+import Contact from "@/components/Home/Contact";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-between">
-      <div className="w-full flex flex-row text-center h-[calc(100vh-100px)] ">
-        <div className="w-2/5 h-full" >
-          <img src="/Jan.png" alt="Jan" className="w-full h-full object-contain object-center" />
-        </div>
-        <div className="w-3/5 h-full p-8 text-right flex items-end justify-center flex-col" >
-          <h1 className="text-4xl font-bold text-primary text-right p-2 flex items-center justify-center">
-            Jan Franko
-          </h1>
-          <span className=" text-xl font-bold text-primary " >Training, Expeditions, Cultural Heritage</span>
-          <p className="text-lg text-primary mt-4 text-right p-2 flex items-center justify-center">
-            A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.
-            At The Global Academy for Traditional Archery, we offer a comprehensive approach to learning the art of traditional archery. Our programs are designed to provide students with the skills, knowledge, and experience needed to excel in this ancient practice.
-          </p>
-          <button className="bg-primary text-secondary font-bold py-2 px-4 mt-8 rounded-full hover:bg-[#0a2a1f]">
-            Explore Our Programs
-          </button>
-        </div>
+      <div className="w-full hidden md:block">
+        <Hero />
+      </div>
+      <div className="w-full block md:hidden">
+        <HeroMobile />
       </div>
       <ExpeditionRegions/>
       <Institute />
       <FounderBlock />
+      <Contact />
     </main>
   );
 }

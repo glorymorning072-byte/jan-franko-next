@@ -1,63 +1,222 @@
-import React from 'react'
+"use client";
+
+import React, { useEffect, useRef } from 'react';
+import Image from 'next/image';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+// Register GSAP ScrollTrigger plugin on client-side
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+const FOUNDER_DATA = {
+  role: "Head Instructor",
+  name: "Jan Franko",
+  biography: [
+    "Training and expeditions are led by Jan Franko, founder of the academy. The academy is led by an instructor with decades of experience in traditional archery. Practical teaching extends back to the year 2000.",
+    "This dual focus on physical biomechanics and mental stillness ensures practitioners build instinct through rigorous, measurable structure."
+  ],
+  quote: "The arrow does not seek the target, it simply finds its way when the mind is no longer in the way. Discipline is not a restriction, but the architecture of freedom.",
+  image: {
+    src: "https://janfranko.com/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-11-at-11.33.11-PM-12.png",
+    alt: "Jan Franko - Founder & Head Instructor"
+  }
+};
 
 const FounderBlock = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLSpanElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const roleRef = useRef<HTMLSpanElement>(null);
+  const bioRef = useRef<HTMLDivElement>(null);
+  const quoteRef = useRef<HTMLQuoteElement>(null);
+  const imageWrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // 1. Line animation
+      gsap.fromTo(lineRef.current, 
+        { scaleX: 0, transformOrigin: "left center" },
+        { 
+          scaleX: 1, 
+          duration: 1, 
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: lineRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // 2. Role text animation
+      gsap.fromTo(roleRef.current,
+        { opacity: 0, x: -20 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: roleRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // 3. Title animation
+      gsap.fromTo(titleRef.current,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: titleRef.current,
+            start: "top 80%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // 4. Biography text animation
+      gsap.fromTo(bioRef.current,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          delay: 0.2,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: bioRef.current,
+            start: "top 80%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // 5. Quote block animation
+      gsap.fromTo(quoteRef.current,
+        { opacity: 0, x: -30 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 1.2,
+          delay: 0.3,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: quoteRef.current,
+            start: "top 75%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // 6. Image fade-in and slide-up animation
+      gsap.fromTo(imageWrapperRef.current,
+        { opacity: 0, y: 50, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: imageWrapperRef.current,
+            start: "top 75%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="relative w-full flex items-center justify-center bg-secondary text-primary py-24 px-6 md:px-12 lg:px-24 overflow-hidden border-t border-accent/15 min-h-screen">
-      <div className="max-w-7xl mx-auto relative z-10">
+    <section 
+      ref={containerRef}
+      className="relative w-full flex min-h-screen items-center justify-center bg-secondary text-primary py-24 px-6 md:px-12 lg:px-24 overflow-hidden border-t border-accent/15 min-h-[90vh]"
+    >
 
-        {/* Header Grid: Asymmetrical layout, different from Expedition Regions */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-20">
 
-          {/* Left Text Column (7 cols on large screen) */}
+      <div className="max-w-7xl mx-auto relative z-10 w-full">
+        {/* Header Grid: Asymmetrical layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+          {/* Left Text Column */}
           <div className="lg:col-span-7 flex flex-col justify-center space-y-6">
             <div className="inline-flex items-center gap-3">
-              <span className="h-[1px] w-12 bg-primary" />
-              <span className="text-xs md:text-sm font-semibold tracking-[0.3em] text-primary uppercase">
-                Head Instructor
+              <span ref={lineRef} className="h-[1px] w-12 bg-primary" />
+              <span ref={roleRef} className="text-xs md:text-sm font-semibold tracking-[0.3em] text-primary uppercase">
+                {FOUNDER_DATA.role}
               </span>
             </div>
 
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-serif text-primary tracking-tight leading-tight">
-              Jan Franko
+            <h2 
+              ref={titleRef}
+              className="text-4xl md:text-5xl lg:text-6xl font-bold font-serif text-primary tracking-tight leading-none"
+            >
+              {FOUNDER_DATA.name}
             </h2>
 
-            <p className="text-lg md:text-xl text-primary/80 font-light leading-relaxed max-w-2xl">
-              Training and expeditions are led by Jan Franko, founder of the academy.
-              The academy is led by an instructor with decades of experience in traditional archery. Practical teaching extends back to the year 2000. This dual focus on physical biomechanics and mental stillness ensures practitioners build instinct through rigorous, measurable structure
-            </p>
+            <div ref={bioRef} className="space-y-4">
+              {FOUNDER_DATA.biography.map((paragraph, index) => (
+                <p 
+                  key={index}
+                  className="text-base md:text-lg text-primary/80 font-light leading-relaxed max-w-2xl"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
 
-            <div className="relative pl-16 pr-10 mt-8">
-              <div className="text-accent text-[90px] leading-none font-serif absolute -top-8 left-0 select-none">
+            {/* Blockquote section - clean layout, no quote overlapping */}
+            <blockquote 
+              ref={quoteRef}
+              className="relative pl-8 md:pl-10 border-l-2 border-accent/40 my-8 py-2 max-w-2xl"
+            >
+              {/* Decorative Quotes Mark */}
+              <span className="absolute -left-2 -top-4 text-accent/15 text-7xl font-serif select-none pointer-events-none">
                 “
-              </div>
-
-              <p className="italic text-xl text-primary/90 font-serif leading-relaxed">
-                The arrow does not seek the target, it simply finds its way when the mind is no longer in the way. Discipline is not a restriction, but the architecture of freedom.
+              </span>
+              <p className="italic text-lg md:text-xl text-primary/95 font-serif leading-relaxed relative z-10">
+                {FOUNDER_DATA.quote}
               </p>
+              <cite className="block mt-4 text-right not-italic font-serif text-lg md:text-xl text-accent font-semibold">
+                — {FOUNDER_DATA.name}
+              </cite>
+            </blockquote>
+          </div>
 
-              <div className="text-right relative mt-6 pr-6">
-                <span className="text-primary font-serif text-2xl italic font-bold">
-                  — Jan Franko
-                </span>
-                <div className="text-accent text-[90px] leading-none font-serif absolute -bottom-14 right-0 select-none">
-                  ”
-                </div>
+          {/* Right Image Column */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-end">
+            <div ref={imageWrapperRef} className="relative group w-full max-w-[400px] lg:max-w-none">
+              {/* Premium offset double frame */}
+              <div className="absolute -inset-3 rounded-2xl border border-accent/20 translate-x-3 translate-y-3 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+              <div className="absolute -inset-3 rounded-2xl border border-accent/10 scale-95 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-700 ease-out" />
+              
+              <div className="relative z-10 overflow-hidden rounded-2xl shadow-2xl border border-accent/15 bg-primary/5 aspect-[4/5]">
+                <Image 
+                  src={FOUNDER_DATA.image.src}
+                  alt={FOUNDER_DATA.image.alt}
+                  fill
+                  sizes="(max-w-768px) 100vw, (max-w-1024px) 50vw, 400px"
+                  className="object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                  priority
+                />
               </div>
             </div>
           </div>
 
-          {/* Right Emblem Column (5 cols on large screen) */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-end">
-            <img 
-              src="https://janfranko.com/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-11-at-11.33.11-PM-12.png" 
-              alt="Founder Emblem" 
-              className="w-full h-auto rounded-2xl shadow-xl border border-accent/15" 
-            />
-          </div>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default FounderBlock
+export default FounderBlock;
