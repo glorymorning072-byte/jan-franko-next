@@ -1,5 +1,7 @@
 import ExpeditionRegions from "@/components/Home/ExpeditionRegions";
 import Image from "next/image";
+import Institute from "@/components/Home/Institute";
+import FounderBlock from "@/components/Home/FounderBlock";
 
 export default function Home() {
   return (
@@ -23,6 +25,8 @@ export default function Home() {
         </div>
       </div>
       <ExpeditionRegions/>
+      <Institute />
+      <FounderBlock />
     </main>
   );
 }
