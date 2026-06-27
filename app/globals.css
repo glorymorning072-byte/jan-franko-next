@@ -1,2 +1,127 @@
 @import "tailwindcss";
 
+@theme {
+  /* Brand color palette */
+  --color-primary: #0e3b2e;
+  --color-secondary: #f0e9d9;
+  --color-accent: #c5a880;
+  --color-accent-hover: #b4976f;
+  --color-dark-bg: #051713;
+  --color-gold: #c5a880;
+  --color-gold-dark: #9b825a;
+
+  /* Typography mappings */
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-geist-sans), "Inter", sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+
+  /* Custom animation timings */
+  --animate-spin-slow: spin 120s linear infinite;
+  --animate-fade-in-up: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  /* Custom selection highlighting matching the brand theme */
+  ::selection {
+    background-color: #c5a880;
+    color: #0e3b2e;
+  }
+
+  ::-moz-selection {
+    background-color: #c5a880;
+    color: #0e3b2e;
+  }
+
+  /* Custom elegant scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #051713;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(197, 168, 128, 0.4);
+    border-radius: 4px;
+    border: 2px solid #051713;
+    transition: background-color 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #c5a880;
+  }
+}
+
+/* Custom premium utility classes */
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 10px rgba(197, 168, 128, 0.2);
+  }
+
+  .border-glow {
+    box-shadow: 0 0 15px rgba(197, 168, 128, 0.1);
+  }
+
+  /* Glassmorphism panel styling */
+  .glass-panel {
+    background: rgba(14, 59, 46, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(197, 168, 128, 0.15);
+  }
+
+  .glass-panel-light {
+    background: rgba(240, 233, 217, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(14, 59, 46, 0.1);
+  }
+
+  /* Decorative underline animations for links */
+  .link-underline {
+    position: relative;
+  }
+
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: currentColor;
+    transform-origin: bottom right;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .link-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+}
+
+/* Keyframes for premium transitions */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -49,11 +49,11 @@ const ExpeditionRegions = () => {
       {regionsData.map((region) => (
         <div 
           key={region.id} 
-          className={`flex flex-col ${region.id % 2 !== 0 ? 'md:flex-row-reverse' : 'md:flex-row'} items-center justify-between h-screen w-full text-[#f0e9d9]`}
+          className={`flex flex-col ${region.id % 2 !== 0 ? 'md:flex-row-reverse' : 'md:flex-row'} items-center justify-between h-screen w-full text-secondary`}
         >
           {/* Text Section */}
-          <div className={`w-full h-1/2 md:w-2/5 md:h-full text-center ${region.id % 2 !== 0 ? 'bg-[#0e3b2e] text-[#f0e9d9]' : 'bg-[#f0e9d9] text-[#0e3b2e]'} flex flex-col items-center justify-center p-6 md:p-12`}>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 md:mb-6">{region.title}</h2>
+          <div className={`w-full h-1/2 md:w-2/5 md:h-full text-center ${region.id % 2 !== 0 ? 'bg-primary text-secondary' : 'bg-secondary text-primary'} flex flex-col items-center justify-center p-6 md:p-12`}>
+            <h2 className="text-3xl md:text-4xl font-bold font-serif mb-4 md:mb-6">{region.title}</h2>
             <p className="text-base md:text-lg mb-4 md:mb-6">{region.description}</p>
             <b className="text-xs md:text-sm tracking-widest uppercase">{region.countries.join(" • ")}</b>
           </div>
@@ -69,7 +69,7 @@ const ExpeditionRegions = () => {
               loading={region.id === 1 ? "eager" : "lazy"}
               decoding="async"
             />
-            <div className={`absolute inset-0 ${region.id % 2 !== 0 ? 'bg-[#0e3b2e]/50' : 'bg-[#f0e9d9]/50'}`}></div>
+            <div className={`absolute inset-0 ${region.id % 2 !== 0 ? 'bg-primary/50' : 'bg-secondary/50'}`}></div>
           </div>
         </div>
       ))}
