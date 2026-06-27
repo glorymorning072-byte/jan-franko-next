@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 
 const HeroMobile = () => {
@@ -113,15 +114,16 @@ const HeroMobile = () => {
       </p>
 
       {/* CTA Button */}
-      <button
-        ref={btnRef}
+      <Link
+        href="/programs"
+        ref={btnRef as any}
         className="relative overflow-hidden bg-primary text-secondary font-serif tracking-widest text-xs uppercase py-3.5 px-7 rounded-full shadow-md shadow-primary/10 active:scale-[0.98] flex items-center gap-2 cursor-pointer z-10 opacity-0"
       >
         <span className="relative z-10">Explore Our Programs</span>
         <svg className="w-3.5 h-3.5 text-accent z-10" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
         </svg>
-      </button>
+      </Link>
     </div>
   );
 };

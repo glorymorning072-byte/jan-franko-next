@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 
 const Hero = () => {
@@ -187,8 +188,9 @@ const Hero = () => {
           At The Global Academy for Traditional Archery, we offer a comprehensive approach to learning the art of traditional archery. Our programs are designed to provide students with the skills, knowledge, and experience needed to excel in this ancient practice.
         </p>
         
-        <button
-          ref={btnRef}
+        <Link
+          href="/programs"
+          ref={btnRef as any}
           className="relative overflow-hidden group bg-primary text-secondary font-serif tracking-widest text-sm uppercase py-4 px-8 rounded-full shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:scale-[1.02] transition-all duration-300 active:scale-[0.98] flex items-center gap-3 cursor-pointer opacity-0"
         >
           <span className="relative z-10">Explore Our Programs</span>
@@ -196,7 +198,7 @@ const Hero = () => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
           <div className="absolute inset-0 bg-[#071f18] translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0" />
-        </button>
+        </Link>
       </div>
     </div>
   );
