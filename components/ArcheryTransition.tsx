@@ -188,7 +188,7 @@ export const ArcheryTransition = ({ children }: { children: React.ReactNode }) =
           {/* Golden Arrow striking the target at a -35 degree angle */}
           <div
             style={{ transform: "rotate(-35deg)", transformOrigin: "right center" }}
-            className="absolute right-[43%] top-1/2 -translate-y-1/2 pointer-events-none"
+            className="absolute right-[48.5%] top-1/2 -translate-y-1/2 pointer-events-none"
           >
             <svg
               ref={arrowRef}
