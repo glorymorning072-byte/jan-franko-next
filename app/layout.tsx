@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { ArcheryTransition } from "@/components/ArcheryTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +38,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col relative bg-[#f0e9d9] text-[#0e3b2e]">
         <Navbar />
-        {children}
+        <ArcheryTransition>
+          {children}
+        </ArcheryTransition>
       </body>
     </html>
   );

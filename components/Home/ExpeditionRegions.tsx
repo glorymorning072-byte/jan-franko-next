@@ -122,12 +122,12 @@ const RegionRow = ({ region, index }: { region: RegionType; index: number }) => 
   return (
     <div
       ref={rowRef}
-      className={`flex flex-col ${isOdd ? 'md:flex-row-reverse' : 'md:flex-row'} items-center justify-between min-h-[75vh] md:h-screen w-full text-secondary overflow-hidden`}
+      className={`flex flex-col ${!isOdd ? 'md:flex-row-reverse' : 'md:flex-row'} items-center justify-between min-h-[75vh] md:h-screen w-full text-secondary overflow-hidden`}
     >
       {/* Text Section */}
       <div 
         ref={textColRef}
-        className={`w-full min-h-[35vh] md:h-full md:w-2/5 text-center ${isOdd ? 'bg-primary text-secondary' : 'bg-secondary text-primary'} flex flex-col items-center justify-center p-8 md:p-12 relative z-10`}
+        className={`w-full min-h-[35vh] md:h-full md:w-2/5 text-center ${!isOdd ? 'bg-primary text-secondary' : 'bg-secondary text-primary'} flex flex-col items-center justify-center p-8 md:p-12 relative z-10`}
       >
 
 
@@ -149,7 +149,7 @@ const RegionRow = ({ region, index }: { region: RegionType; index: number }) => 
           className="object-cover" 
           priority={region.id === 1}
         />
-        <div className={`absolute inset-0 ${isOdd ? 'bg-primary/45' : 'bg-secondary/45'} mix-blend-multiply`} />
+        <div className={`absolute inset-0 ${!isOdd ? 'bg-primary/45' : 'bg-secondary/45'} mix-blend-multiply`} />
       </div>
     </div>
   );
