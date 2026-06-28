@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, Compass, MapPin, Award, Sliders, BookOpen, Tag, Mail, Phone } from "lucide-react";
+import { clientFetch } from "@/data/clientFetch";
 
 interface Term {
   id: number;
@@ -55,26 +56,17 @@ const Navbar = () => {
   useEffect(() => {
     const fetchTaxonomies = async () => {
       try {
-        const [navRes, eqRes, bowyerRes] = await Promise.all([
-          fetch("/api/nav-taxonomies"),
-          fetch("/api/equipment/categories"),
-          fetch("/api/equipment/bowyers")
+        const [navData, eqData, bowyerData] = await Promise.all([
+          clientFetch<any>("/api/nav-taxonomies"),
+          clientFetch<CategoryTerm[]>("/api/equipment/categories"),
+          clientFetch<any[]>("/api/equipment/bowyers")
         ]);
 
-        if (navRes.ok) {
-          const navData = await navRes.json();
-          setTypes(navData.types || []);
-          setSkills(navData.skills || []);
-          setRegions(navData.regions || []);
-        }
-        if (eqRes.ok) {
-          const eqData = await eqRes.json();
-          setEquipmentCategories(eqData || []);
-        }
-        if (bowyerRes.ok) {
-          const bowyerData = await bowyerRes.json();
-          setBowyers(bowyerData || []);
-        }
+        setTypes(navData.types || []);
+        setSkills(navData.skills || []);
+        setRegions(navData.regions || []);
+        setEquipmentCategories(eqData || []);
+        setBowyers(bowyerData || []);
       } catch (err) {
         console.error("Failed to fetch nav menu taxonomies:", err);
       }

@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft, Sparkles, Star, Loader2 } from "lucide-react";
+import { clientFetch } from "@/data/clientFetch";
 
 interface BowyerDetails {
   id: number;
@@ -41,23 +42,17 @@ const BowyerProfileContent = () => {
   const [bowyer, setBowyer] = useState<BowyerDetails | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<CategoryTerm[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [bowyerLoading, setBowyerLoading] = useState(true);
+  const [productsLoading, setProductsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [bowyerRes, categoryRes] = await Promise.all([
-          fetch("/api/equipment/bowyers"),
-          fetch("/api/equipment/categories")
+        const [bowyersList, categoriesList] = await Promise.all([
+          clientFetch<BowyerDetails[]>("/api/equipment/bowyers"),
+          clientFetch<CategoryTerm[]>("/api/equipment/categories")
         ]);
-
-        if (!bowyerRes.ok || !categoryRes.ok) {
-          throw new Error("Failed to load partner information");
-        }
-
-        const bowyersList: BowyerDetails[] = await bowyerRes.json();
-        const categoriesList: CategoryTerm[] = await categoryRes.json();
 
         // 1. Match current bowyer slug
         const currentBowyer = bowyersList.find((b) => b.slug === slug);
@@ -66,6 +61,7 @@ const BowyerProfileContent = () => {
         }
         setBowyer(currentBowyer);
         setCategories(categoriesList);
+        setBowyerLoading(false); // Render bowyer details immediately!
 
         // 2. Fetch specific master bowyer products for this bowyer ID
         const productsRes = await fetch(`/api/equipment/master-bowyer-products?bowyer=${currentBowyer.id}`);
@@ -78,8 +74,9 @@ const BowyerProfileContent = () => {
       } catch (err: any) {
         console.error("Failed to load bowyer page:", err);
         setError(err.message || "An unexpected error occurred");
+        setBowyerLoading(false);
       } finally {
-        setLoading(false);
+        setProductsLoading(false);
       }
     };
 
@@ -100,7 +97,7 @@ const BowyerProfileContent = () => {
     return textOnly.length > 120 ? textOnly.slice(0, 120) + "..." : textOnly;
   };
 
-  if (loading) {
+  if (bowyerLoading) {
     return (
       <div className="w-full min-h-screen bg-secondary flex flex-col items-center justify-center space-y-4">
         <Loader2 className="w-8 h-8 text-accent animate-spin" />
@@ -245,12 +242,17 @@ const BowyerProfileContent = () => {
           <div className="w-10 h-[1px] bg-[#c5a880]/30 mx-auto mt-3" />
         </div>
 
-        {products.length === 0 ? (
+        {productsLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 space-y-3">
+            <Loader2 className="w-6 h-6 text-accent animate-spin" />
+            <span className="text-xs font-sans text-primary/50 tracking-wider">Loading Handcrafted Creations...</span>
+          </div>
+        ) : products.length === 0 ? (
           <div className="text-center py-20 bg-white border border-primary/5 rounded-3xl text-primary/50 font-sans shadow-sm max-w-xl mx-auto">
             This Master Bowyer is currently crafting new exclusive equipment pieces. Connect with us to request a bespoke build consultation.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 border-t border-primary/5 pt-8">
             {products.map((product) => {
               // Find parent category name
               const parentId = product.categories.find(
