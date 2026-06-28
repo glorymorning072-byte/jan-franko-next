@@ -278,7 +278,7 @@ const Navbar = () => {
                 {gridSlots.map((slot, index) => {
                   if (slot.type === "special") {
                     return (
-                      <div key="special-promo" className="bg-[#0e3b2e] rounded-2xl p-4 text-white flex flex-col justify-between space-y-3.5 shadow-inner col-span-1 h-full min-h-[380px] relative overflow-hidden group/carousel">
+                      <div key="special-promo" className="bg-[#0e3b2e] rounded-2xl p-4 text-white flex flex-col justify-between space-y-3.5 shadow-inner col-span-1 row-span-2 h-full min-h-[380px] relative overflow-hidden group/carousel">
                         {bowyers.length === 0 ? (
                           <div className="flex items-center justify-center h-full text-white/50 text-[10px] italic font-sans">
                             Loading partners...
@@ -308,8 +308,8 @@ const Navbar = () => {
                                 </div>
                               </div>
                               
-                              {/* Full-width Taller Banner Image (3:4 aspect ratio) */}
-                              <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden shadow-md">
+                              {/* Full-width Taller Banner Image (4:3 aspect ratio) */}
+                              <div className="relative w-full aspect-4/3 rounded-xl overflow-hidden shadow-md">
                                 <img
                                   src={bowyers[activeBowyerIndex].image}
                                   alt={bowyers[activeBowyerIndex].name}
@@ -692,16 +692,16 @@ const Navbar = () => {
               </li>
 
               {/* Knowledge Accordion (Mobile) */}
-              <li className="space-y-2">
+              <li className="space-y-3">
                 <button
                   onClick={() => setIsKnowledgeMobileOpen(!isKnowledgeMobileOpen)}
-                  className="w-full flex justify-between items-center py-1 text-primary/90 font-serif text-xs tracking-widest uppercase text-left"
+                  className="w-full flex justify-between items-center py-1 text-left uppercase tracking-widest hover:text-accent cursor-pointer"
                 >
-                  Knowledge
+                  <span className={pathname.startsWith("/scrolls") ? "text-accent font-bold" : "text-primary/90"}>
+                    Knowledge
+                  </span>
                   <ChevronDown
-                    className={`w-3.5 h-3.5 text-primary/60 transition-transform duration-300 ${
-                      isKnowledgeMobileOpen ? "rotate-180" : ""
-                    }`}
+                    className={`w-4 h-4 transition-transform duration-300 ${isKnowledgeMobileOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
