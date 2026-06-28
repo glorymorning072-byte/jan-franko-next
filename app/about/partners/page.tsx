@@ -124,47 +124,65 @@ const PartnersPage = () => {
           </div>
 
           {loading ? (
-            <div className="flex justify-center py-12">
-              <Loader2 className="w-8 h-8 text-accent animate-spin" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="bg-white border border-primary/5 rounded-2xl h-[400px] overflow-hidden flex flex-col shadow-sm animate-pulse">
+                  <div className="bg-primary/10 h-[200px] w-full" />
+                  <div className="p-5 flex-1 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="bg-primary/10 rounded h-3 w-1/4" />
+                      <div className="bg-primary/10 rounded h-5 w-2/3" />
+                      <div className="space-y-1.5">
+                        <div className="bg-primary/10 rounded h-3.5 w-full" />
+                        <div className="bg-primary/10 rounded h-3.5 w-full" />
+                        <div className="bg-primary/10 rounded h-3.5 w-5/6" />
+                      </div>
+                    </div>
+                    <div className="border-t border-primary/5 pt-4 flex justify-between">
+                      <div className="bg-primary/10 rounded h-3 w-1/3" />
+                      <div className="bg-primary/10 rounded h-3 w-4" />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {bowyers.map((b) => (
-                <div key={b.slug} className="group bg-white border border-primary/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:border-accent/40 transition-all duration-300 flex flex-col justify-between h-[420px]">
-                  
-                  {/* Aspect ratio 3:4 portrait image representation */}
-                  <div className="relative w-full aspect-[4/3] bg-primary/10 overflow-hidden shrink-0">
+                <Link
+                  key={b.slug}
+                  href={`/bowyer/${b.slug}`}
+                  className="product-card group bg-white border border-primary/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:border-accent/40 transition-all duration-300 flex flex-col h-[400px] cursor-pointer"
+                >
+                  {/* Image Banner */}
+                  <div className="relative w-full h-[200px] bg-primary/10 overflow-hidden shrink-0">
                     <img
                       src={b.image}
                       alt={b.name}
-                      className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-700 ease-out"
                     />
                   </div>
 
                   {/* Body Content */}
                   <div className="p-5 flex-1 flex flex-col justify-between">
                     <div className="space-y-2">
-                      <div className="text-[9px] text-[#7d603a] font-serif uppercase tracking-widest font-bold">
+                      <div className="text-[9px] text-[#5c4629] font-serif uppercase tracking-widest font-bold">
                         Vetted Partner Bowyer
                       </div>
-                      <h3 className="text-lg font-serif font-bold text-primary leading-tight line-clamp-1">
+                      <h3 className="text-lg font-serif font-bold text-primary leading-snug group-hover:text-accent transition-colors duration-300 line-clamp-1">
                         {cleanTitle(b.name)}
                       </h3>
-                      <p className="text-sm text-primary/80 font-sans leading-relaxed line-clamp-3">
+                      <p className="text-xs text-primary/75 leading-relaxed font-sans line-clamp-3">
                         {b.story}
                       </p>
                     </div>
 
-                    <Link
-                      href={`/bowyer/${b.slug}`}
-                      className="border-t border-primary/5 pt-4 flex items-center justify-between text-[10px] font-serif uppercase tracking-widest font-bold text-accent group-hover:translate-x-1 transition-transform duration-300 cursor-pointer"
-                    >
+                    <div className="border-t border-primary/5 pt-4 flex items-center justify-between text-[10px] font-serif uppercase tracking-widest font-bold text-accent group-hover:translate-x-1 transition-transform duration-300">
                       <span>Explore Craft Profile</span>
                       <span>→</span>
-                    </Link>
+                    </div>
                   </div>
-
-                </div>
+                </Link>
               ))}
             </div>
           )}
@@ -173,7 +191,7 @@ const PartnersPage = () => {
         {/* Institutional Affiliations Block */}
         <div className="bg-[#0e3b2e]/5 border border-primary/5 rounded-3xl p-8 md:p-12 space-y-8">
           <div className="space-y-2">
-            <span className="text-[9px] uppercase tracking-widest text-[#7d603a] font-serif font-bold">
+            <span className="text-[9px] uppercase tracking-widest text-[#5c4629] font-serif font-bold">
               Affiliations
             </span>
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-primary tracking-tight">

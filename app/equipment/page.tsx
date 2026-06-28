@@ -261,7 +261,7 @@ const EquipmentContent = () => {
             <div className="flex items-center justify-end gap-3 flex-wrap">
               {/* Sort By Dropdown */}
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold hidden sm:inline">
+                <span className="text-[10px] font-serif uppercase tracking-widest text-[#5c4629] font-bold hidden sm:inline">
                   Sort By:
                 </span>
                 <select
@@ -295,7 +295,7 @@ const EquipmentContent = () => {
         >
           <div className="bg-white border border-primary/5 p-6 rounded-3xl shadow-sm space-y-6">
             <div className="max-w-md mx-auto space-y-2">
-              <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Category</label>
+              <label className="text-xs font-serif uppercase tracking-wider text-[#5c4629] font-bold">Category</label>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
@@ -327,11 +327,11 @@ const EquipmentContent = () => {
         {/* Active Filters Row */}
         {isFiltersActive && (
           <div className="flex flex-wrap items-center gap-2 animate-in fade-in duration-300 mb-2">
-            <span className="text-[10px] uppercase tracking-wider text-[#7d603a] font-serif font-bold mr-1">
+            <span className="text-[10px] uppercase tracking-wider text-[#5c4629] font-serif font-bold mr-1">
               Active Filters:
             </span>
             {searchQuery && (
-              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#5c4629] px-3 py-1 rounded-full text-xs font-sans font-medium">
                 Search: "{searchQuery}"
                 <button onClick={() => setSearchQuery("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
                   <X className="w-3 h-3" />
@@ -339,7 +339,7 @@ const EquipmentContent = () => {
               </span>
             )}
             {selectedCategory && (
-              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#5c4629] px-3 py-1 rounded-full text-xs font-sans font-medium">
                 Category: {cleanTitle(categories.find(c => c.id.toString() === selectedCategory)?.name || "")}
                 <button onClick={() => setSelectedCategory("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
                   <X className="w-3 h-3" />
@@ -351,7 +351,7 @@ const EquipmentContent = () => {
                 setSelectedCategory("");
                 setSearchQuery("");
               }}
-              className="text-[#7d603a] hover:text-[#0e3b2e] text-xs font-serif font-bold underline ml-2 cursor-pointer transition-colors"
+              className="text-[#5c4629] hover:text-[#0e3b2e] text-xs font-serif font-bold underline ml-2 cursor-pointer transition-colors"
             >
               Clear All
             </button>
@@ -362,12 +362,22 @@ const EquipmentContent = () => {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((n) => (
-              <div key={n} className="bg-white border border-primary/5 rounded-2xl h-[380px] p-5 flex flex-col justify-between space-y-4 animate-pulse">
-                <div className="bg-primary/10 rounded-xl h-[180px] w-full" />
-                <div className="space-y-2 flex-1">
-                  <div className="bg-primary/10 rounded h-4 w-1/3" />
-                  <div className="bg-primary/10 rounded h-6 w-3/4" />
-                  <div className="bg-primary/10 rounded h-10 w-full" />
+              <div key={n} className="bg-white border border-primary/5 rounded-2xl h-[400px] overflow-hidden flex flex-col shadow-sm animate-pulse">
+                <div className="bg-primary/10 h-[200px] w-full" />
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="bg-primary/10 rounded h-3 w-1/4" />
+                    <div className="bg-primary/10 rounded h-5 w-3/4" />
+                    <div className="space-y-1.5">
+                      <div className="bg-primary/10 rounded h-3.5 w-full" />
+                      <div className="bg-primary/10 rounded h-3.5 w-full" />
+                      <div className="bg-primary/10 rounded h-3.5 w-2/3" />
+                    </div>
+                  </div>
+                  <div className="border-t border-primary/5 pt-4 flex justify-between">
+                    <div className="bg-primary/10 rounded h-3 w-1/3" />
+                    <div className="bg-primary/10 rounded h-3 w-4" />
+                  </div>
                 </div>
               </div>
             ))}
@@ -418,7 +428,7 @@ const EquipmentContent = () => {
                   {/* Body Details */}
                   <div className="p-5 flex-1 flex flex-col justify-between">
                     <div className="space-y-2">
-                      <div className="flex flex-wrap items-center gap-1.5 text-[9px] text-[#7d603a] font-serif uppercase tracking-widest font-bold">
+                      <div className="flex flex-wrap items-center gap-1.5 text-[9px] text-[#5c4629] font-serif uppercase tracking-widest font-bold">
                         <span>{cleanTitle(parentLabel)}</span>
                         {brandLabel && (
                           <>

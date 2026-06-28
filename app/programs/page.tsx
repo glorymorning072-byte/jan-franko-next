@@ -265,7 +265,7 @@ const ProgramsContent = () => {
             {dot <= levelIndex && <div className="w-1 h-1 bg-[#0e3b2e] rounded-full" />}
           </div>
         ))}
-        <span className="text-[9px] text-[#7d603a] font-bold uppercase tracking-wider ml-1 font-sans">
+        <span className="text-[9px] text-[#5c4629] font-bold uppercase tracking-wider ml-1 font-sans">
           L{levelIndex}
         </span>
       </div>
@@ -586,7 +586,7 @@ const ProgramsContent = () => {
 
             {/* Sort By Dropdown */}
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold hidden sm:inline">
+              <span className="text-[10px] font-serif uppercase tracking-widest text-[#5c4629] font-bold hidden sm:inline">
                 Sort By:
               </span>
               <select
@@ -605,7 +605,7 @@ const ProgramsContent = () => {
             <button
               onClick={() => window.location.reload()}
               title="Refresh Data"
-              className="p-3 border border-primary/20 hover:border-primary/50 rounded-full text-primary hover:text-[#7d603a] transition-all duration-300 cursor-pointer"
+              className="p-3 border border-primary/20 hover:border-primary/50 rounded-full text-primary hover:text-[#5c4629] transition-all duration-300 cursor-pointer"
             >
               <RefreshCw className="w-4.5 h-4.5" />
             </button>
@@ -622,11 +622,11 @@ const ProgramsContent = () => {
         {/* Active Filters Row */}
         {(selectedType || selectedStatus || selectedSkill || selectedRegion || searchQuery) && (
           <div className="flex flex-wrap items-center gap-2 animate-in fade-in duration-300 mb-2">
-            <span className="text-[10px] uppercase tracking-wider text-[#7d603a] font-serif font-bold mr-1">
+            <span className="text-[10px] uppercase tracking-wider text-[#5c4629] font-serif font-bold mr-1">
               Active Filters:
             </span>
             {searchQuery && (
-              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#5c4629] px-3 py-1 rounded-full text-xs font-sans font-medium">
                 Search: "{searchQuery}"
                 <button onClick={() => setSearchQuery("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
                   <X className="w-3.5 h-3.5" />
@@ -634,7 +634,7 @@ const ProgramsContent = () => {
               </span>
             )}
             {selectedType && (
-              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#5c4629] px-3 py-1 rounded-full text-xs font-sans font-medium">
                 Type: {types.find(t => t.id.toString() === selectedType)?.name || selectedType}
                 <button onClick={() => setSelectedType("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
                   <X className="w-3 h-3" />
@@ -642,7 +642,7 @@ const ProgramsContent = () => {
               </span>
             )}
             {selectedStatus && (
-              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#5c4629] px-3 py-1 rounded-full text-xs font-sans font-medium">
                 Status: {statuses.find(s => s.id.toString() === selectedStatus)?.name || selectedStatus}
                 <button onClick={() => setSelectedStatus("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
                   <X className="w-3 h-3" />
@@ -650,7 +650,7 @@ const ProgramsContent = () => {
               </span>
             )}
             {selectedSkill && (
-              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#5c4629] px-3 py-1 rounded-full text-xs font-sans font-medium">
                 Skill: {skills.find(sk => sk.id.toString() === selectedSkill)?.name || selectedSkill}
                 <button onClick={() => setSelectedSkill("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
                   <X className="w-3 h-3" />
@@ -658,7 +658,7 @@ const ProgramsContent = () => {
               </span>
             )}
             {selectedRegion && (
-              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
+              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#5c4629] px-3 py-1 rounded-full text-xs font-sans font-medium">
                 Region: {regions.find(r => r.id.toString() === selectedRegion)?.name || selectedRegion}
                 <button onClick={() => setSelectedRegion("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
                   <X className="w-3 h-3" />
@@ -670,7 +670,7 @@ const ProgramsContent = () => {
                 resetFilters();
                 setSearchQuery("");
               }}
-              className="text-[#7d603a] hover:text-[#0e3b2e] text-xs font-serif font-bold underline ml-2 cursor-pointer transition-colors"
+              className="text-[#5c4629] hover:text-[#0e3b2e] text-xs font-serif font-bold underline ml-2 cursor-pointer transition-colors"
             >
               Clear All
             </button>
@@ -687,7 +687,7 @@ const ProgramsContent = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Type Filter */}
               <div className="flex flex-col space-y-2">
-                <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Program Type</label>
+                <label className="text-xs font-serif uppercase tracking-wider text-[#5c4629] font-bold">Program Type</label>
                 <select
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value)}
@@ -702,7 +702,7 @@ const ProgramsContent = () => {
 
               {/* Status Filter */}
               <div className="flex flex-col space-y-2">
-                <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Availability</label>
+                <label className="text-xs font-serif uppercase tracking-wider text-[#5c4629] font-bold">Availability</label>
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
@@ -717,7 +717,7 @@ const ProgramsContent = () => {
 
               {/* Skill Filter */}
               <div className="flex flex-col space-y-2">
-                <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Skill Level</label>
+                <label className="text-xs font-serif uppercase tracking-wider text-[#5c4629] font-bold">Skill Level</label>
                 <select
                   value={selectedSkill}
                   onChange={(e) => setSelectedSkill(e.target.value)}
@@ -732,7 +732,7 @@ const ProgramsContent = () => {
 
               {/* Region Filter */}
               <div className="flex flex-col space-y-2">
-                <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Region</label>
+                <label className="text-xs font-serif uppercase tracking-wider text-[#5c4629] font-bold">Region</label>
                 <select
                   value={selectedRegion}
                   onChange={(e) => setSelectedRegion(e.target.value)}
@@ -760,12 +760,26 @@ const ProgramsContent = () => {
 
         {/* Loading / Error States */}
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-24 space-y-4">
-            <svg className="animate-spin h-8 w-8 text-accent" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-            </svg>
-            <span className="text-sm font-normal text-primary/90">Loading matches from database...</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3, 4, 5, 6].map((n) => (
+              <div key={n} className="bg-white border border-primary/5 rounded-2xl h-[400px] overflow-hidden flex flex-col shadow-sm animate-pulse">
+                <div className="bg-primary/10 h-[200px] w-full" />
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="bg-primary/10 rounded h-3 w-1/4" />
+                    <div className="bg-primary/10 rounded h-5 w-3/4" />
+                    <div className="space-y-1.5">
+                      <div className="bg-primary/10 rounded h-3.5 w-full" />
+                      <div className="bg-primary/10 rounded h-3.5 w-2/3" />
+                    </div>
+                  </div>
+                  <div className="border-t border-primary/5 pt-4 flex justify-between">
+                    <div className="bg-primary/10 rounded h-3 w-1/3" />
+                    <div className="bg-primary/10 rounded h-3 w-4" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         ) : error ? (
           <div className="bg-red-500/10 border border-red-500/20 text-red-700 p-6 rounded-2xl">
@@ -795,16 +809,16 @@ const ProgramsContent = () => {
                 <div
                   key={program.id}
                   onClick={() => setActiveModalProgram(program)}
-                  className="program-card group bg-white border border-primary/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:border-accent/40 transition-all duration-300 flex flex-col h-[390px] cursor-pointer opacity-0"
+                  className="program-card group bg-white border border-primary/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:border-accent/40 transition-all duration-300 flex flex-col h-[400px] cursor-pointer opacity-0"
                 >
                   {/* Top Image Banner */}
-                  <div className="relative w-full h-[180px] bg-primary/10 overflow-hidden">
+                  <div className="relative w-full h-[200px] bg-primary/10 overflow-hidden">
                     {bgUrl ? (
                       <Image
                         src={bgUrl}
                         alt={program.title.rendered}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        className="object-cover group-hover:scale-102 transition-transform duration-700 ease-out"
                       />
                     ) : (
                       <div className="w-full h-full bg-primary/5" />
@@ -827,11 +841,11 @@ const ProgramsContent = () => {
                   <div className="p-5 flex-1 flex flex-col justify-between">
                     <div className="space-y-2">
                       {typeName && (
-                        <span className="text-[10px] text-[#7d603a] font-bold tracking-widest uppercase font-serif block">
+                        <span className="text-[9px] text-[#5c4629] font-bold tracking-widest uppercase font-serif block">
                           {typeName}
                         </span>
                       )}
-                      <h3 className="text-xl font-serif font-bold text-primary leading-snug group-hover:text-[#7d603a] transition-colors duration-300 line-clamp-2">
+                      <h3 className="text-lg font-serif font-bold text-primary leading-snug group-hover:text-accent transition-colors duration-300 line-clamp-2">
                         {program.title.rendered}
                       </h3>
                       {program.acf?.subtitle && (
@@ -844,14 +858,14 @@ const ProgramsContent = () => {
                     {/* Quick Info Footer */}
                     <div className="border-t border-primary/5 pt-4 flex items-center justify-between text-xs text-primary/90 font-medium">
                       <span className="flex items-center gap-1.5 min-w-0 pr-4">
-                        <MapPin className="w-4 h-4 text-[#7d603a] shrink-0" />
+                        <MapPin className="w-4 h-4 text-[#5c4629] shrink-0" />
                         <span className="truncate">
                           {program.acf?.main_location && program.acf?.country
                             ? `${program.acf.main_location}, ${program.acf.country}`
                             : program.acf?.country || "Worldwide"}
                         </span>
                       </span>
-                      <span className="text-[#7d603a] group-hover:text-accent font-bold font-serif uppercase tracking-wider transition-colors duration-300 whitespace-nowrap shrink-0">
+                      <span className="text-[#5c4629] group-hover:text-accent font-bold font-serif uppercase tracking-wider transition-colors duration-300 whitespace-nowrap shrink-0">
                         Quick View
                       </span>
                     </div>

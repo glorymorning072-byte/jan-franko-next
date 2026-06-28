@@ -243,9 +243,27 @@ const BowyerProfileContent = () => {
         </div>
 
         {productsLoading ? (
-          <div className="flex flex-col items-center justify-center py-20 space-y-3">
-            <Loader2 className="w-6 h-6 text-accent animate-spin" />
-            <span className="text-xs font-sans text-primary/50 tracking-wider">Loading Handcrafted Creations...</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="bg-white border border-primary/5 rounded-2xl h-[400px] overflow-hidden flex flex-col shadow-sm animate-pulse">
+                <div className="bg-primary/10 h-[200px] w-full" />
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="bg-primary/10 rounded h-3 w-1/4" />
+                    <div className="bg-primary/10 rounded h-5 w-3/4" />
+                    <div className="space-y-1.5">
+                      <div className="bg-primary/10 rounded h-3.5 w-full" />
+                      <div className="bg-primary/10 rounded h-3.5 w-full" />
+                      <div className="bg-primary/10 rounded h-3.5 w-2/3" />
+                    </div>
+                  </div>
+                  <div className="border-t border-primary/5 pt-4 flex justify-between">
+                    <div className="bg-primary/10 rounded h-3 w-1/3" />
+                    <div className="bg-primary/10 rounded h-3 w-4" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-20 bg-white border border-primary/5 rounded-3xl text-primary/50 font-sans shadow-sm max-w-xl mx-auto">
