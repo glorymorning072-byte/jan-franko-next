@@ -43,7 +43,7 @@ const regionsData: RegionType[] = [
     title: "Central Asian Steppe Archery",
     description: "Nomadic horseback archery traditions.",
     countries: ["Mongolia", "Kyrgyzstan", "Kazakhstan"],
-    image: "https://images.pexels.com/photos/30876954/pexels-photo-30876954.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    image: "https://images.pexels.com/photos/12210398/pexels-photo-12210398.jpeg?auto=compress&cs=tinysrgb&w=1200",
     watermark: "Steppe"
   },
   {
@@ -149,22 +149,24 @@ const RegionRow = ({ region, index }: { region: RegionType; index: number }) => 
   return (
     <div
       ref={rowRef}
-      className={`flex flex-col ${!isOdd ? 'md:flex-row-reverse' : 'md:flex-row'} items-center justify-between min-h-[75vh] md:h-screen w-full text-secondary overflow-hidden`}
+      className={`flex relative flex-col ${!isOdd ? 'md:flex-row-reverse' : 'md:flex-row'} p-20 items-center bg-fixed justify-center md:justify-between min-h-[75vh] md:h-screen w-full text-secondary overflow-hidden`}
+      style={{backgroundImage: `url(${region.image})`, backgroundSize: 'cover', backgroundPosition: 'center'}}
     >
+      <div className={` absolute top-0 left-0 w-full h-full ${isOdd ? 'bg-primary/45' : 'bg-secondary/45'} `} ></div>
       {/* Text Section */}
       <div 
         ref={textColRef}
-        className={`w-full min-h-[35vh] md:h-full md:w-2/5 text-center ${!isOdd ? 'bg-primary text-secondary' : 'bg-secondary text-primary'} flex flex-col items-center justify-center p-8 md:p-12 relative z-10`}
+        className={`w-full min-h-[35vh] md:h-full md:w-2/5 rounded-lg backdrop-blur-2xl text-center ${!isOdd ? 'bg-primary/50 text-secondary' : 'bg-secondary/50 text-primary'}  flex flex-col items-center justify-center p-8 md:p-12 relative z-10`}
       >
         <div className="relative z-10 flex flex-col items-center justify-center">
           <h2 ref={titleRef} className="text-3xl md:text-4xl font-bold font-serif mb-4 md:mb-6">{region.title}</h2>
           <p ref={descRef} className="text-base md:text-lg mb-4 md:mb-6 max-w-md font-light leading-relaxed">{region.description}</p>
-          <b ref={countriesRef} className="text-xs md:text-sm tracking-widest uppercase text-accent font-semibold">{region.countries.join(" • ")}</b>
+          <b ref={countriesRef} className={`text-xs md:text-sm tracking-widest uppercase ${isOdd ? 'text-primary' : 'text-secondary'} font-semibold`}>{region.countries.join(" • ")}</b>
           
           <div ref={buttonsRef} className="mt-8 flex flex-col sm:flex-row items-center gap-4 relative z-10">
             <Button
               href={progSlug ? `/programs?region=${progSlug}` : "/programs"}
-              variant="accent"
+              variant={isOdd ? "primary" : "secondary"}
             >
               Explore Expeditions
             </Button>
@@ -172,7 +174,7 @@ const RegionRow = ({ region, index }: { region: RegionType; index: number }) => 
               <Button
                 href={`/scrolls/region/${scrollSlug}`}
                 variant="outline"
-                className={!isOdd ? "border-white/30 hover:border-accent text-white hover:text-white" : ""}
+                className={isOdd ? "text-primary border-primary hover:bg-primary/10" : "text-secondary border-secondary hover:bg-secondary/10"}
               >
                 Read Region Lore
               </Button>
@@ -182,7 +184,7 @@ const RegionRow = ({ region, index }: { region: RegionType; index: number }) => 
       </div>
 
       {/* Image Section */}
-      <div className="w-full h-[40vh] md:w-3/5 md:h-full flex items-center justify-center relative overflow-hidden z-0">
+      {/* <div className="w-full h-[40vh] md:w-3/5 md:h-full flex items-center justify-center relative overflow-hidden z-0">
         <Image 
           ref={imageColRef}
           src={region.image} 
@@ -193,7 +195,7 @@ const RegionRow = ({ region, index }: { region: RegionType; index: number }) => 
           priority={region.id === 1}
         />
         <div className={`absolute inset-0 ${!isOdd ? 'bg-primary/45' : 'bg-secondary/45'} mix-blend-multiply`} />
-      </div>
+      </div> */}
     </div>
   );
 };

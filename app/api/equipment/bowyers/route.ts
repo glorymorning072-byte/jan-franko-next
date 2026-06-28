@@ -36,7 +36,8 @@ export async function GET() {
       heading: b.acf?.heading || "",
       story: b.acf?.bowyer_story || b.description || "",
       philosophy: b.acf?.bowyer_philosophy || "",
-      image: imageMap[b.acf?.profile_image] || "https://images.unsplash.com/photo-1547989453-11e67ffb3885?auto=format&fit=crop&w=1200&q=80"
+      image: imageMap[b.acf?.profile_image] || "https://images.unsplash.com/photo-1547989453-11e67ffb3885?auto=format&fit=crop&w=1200&q=80",
+      process: b.acf?.bowyer_process || []
     }));
 
     return NextResponse.json(mapped);

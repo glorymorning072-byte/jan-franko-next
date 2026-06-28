@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, Compass, MapPin, Award, Sliders, BookOpen, Tag } from "lucide-react";
+import { Menu, X, ChevronDown, Compass, MapPin, Award, Sliders, BookOpen, Tag, Mail, Phone } from "lucide-react";
 
 interface Term {
   id: number;
@@ -23,6 +23,8 @@ const Navbar = () => {
   const [isProgramsMobileOpen, setIsProgramsMobileOpen] = useState(false); // Mobile programs sub-accordion
   const [isKnowledgeMobileOpen, setIsKnowledgeMobileOpen] = useState(false); // Mobile knowledge sub-accordion
   const [isEquipmentMobileOpen, setIsEquipmentMobileOpen] = useState(false); // Mobile equipment sub-accordion
+  const [isAboutMobileOpen, setIsAboutMobileOpen] = useState(false); // Mobile about sub-accordion
+  const [openSubgroups, setOpenSubgroups] = useState<Record<string, boolean>>({});
   const [types, setTypes] = useState<Term[]>([]);
   const [skills, setSkills] = useState<Term[]>([]);
   const [regions, setRegions] = useState<Term[]>([]);
@@ -32,12 +34,21 @@ const Navbar = () => {
   
   const pathname = usePathname();
 
+  const toggleSubgroup = (key: string) => {
+    setOpenSubgroups((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
   // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
     setIsProgramsMobileOpen(false);
     setIsKnowledgeMobileOpen(false);
     setIsEquipmentMobileOpen(false);
+    setIsAboutMobileOpen(false);
+    setOpenSubgroups({});
   }, [pathname]);
 
   // Fetch all taxonomies and bowyer partners on mount to populate Mega Menu columns dynamically
@@ -162,7 +173,7 @@ const Navbar = () => {
             </Link>
 
             {/* MEGA MENU CONTAINER */}
-            <div className="absolute top-full left-0 w-full bg-white/90 backdrop-blur-xl border-t border-primary/5 border-b border-primary/10 rounded-b-3xl shadow-2xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
+            <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-t border-primary/5 border-b border-primary/10 rounded-b-3xl shadow-2xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
               <div className="max-w-7xl mx-auto px-12 py-10 grid grid-cols-4 gap-8">
                 {/* Column 1: Types */}
                 <div className="space-y-4">
@@ -273,7 +284,7 @@ const Navbar = () => {
             </Link>
 
             {/* MEGA MENU CONTAINER */}
-            <div className="absolute top-full left-0 w-full bg-white/90 backdrop-blur-xl border-t border-primary/5 border-b border-primary/10 rounded-b-3xl shadow-2xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
+            <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-t border-primary/5 border-b border-primary/10 rounded-b-3xl shadow-2xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
               <div className="max-w-7xl mx-auto px-12 py-10 grid grid-cols-4 gap-8">
                 {gridSlots.map((slot, index) => {
                   if (slot.type === "special") {
@@ -334,7 +345,7 @@ const Navbar = () => {
                             {/* Button and Controls Row */}
                             <div className="flex items-center gap-2 z-10 pt-1.5 border-t border-white/10">
                               <Link
-                                href={`/equipment?category=${bowyers[activeBowyerIndex].slug}`}
+                                href={`/bowyer/${bowyers[activeBowyerIndex].slug}`}
                                 className="flex-1 text-center py-2 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-[9px] tracking-wider uppercase rounded-xl transition-all"
                               >
                                 View Crafts
@@ -415,7 +426,7 @@ const Navbar = () => {
             </Link>
 
             {/* MEGA MENU CONTAINER */}
-            <div className="absolute top-full left-0 w-full bg-white/90 backdrop-blur-xl border-t border-primary/5 border-b border-primary/10 rounded-b-3xl shadow-2xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
+            <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-t border-primary/5 border-b border-primary/10 rounded-b-3xl shadow-2xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
               <div className="max-w-7xl mx-auto px-12 py-10 grid grid-cols-4 gap-8">
                 {/* Column 1: Categories */}
                 <div className="space-y-4">
@@ -537,20 +548,151 @@ const Navbar = () => {
             </div>
           </li>
 
-          {/* Contact Anchor Link */}
-          <li className="h-full flex items-center">
-            <a
-              href="#contact"
-              onClick={(e) => {
-                if (pathname !== "/") {
-                  e.preventDefault();
-                  window.location.href = "/#contact";
-                }
-              }}
-              className="hover:text-accent transition-colors py-2 border-b-2 border-transparent text-primary/90 cursor-pointer"
+          {/* About Mega Menu Trigger (Hover active) */}
+          <li className="group h-full flex items-center static">
+            <Link
+              href="/about"
+              className={`hover:text-accent transition-colors py-2 border-b-2 flex items-center gap-1 cursor-pointer ${
+                pathname.startsWith("/about") ? "border-accent text-accent font-semibold" : "border-transparent text-primary/90"
+              }`}
             >
-              Contact
-            </a>
+              About
+              <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180" />
+            </Link>
+
+            {/* ABOUT MEGA MENU CONTAINER */}
+            <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-t border-primary/5 border-b border-primary/10 rounded-b-3xl shadow-2xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
+              <div className="max-w-7xl mx-auto px-12 py-10 grid grid-cols-12 gap-8 items-stretch">
+                
+                {/* Column 1: Navigation Links (span 4) */}
+                <div className="col-span-4 space-y-4">
+                  <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-2 flex items-center gap-1.5 font-sans">
+                    <BookOpen className="w-4 h-4" />
+                    Academy Overview
+                  </h4>
+                  <ul className="space-y-3 font-sans text-xs tracking-wider normal-case text-primary/80">
+                    <li>
+                      <Link href="/about" className="hover:text-accent transition-colors block py-0.5 font-semibold text-primary">
+                        Academy Profile
+                      </Link>
+                      <p className="text-[10px] text-primary/55 font-sans font-light mt-0.5">Learn about our mission, focus, and training landscapes.</p>
+                    </li>
+                    <li>
+                      <Link href="/about/jan-franko" className="hover:text-accent transition-colors block py-0.5 font-semibold text-primary">
+                        Jan Franko (Instructor)
+                      </Link>
+                      <p className="text-[10px] text-primary/55 font-sans font-light mt-0.5">Explore the chronology and martial bow studies of our founder.</p>
+                    </li>
+                    <li>
+                      <Link href="/about/partners" className="hover:text-accent transition-colors block py-0.5 font-semibold text-primary">
+                        Partners &amp; Bowyers
+                      </Link>
+                      <p className="text-[10px] text-primary/55 font-sans font-light mt-0.5">Vetted partners who supply custom gear to the academy.</p>
+                    </li>
+                    <li>
+                      <Link href="/contact" className="hover:text-accent transition-colors block py-0.5 font-semibold text-primary">
+                        Inquiries &amp; Contacts
+                      </Link>
+                      <p className="text-[10px] text-primary/55 font-sans font-light mt-0.5">Get in touch to register for upcoming courses.</p>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 2: Designed Contact Info Card (span 4) */}
+                <div className="col-span-4 bg-[#0e3b2e] rounded-2xl p-5 text-white flex flex-col justify-between space-y-4 shadow-inner">
+                  <div className="space-y-3">
+                    <span className="text-[9px] uppercase tracking-widest text-accent font-bold font-sans">
+                      Academy Base
+                    </span>
+                    <h5 className="font-serif text-lg font-bold leading-snug">
+                      Get in Touch
+                    </h5>
+                    <div className="space-y-2.5 text-xs text-white/80 font-sans">
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-3.5 h-3.5 text-accent shrink-0" />
+                        <span>Košice, Slovakia</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Mail className="w-3.5 h-3.5 text-accent shrink-0" />
+                        <span>contact@janfranko.com</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Phone className="w-3.5 h-3.5 text-accent shrink-0" />
+                        <span>+43 664 93296890</span>
+                      </div>
+                    </div>
+                  </div>
+                  <Link
+                    href="/contact"
+                    className="inline-block text-center py-2 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-[10px] tracking-wider uppercase rounded-xl transition-all"
+                  >
+                    Direct Inquiries
+                  </Link>
+                </div>
+
+                {/* Column 3: Social Links Card with Brandfetch Icons (span 4) */}
+                <div className="col-span-4 bg-white border border-primary/5 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                  <div className="space-y-3">
+                    <span className="text-[9px] uppercase tracking-widest text-[#7d603a] font-bold font-sans">
+                      Social Channels
+                    </span>
+                    <h5 className="font-serif text-base font-bold text-primary leading-snug">
+                      Connect Globally
+                    </h5>
+                    <div className="grid grid-cols-2 gap-3 pt-1">
+                      <a
+                        href="https://www.facebook.com/share/16uZNxRu4R/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 bg-[#f4f1e8] hover:bg-[#ebd9bd]/25 px-3 py-2 rounded-xl text-[10px] font-sans font-medium text-primary hover:text-accent transition-colors group"
+                      >
+                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 shrink-0 transition-colors">
+                          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Facebook
+                      </a>
+                      <a
+                        href="https://www.linkedin.com/in/exploreradventures1978"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 bg-[#f4f1e8] hover:bg-[#ebd9bd]/25 px-3 py-2 rounded-xl text-[10px] font-sans font-medium text-primary hover:text-accent transition-colors group"
+                      >
+                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 shrink-0 transition-colors">
+                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/>
+                        </svg>
+                        LinkedIn
+                      </a>
+                      <a
+                        href="https://wa.me/4366493296890"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 bg-[#f4f1e8] hover:bg-[#ebd9bd]/25 px-3 py-2 rounded-xl text-[10px] font-sans font-medium text-primary hover:text-accent transition-colors group"
+                      >
+                        <svg viewBox="0 0 345.24 345.24" fill="currentColor" className="w-4 h-4 shrink-0 transition-colors">
+                          <path d="M172.51,0C78.22,0,1.47,76.74,1.43,171.06c-.01,30.15,7.87,59.58,22.84,85.52L0,345.24l90.69-23.79c24.99,13.63,53.12,20.81,81.75,20.82h.07c94.28,0,171.03-76.75,171.07-171.07,.02-45.71-17.76-88.69-50.06-121.02C261.22,17.84,218.27,.02,172.51,0Zm0,313.38h-.06c-25.51,0-50.54-6.87-72.37-19.82l-5.19-3.08-53.81,14.12,14.36-52.47-3.38-5.38c-14.23-22.64-21.75-48.81-21.74-75.67,.03-78.4,63.82-142.18,142.25-142.18,37.98,.01,73.68,14.82,100.52,41.7,26.85,26.87,41.62,62.6,41.61,100.59-.03,78.4-63.82,142.19-142.19,142.19Zm77.99-106.49c-4.27-2.14-25.29-12.48-29.21-13.91-3.92-1.43-6.77-2.14-9.62,2.14-2.85,4.28-11.04,13.91-13.53,16.76-2.49,2.86-4.99,3.21-9.26,1.07-4.27-2.14-18.05-6.66-34.37-21.22-12.71-11.33-21.29-25.33-23.78-29.61-2.49-4.28-.27-6.59,1.88-8.72,1.92-1.91,4.27-4.99,6.41-7.49,2.14-2.5,2.85-4.28,4.27-7.14,1.42-2.85,.71-5.35-.36-7.49-1.07-2.14-9.62-23.18-13.18-31.74-3.47-8.33-6.99-7.21-9.62-7.34-2.49-.13-5.34-.15-8.19-.15s-7.48,1.07-11.4,5.35c-3.92,4.28-14.96,14.62-14.96,35.66s15.32,41.37,17.45,44.22c2.14,2.85,30.14,46.03,73.02,64.54,10.2,4.4,18.16,7.03,24.37,9,10.24,3.25,19.56,2.79,26.92,1.69,8.21-1.23,25.29-10.34,28.85-20.33,3.56-9.98,3.56-18.54,2.49-20.33-1.07-1.78-3.92-2.85-8.19-4.99Z"/>
+                        </svg>
+                        WhatsApp
+                      </a>
+                      <a
+                        href="https://t.me/ExplorerAdventuresJF"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 bg-[#f4f1e8] hover:bg-[#ebd9bd]/25 px-3 py-2 rounded-xl text-[10px] font-sans font-medium text-primary hover:text-accent transition-colors group"
+                      >
+                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 shrink-0 transition-colors">
+                          <path d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.16-.22 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.577.192l-8.533 7.703-.33 4.953c.485 0 .7-.223.97-.485l2.33-2.266 4.85 3.582c.893.492 1.535.24 1.758-.823l3.18-15c.325-1.305-.5-1.9-.136-1.5z"/>
+                        </svg>
+                        Telegram
+                      </a>
+                    </div>
+                  </div>
+                  <p className="text-[9px] text-[#7d603a] font-serif italic leading-relaxed">
+                    * Follow our expeditions and traditional bow reviews live from the field.
+                  </p>
+                </div>
+
+              </div>
+            </div>
           </li>
         </ul>
 
@@ -574,7 +716,7 @@ const Navbar = () => {
               <li>
                 <Link
                   href="/"
-                  className={`block py-1 ${pathname === "/" ? "text-accent font-bold" : "text-primary/90"}`}
+                  className={`block py-1 font-bold ${pathname === "/" ? "text-[#7d603a]" : "text-primary/90 hover:text-[#7d603a] transition-colors"}`}
                 >
                   Home
                 </Link>
@@ -582,67 +724,96 @@ const Navbar = () => {
 
               {/* Collapsible Programs Accordion */}
               <li className="space-y-3">
-                <button
-                  onClick={() => setIsProgramsMobileOpen(!isProgramsMobileOpen)}
-                  className="w-full flex justify-between items-center py-1 text-left uppercase tracking-widest hover:text-accent cursor-pointer"
-                >
-                  <span className={pathname === "/programs" ? "text-accent font-bold" : "text-primary/90"}>
+                <div className="flex items-center justify-between py-1 group">
+                  <Link
+                    href="/programs"
+                    className={`flex-1 uppercase tracking-widest font-bold ${pathname === "/programs" ? "text-[#7d603a]" : "text-primary/90 hover:text-[#7d603a] transition-colors"}`}
+                  >
                     Programs
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${isProgramsMobileOpen ? "rotate-180" : ""}`}
-                  />
-                </button>
+                  </Link>
+                  <button
+                    onClick={() => setIsProgramsMobileOpen(!isProgramsMobileOpen)}
+                    className="p-1.5 -mr-1 text-primary/70 bg-primary/5 hover:bg-[#ebd9bd]/50 group-hover:bg-[#ebd9bd]/30 rounded-lg cursor-pointer transition-all duration-200"
+                  >
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-300 ${isProgramsMobileOpen ? "rotate-180 text-[#7d603a]" : ""}`}
+                    />
+                  </button>
+                </div>
 
                 {isProgramsMobileOpen && (
-                  <div className="pl-4 space-y-4 border-l border-primary/10 animate-in slide-in-from-top-2 duration-200">
+                  <div className="pl-4 border-l border-primary/10 space-y-4 pt-1 pb-3 animate-in slide-in-from-top-2 duration-200">
                     
                     {/* Types Subgroup */}
                     <div className="space-y-1.5">
-                      <span className="text-[10px] font-sans font-bold text-[#7d603a] tracking-wider uppercase block">
-                        Types
-                      </span>
-                      <ul className="space-y-1.5 font-sans text-xs tracking-wide text-primary/85 normal-case">
-                        {types.map((t) => (
-                          <li key={t.id}>
-                            <Link href={`/programs?program_type=${t.slug}`} className="hover:text-accent block py-0.5">
-                              {t.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+                      <button
+                        onClick={() => toggleSubgroup("prog-types")}
+                        className="w-full flex justify-between items-center text-xs font-serif font-bold text-[#7d603a] tracking-wider uppercase py-1 hover:opacity-85 text-left cursor-pointer group"
+                      >
+                        <span>Types</span>
+                        <ChevronDown
+                          className={`w-5 h-5 p-0.5 text-primary/50 bg-primary/5 group-hover:bg-[#ebd9bd]/50 rounded-md transition-all duration-200 ${openSubgroups["prog-types"] ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                      {openSubgroups["prog-types"] && (
+                        <ul className="space-y-1.5 pl-2 font-sans text-xs tracking-wide text-primary/80 font-medium normal-case animate-in slide-in-from-top-1 duration-150">
+                          {types.map((t) => (
+                            <li key={t.id}>
+                              <Link href={`/programs?program_type=${t.slug}`} className="hover:text-[#7d603a] block py-1 transition-colors">
+                                {t.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
 
                     {/* Skill Levels Subgroup */}
                     <div className="space-y-1.5">
-                      <span className="text-[10px] font-sans font-bold text-[#7d603a] tracking-wider uppercase block">
-                        Skill Levels
-                      </span>
-                      <ul className="space-y-1.5 font-sans text-xs tracking-wide text-primary/85 normal-case">
-                        {skills.map((s) => (
-                          <li key={s.id}>
-                            <Link href={`/programs?skill_level=${s.slug}`} className="hover:text-accent block py-0.5">
-                              {s.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+                      <button
+                        onClick={() => toggleSubgroup("prog-skills")}
+                        className="w-full flex justify-between items-center text-xs font-serif font-bold text-[#7d603a] tracking-wider uppercase py-1 hover:opacity-85 text-left cursor-pointer group"
+                      >
+                        <span>Skill Levels</span>
+                        <ChevronDown
+                          className={`w-5 h-5 p-0.5 text-primary/50 bg-primary/5 group-hover:bg-[#ebd9bd]/50 rounded-md transition-all duration-200 ${openSubgroups["prog-skills"] ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                      {openSubgroups["prog-skills"] && (
+                        <ul className="space-y-1.5 pl-2 font-sans text-xs tracking-wide text-primary/80 font-medium normal-case animate-in slide-in-from-top-1 duration-150">
+                          {skills.map((s) => (
+                            <li key={s.id}>
+                              <Link href={`/programs?skill_level=${s.slug}`} className="hover:text-[#7d603a] block py-1 transition-colors">
+                                {s.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
 
                     {/* Regions Subgroup */}
                     <div className="space-y-1.5">
-                      <span className="text-[10px] font-sans font-bold text-[#7d603a] tracking-wider uppercase block">
-                        Regions
-                      </span>
-                      <ul className="space-y-1.5 font-sans text-xs tracking-wide text-primary/85 normal-case">
-                        {regions.map((r) => (
-                          <li key={r.id}>
-                            <Link href={`/programs?region=${r.slug}`} className="hover:text-accent block py-0.5">
-                              {r.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+                      <button
+                        onClick={() => toggleSubgroup("prog-regions")}
+                        className="w-full flex justify-between items-center text-xs font-serif font-bold text-[#7d603a] tracking-wider uppercase py-1 hover:opacity-85 text-left cursor-pointer group"
+                      >
+                        <span>Regions</span>
+                        <ChevronDown
+                          className={`w-5 h-5 p-0.5 text-primary/50 bg-primary/5 group-hover:bg-[#ebd9bd]/50 rounded-md transition-all duration-200 ${openSubgroups["prog-regions"] ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                      {openSubgroups["prog-regions"] && (
+                        <ul className="space-y-1.5 pl-2 font-sans text-xs tracking-wide text-primary/80 font-medium normal-case animate-in slide-in-from-top-1 duration-150">
+                          {regions.map((r) => (
+                            <li key={r.id}>
+                              <Link href={`/programs?region=${r.slug}`} className="hover:text-[#7d603a] block py-1 transition-colors">
+                                {r.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
 
                   </div>
@@ -651,41 +822,79 @@ const Navbar = () => {
 
               {/* Collapsible Equipment Accordion */}
               <li className="space-y-3">
-                <button
-                  onClick={() => setIsEquipmentMobileOpen(!isEquipmentMobileOpen)}
-                  className="w-full flex justify-between items-center py-1 text-left uppercase tracking-widest hover:text-accent cursor-pointer"
-                >
-                  <span className={pathname.startsWith("/equipment") ? "text-accent font-bold" : "text-primary/90"}>
+                <div className="flex items-center justify-between py-1 group">
+                  <Link
+                    href="/equipment"
+                    className={`flex-1 uppercase tracking-widest font-bold ${pathname.startsWith("/equipment") ? "text-[#7d603a]" : "text-primary/90 hover:text-[#7d603a] transition-colors"}`}
+                  >
                     Equipment
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${isEquipmentMobileOpen ? "rotate-180" : ""}`}
-                  />
-                </button>
+                  </Link>
+                  <button
+                    onClick={() => setIsEquipmentMobileOpen(!isEquipmentMobileOpen)}
+                    className="p-1.5 -mr-1 text-primary/70 bg-primary/5 hover:bg-[#ebd9bd]/50 group-hover:bg-[#ebd9bd]/30 rounded-lg cursor-pointer transition-all duration-200"
+                  >
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-300 ${isEquipmentMobileOpen ? "rotate-180 text-[#7d603a]" : ""}`}
+                    />
+                  </button>
+                </div>
 
                 {isEquipmentMobileOpen && (
-                  <div className="pl-4 border-l border-primary/10 space-y-4 animate-in slide-in-from-top-2 duration-200">
+                  <div className="pl-4 border-l border-primary/10 space-y-4 pt-1 pb-3 animate-in slide-in-from-top-2 duration-200">
                     {topCats.map((parentCat) => {
                       const subs = equipmentCategories.filter((c) => c.parent === parentCat.id);
-                      return (
-                        <div key={parentCat.id} className="space-y-2">
-                          <span className="text-[10px] tracking-wider text-[#7d603a] font-bold block">{cleanTitle(parentCat.name)}</span>
-                          <ul className="pl-2 space-y-2 text-xs tracking-wider normal-case text-primary/75">
-                            <li>
-                              <Link href={`/equipment?category=${parentCat.slug}`} className="hover:text-accent block">
-                                All {cleanTitle(parentCat.name)}
+                      const key = `eq-cat-${parentCat.id}`;
+                      
+                      if (subs.length > 0) {
+                        return (
+                          <div key={parentCat.id} className="space-y-2">
+                            <div className="flex items-center justify-between group">
+                              <Link
+                                href={`/equipment?category=${parentCat.slug}`}
+                                className="flex-1 text-xs font-serif font-bold text-[#7d603a] tracking-wider uppercase hover:opacity-80 block"
+                              >
+                                {cleanTitle(parentCat.name)}
                               </Link>
-                            </li>
-                            {subs.slice(0, 5).map((sub) => (
-                              <li key={sub.id}>
-                                <Link href={`/equipment?category=${sub.slug}`} className="hover:text-accent block">
-                                  {cleanTitle(sub.name)}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      );
+                              <button
+                                onClick={() => toggleSubgroup(key)}
+                                className="p-1 -mr-0.5 text-primary/50 bg-primary/5 hover:bg-[#ebd9bd]/50 group-hover:bg-[#ebd9bd]/30 rounded-md cursor-pointer transition-all duration-200"
+                              >
+                                <ChevronDown
+                                  className={`w-3.5 h-3.5 transition-transform duration-300 ${openSubgroups[key] ? "rotate-180" : ""}`}
+                                />
+                              </button>
+                            </div>
+                            {openSubgroups[key] && (
+                              <ul className="space-y-1.5 pl-2 font-sans text-xs tracking-wide text-primary/80 font-medium normal-case animate-in slide-in-from-top-1 duration-150">
+                                <li>
+                                  <Link href={`/equipment?category=${parentCat.slug}`} className="hover:text-[#7d603a] block py-1 transition-colors font-semibold">
+                                    All {cleanTitle(parentCat.name)}
+                                  </Link>
+                                </li>
+                                {subs.slice(0, 5).map((sub) => (
+                                  <li key={sub.id}>
+                                    <Link href={`/equipment?category=${sub.slug}`} className="hover:text-[#7d603a] block py-1 transition-colors">
+                                      {cleanTitle(sub.name)}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        );
+                      } else {
+                        // Categories with no sub-categories render as single direct redirect links
+                        return (
+                          <div key={parentCat.id} className="py-1">
+                            <Link
+                              href={`/equipment?category=${parentCat.slug}`}
+                              className="text-xs font-serif font-bold text-[#7d603a] tracking-wider uppercase hover:opacity-85 block"
+                            >
+                              {cleanTitle(parentCat.name)}
+                            </Link>
+                          </div>
+                        );
+                      }
                     })}
                   </div>
                 )}
@@ -693,113 +902,177 @@ const Navbar = () => {
 
               {/* Knowledge Accordion (Mobile) */}
               <li className="space-y-3">
-                <button
-                  onClick={() => setIsKnowledgeMobileOpen(!isKnowledgeMobileOpen)}
-                  className="w-full flex justify-between items-center py-1 text-left uppercase tracking-widest hover:text-accent cursor-pointer"
-                >
-                  <span className={pathname.startsWith("/scrolls") ? "text-accent font-bold" : "text-primary/90"}>
+                <div className="flex items-center justify-between py-1 group">
+                  <Link
+                    href="/scrolls"
+                    className={`flex-1 uppercase tracking-widest font-bold ${pathname.startsWith("/scrolls") ? "text-[#7d603a]" : "text-primary/90 hover:text-[#7d603a] transition-colors"}`}
+                  >
                     Knowledge
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${isKnowledgeMobileOpen ? "rotate-180" : ""}`}
-                  />
-                </button>
+                  </Link>
+                  <button
+                    onClick={() => setIsKnowledgeMobileOpen(!isKnowledgeMobileOpen)}
+                    className="p-1.5 -mr-1 text-primary/70 bg-primary/5 hover:bg-[#ebd9bd]/50 group-hover:bg-[#ebd9bd]/30 rounded-lg cursor-pointer transition-all duration-200"
+                  >
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-300 ${isKnowledgeMobileOpen ? "rotate-180 text-[#7d603a]" : ""}`}
+                    />
+                  </button>
+                </div>
 
                 {isKnowledgeMobileOpen && (
-                  <div className="pl-4 space-y-4 border-l border-primary/10 animate-in slide-in-from-top-2 duration-200">
+                  <div className="pl-4 border-l border-primary/10 space-y-4 pt-1 pb-3 animate-in slide-in-from-top-2 duration-200">
                     
                     {/* Categories Subgroup */}
                     <div className="space-y-1.5">
-                      <span className="text-[10px] font-sans font-bold text-[#7d603a] tracking-wider uppercase block">
-                        Categories
-                      </span>
-                      <ul className="space-y-1.5 font-sans text-xs tracking-wide text-primary/85 normal-case">
-                        <li>
-                          <Link href="/scrolls?category=bowyer-craft" className="hover:text-accent block py-0.5">
-                            Bowyer Craft
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/scrolls?category=technique" className="hover:text-accent block py-0.5">
-                            Technique &amp; Discipline
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/scrolls?category=history" className="hover:text-accent block py-0.5">
-                            History &amp; Lore
-                          </Link>
-                        </li>
-                      </ul>
+                      <button
+                        onClick={() => toggleSubgroup("know-cats")}
+                        className="w-full flex justify-between items-center text-xs font-serif font-bold text-[#7d603a] tracking-wider uppercase py-1 hover:opacity-85 text-left cursor-pointer group"
+                      >
+                        <span>Categories</span>
+                        <ChevronDown
+                          className={`w-5 h-5 p-0.5 text-primary/50 bg-primary/5 group-hover:bg-[#ebd9bd]/50 rounded-md transition-all duration-200 ${openSubgroups["know-cats"] ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                      {openSubgroups["know-cats"] && (
+                        <ul className="space-y-1.5 pl-2 font-sans text-xs tracking-wide text-primary/80 font-medium normal-case animate-in slide-in-from-top-1 duration-150">
+                          <li>
+                            <Link href="/scrolls?category=bowyer-craft" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Bowyer Craft
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/scrolls?category=technique" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Technique &amp; Discipline
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/scrolls?category=history" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              History &amp; Lore
+                            </Link>
+                          </li>
+                        </ul>
+                      )}
                     </div>
 
                     {/* Regions Subgroup */}
                     <div className="space-y-1.5">
-                      <span className="text-[10px] font-sans font-bold text-[#7d603a] tracking-wider uppercase block">
-                        Regions
-                      </span>
-                      <ul className="space-y-1.5 font-sans text-xs tracking-wide text-primary/85 normal-case">
-                        <li>
-                          <Link href="/scrolls?region=nordic" className="hover:text-accent block py-0.5">
-                            Nordic Region
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/scrolls?region=europe" className="hover:text-accent block py-0.5">
-                            Europe
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/scrolls?region=steppe" className="hover:text-accent block py-0.5">
-                            Central Asian Steppe
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/scrolls?region=ottoman" className="hover:text-accent block py-0.5">
-                            Ottoman Archery
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/scrolls?region=east-asia" className="hover:text-accent block py-0.5">
-                            East Asian
-                          </Link>
-                        </li>
-                      </ul>
+                      <button
+                        onClick={() => toggleSubgroup("know-regions")}
+                        className="w-full flex justify-between items-center text-xs font-serif font-bold text-[#7d603a] tracking-wider uppercase py-1 hover:opacity-85 text-left cursor-pointer group"
+                      >
+                        <span>Regions</span>
+                        <ChevronDown
+                          className={`w-5 h-5 p-0.5 text-primary/50 bg-primary/5 group-hover:bg-[#ebd9bd]/50 rounded-md transition-all duration-200 ${openSubgroups["know-regions"] ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                      {openSubgroups["know-regions"] && (
+                        <ul className="space-y-1.5 pl-2 font-sans text-xs tracking-wide text-primary/80 font-medium normal-case animate-in slide-in-from-top-1 duration-150">
+                          <li>
+                            <Link href="/scrolls?region=nordic" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Nordic Region
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/scrolls?region=europe" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Europe
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/scrolls?region=steppe" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Central Asian Steppe
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/scrolls?region=ottoman" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Ottoman Archery
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/scrolls?region=east-asia" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              East Asian
+                            </Link>
+                          </li>
+                        </ul>
+                      )}
                     </div>
 
                   </div>
                 )}
               </li>
 
-              <li>
-                <a
-                  href="#contact"
-                  onClick={(e) => {
-                    if (pathname !== "/") {
-                      e.preventDefault();
-                      window.location.href = "/#contact";
-                    } else {
-                      setIsOpen(false);
-                    }
-                  }}
-                  className="block py-1 text-primary/90 cursor-pointer"
-                >
-                  Contact
-                </a>
+              {/* Collapsible About Accordion (Mobile) */}
+              <li className="space-y-3">
+                <div className="flex items-center justify-between py-1 group">
+                  <Link
+                    href="/about"
+                    className={`flex-1 uppercase tracking-widest font-bold ${pathname.startsWith("/about") || pathname === "/contact" ? "text-[#7d603a]" : "text-primary/90 hover:text-[#7d603a] transition-colors"}`}
+                  >
+                    About
+                  </Link>
+                  <button
+                    onClick={() => setIsAboutMobileOpen(!isAboutMobileOpen)}
+                    className="p-1.5 -mr-1 text-primary/70 bg-primary/5 hover:bg-[#ebd9bd]/50 group-hover:bg-[#ebd9bd]/30 rounded-lg cursor-pointer transition-all duration-200"
+                  >
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-300 ${isAboutMobileOpen ? "rotate-180 text-[#7d603a]" : ""}`}
+                    />
+                  </button>
+                </div>
+
+                {isAboutMobileOpen && (
+                  <div className="pl-4 border-l border-primary/10 space-y-4 pt-1 pb-3 animate-in slide-in-from-top-2 duration-200">
+                    <div className="space-y-1.5">
+                      <button
+                        onClick={() => toggleSubgroup("about-academy")}
+                        className="w-full flex justify-between items-center text-xs font-serif font-bold text-[#7d603a] tracking-wider uppercase py-1 hover:opacity-85 text-left cursor-pointer group"
+                      >
+                        <span>Academy</span>
+                        <ChevronDown
+                          className={`w-5 h-5 p-0.5 text-primary/50 bg-primary/5 group-hover:bg-[#ebd9bd]/50 rounded-md transition-all duration-200 ${openSubgroups["about-academy"] ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                      {openSubgroups["about-academy"] && (
+                        <ul className="space-y-1.5 pl-2 font-sans text-xs tracking-wide text-primary/80 font-medium normal-case animate-in slide-in-from-top-1 duration-150">
+                          <li>
+                            <Link href="/about" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Academy Profile
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/about/jan-franko" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Jan Franko (Instructor)
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/about/partners" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Partners &amp; Bowyers
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/contact" className="hover:text-[#7d603a] block py-1 transition-colors font-semibold">
+                              Contact &amp; Inquiries
+                            </Link>
+                          </li>
+                        </ul>
+                      )}
+                    </div>
+                  </div>
+                )}
               </li>
             </ul>
           </div>
 
           {/* Quick Footer Promo */}
           <div className="p-6 bg-[#0e3b2e] text-white space-y-3">
-            <span className="text-[9px] uppercase tracking-widest text-accent font-bold font-sans">
+            <span className="text-xs uppercase tracking-widest text-accent font-bold font-sans">
               Admission Office
             </span>
-            <p className="text-[11px] text-white/70 font-sans leading-relaxed">
+            <p className="text-xs text-white/80 font-sans leading-relaxed">
               Applications are reviewed on a rolling basis. Suitable fitness levels are required for Level 3/4.
             </p>
             <Link
               href="/programs"
-              className="block text-center py-2 bg-accent text-primary font-serif font-bold text-[10px] tracking-wider uppercase rounded-lg transition-all"
+              className="block text-center py-2.5 bg-accent text-primary font-serif font-bold text-xs tracking-wider uppercase rounded-lg transition-all"
             >
               All Directory Listings
             </Link>

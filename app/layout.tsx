@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { ArcheryTransition } from "@/components/ArcheryTransition";
 
 const geistSans = Geist({
@@ -41,6 +42,7 @@ export default function RootLayout({
         <ArcheryTransition>
           {children}
         </ArcheryTransition>
+        <Footer />
       </body>
     </html>
   );
