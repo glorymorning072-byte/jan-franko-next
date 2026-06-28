@@ -57,7 +57,7 @@ const AboutPage = () => {
 
           {/* Quick Stats/Summary Sideblock */}
           <div className="lg:col-span-5 bg-white border border-primary/5 rounded-3xl p-6 md:p-8 space-y-6 shadow-sm">
-            <h3 className="text-xs uppercase tracking-widest text-[#7d603a] font-serif font-bold border-b border-primary/5 pb-2">
+            <h3 className="text-xs uppercase tracking-widest text-[#5c4629] font-serif font-bold border-b border-primary/5 pb-2">
               Academy Pillars
             </h3>
             <ul className="space-y-4">
@@ -89,7 +89,7 @@ const AboutPage = () => {
         {/* Training Environments Block */}
         <div className="bg-[#0e3b2e]/5 border border-primary/5 rounded-3xl p-8 md:p-12 space-y-8">
           <div className="space-y-2">
-            <span className="text-[9px] uppercase tracking-widest text-[#7d603a] font-serif font-bold">
+            <span className="text-[9px] uppercase tracking-widest text-[#5c4629] font-serif font-bold">
               Global Grounds
             </span>
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-primary tracking-tight">

@@ -74,7 +74,7 @@ const PartnersPage = () => {
         {/* Vetting Protocols Block */}
         <div className="space-y-8">
           <div className="text-center space-y-2">
-            <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold">
+            <span className="text-[10px] font-serif uppercase tracking-widest text-[#5c4629] font-bold">
               Archery Standards
             </span>
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-primary tracking-tight">
@@ -114,7 +114,7 @@ const PartnersPage = () => {
         {/* Master Bowyers showcase */}
         <div className="space-y-8">
           <div className="text-center space-y-2">
-            <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold">
+            <span className="text-[10px] font-serif uppercase tracking-widest text-[#5c4629] font-bold">
               The Creators
             </span>
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-primary tracking-tight">

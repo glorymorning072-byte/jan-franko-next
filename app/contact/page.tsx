@@ -59,7 +59,7 @@ const ContactPage = () => {
         <div className="lg:col-span-5 space-y-10">
           <div className="space-y-6">
             <div className="space-y-2">
-              <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold">
+              <span className="text-[10px] font-serif uppercase tracking-widest text-[#5c4629] font-bold">
                 Get in Touch
               </span>
               <h2 className="text-xl md:text-2xl font-serif font-bold text-primary tracking-tight">
@@ -108,7 +108,7 @@ const ContactPage = () => {
           {/* Training Landscapes */}
           <div className="space-y-6">
             <div className="space-y-2">
-              <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold">
+              <span className="text-[10px] font-serif uppercase tracking-widest text-[#5c4629] font-bold">
                 Field Locations
               </span>
               <h2 className="text-xl md:text-2xl font-serif font-bold text-primary tracking-tight">
@@ -131,7 +131,7 @@ const ContactPage = () => {
                 <strong>Inner Mongolia:</strong> Jurts grassland horse archery retreats organized in cooperation with regional guilds.
               </li>
             </ul>
-            <p className="text-xs text-[#7d603a] font-serif italic pt-1 border-t border-primary/5 leading-relaxed">
+            <p className="text-xs text-[#5c4629] font-serif italic pt-1 border-t border-primary/5 leading-relaxed">
               * Training and expeditions take place in remote field environments. Replies may take time while the academy is in the field.
             </p>
           </div>

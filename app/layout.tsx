@@ -25,6 +25,22 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "Jan Franko - Traditional Archery",
   description: "A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://janfranko.com",
+    title: "Jan Franko - Traditional Archery",
+    description: "A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.",
+    siteName: "Jan Franko - Traditional Archery",
+    images: [
+      {
+        url: "https://janfranko.com/Jan.png",
+        width: 1024,
+        height: 682,
+        alt: "Jan Franko - Traditional Archery",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -39,9 +55,11 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col relative bg-[#f0e9d9] text-[#0e3b2e]">
         <Navbar />
-        <ArcheryTransition>
-          {children}
-        </ArcheryTransition>
+        <main className="flex-grow">
+          <ArcheryTransition>
+            {children}
+          </ArcheryTransition>
+        </main>
         <Footer />
       </body>
     </html>

@@ -33,9 +33,9 @@ const Footer = () => {
 
         {/* Column 2: Navigation Links (span 2) */}
         <div className="lg:col-span-2 space-y-4">
-          <h4 className="text-xs font-serif font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">
+          <h3 className="text-xs font-serif font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">
             The Academy
-          </h4>
+          </h3>
           <ul className="space-y-2.5 text-sm font-sans font-medium text-[#f0e9d9]/80">
             <li>
               <Link href="/about" className="hover:text-accent transition-colors block py-0.5">
@@ -62,9 +62,9 @@ const Footer = () => {
 
         {/* Column 3: Resources (span 2) */}
         <div className="lg:col-span-2 space-y-4">
-          <h4 className="text-xs font-serif font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">
+          <h3 className="text-xs font-serif font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">
             Resources
-          </h4>
+          </h3>
           <ul className="space-y-2.5 text-sm font-sans font-medium text-[#f0e9d9]/80">
             <li>
               <Link href="/programs" className="hover:text-accent transition-colors block py-0.5">
@@ -86,9 +86,9 @@ const Footer = () => {
 
         {/* Column 4: Contact & Socials (span 4) */}
         <div className="lg:col-span-4 space-y-5">
-          <h4 className="text-xs font-serif font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">
+          <h3 className="text-xs font-serif font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">
             Contact &amp; Location
-          </h4>
+          </h3>
           <ul className="space-y-3 text-sm font-sans text-[#f0e9d9]/80 font-medium">
             <li className="flex items-start gap-3">
               <MapPin className="w-4 h-4 text-accent mt-0.5 shrink-0" />

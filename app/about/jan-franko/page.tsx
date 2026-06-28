@@ -62,7 +62,7 @@ const JanFrankoProfilePage = () => {
         {/* Hero Bio Details */}
         <div className="lg:col-span-7 space-y-6">
           <div className="space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-[#c5a880]/15 border border-[#c5a880]/35 rounded-full text-xs md:text-sm font-serif font-semibold tracking-widest uppercase text-[#7d603a]">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-[#c5a880]/15 border border-[#c5a880]/35 rounded-full text-xs md:text-sm font-serif font-semibold tracking-widest uppercase text-[#5c4629]">
               <Sparkles className="w-3 h-3 text-accent" />
               Founder &amp; Instructor
             </span>
