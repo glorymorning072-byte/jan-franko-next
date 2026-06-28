@@ -47,19 +47,17 @@ const BowyerProfileContent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [bowyerRes, categoryRes, productRes] = await Promise.all([
+        const [bowyerRes, categoryRes] = await Promise.all([
           fetch("/api/equipment/bowyers"),
-          fetch("/api/equipment/categories"),
-          fetch("/api/equipment/products")
+          fetch("/api/equipment/categories")
         ]);
 
-        if (!bowyerRes.ok || !categoryRes.ok || !productRes.ok) {
+        if (!bowyerRes.ok || !categoryRes.ok) {
           throw new Error("Failed to load partner information");
         }
 
         const bowyersList: BowyerDetails[] = await bowyerRes.json();
         const categoriesList: CategoryTerm[] = await categoryRes.json();
-        const productsList: Product[] = await productRes.json();
 
         // 1. Match current bowyer slug
         const currentBowyer = bowyersList.find((b) => b.slug === slug);
@@ -69,27 +67,10 @@ const BowyerProfileContent = () => {
         setBowyer(currentBowyer);
         setCategories(categoriesList);
 
-        // 2. Resolve WooCommerce Category ID from slug to filter products
-        const matchingCategory = categoriesList.find((c) => c.slug === slug);
-        if (matchingCategory) {
-          // Recursively find all child category IDs to do a deep filter if necessary
-          const getCategoryDescendants = (catId: number): number[] => {
-            const ids = [catId];
-            const findChildren = (parent: number) => {
-              categoriesList.forEach((c) => {
-                if (c.parent === parent) {
-                  ids.push(c.id);
-                  findChildren(c.id);
-                }
-              });
-            };
-            findChildren(catId);
-            return ids;
-          };
-          const allowedIds = getCategoryDescendants(matchingCategory.id);
-          const matchedProducts = productsList.filter((p) =>
-            p.categories.some((id) => allowedIds.includes(id))
-          );
+        // 2. Fetch specific master bowyer products for this bowyer ID
+        const productsRes = await fetch(`/api/equipment/master-bowyer-products?bowyer=${currentBowyer.id}`);
+        if (productsRes.ok) {
+          const matchedProducts = await productsRes.json();
           setProducts(matchedProducts);
         } else {
           setProducts([]);
@@ -149,7 +130,7 @@ const BowyerProfileContent = () => {
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-6">
         <Link
           href="/equipment"
-          className="inline-flex items-center gap-2 text-xs font-serif uppercase tracking-widest text-[#7d603a] hover:text-primary transition-colors cursor-pointer group"
+          className="inline-flex items-center gap-2 text-xs font-serif uppercase tracking-widest text-[#5c4629] hover:text-primary transition-colors cursor-pointer group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           Back to Armory
@@ -172,7 +153,7 @@ const BowyerProfileContent = () => {
         {/* Hero Bio Details */}
         <div className="lg:col-span-7 space-y-6">
           <div className="space-y-3">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-[#c5a880]/15 border border-[#c5a880]/35 rounded-full text-[10px] md:text-xs font-serif font-semibold tracking-widest uppercase text-[#7d603a]">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-[#c5a880]/15 border border-[#c5a880]/35 rounded-full text-[10px] md:text-xs font-serif font-semibold tracking-widest uppercase text-[#5c4629]">
               <Sparkles className="w-3 h-3 text-accent" />
               Partner Bowyer Craft
             </span>
@@ -188,7 +169,7 @@ const BowyerProfileContent = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
             <div className="space-y-2">
-              <h3 className="text-[11px] font-serif uppercase tracking-widest text-[#7d603a] font-bold">
+              <h3 className="text-[11px] font-serif uppercase tracking-widest text-[#5c4629] font-bold">
                 The Artisan Story
               </h3>
               <p className="text-xs text-primary/80 font-sans leading-relaxed">
@@ -255,7 +236,7 @@ const BowyerProfileContent = () => {
       {/* Showcase Crafts Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24 space-y-12">
         <div className="text-center space-y-2">
-          <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold">
+          <span className="text-[10px] font-serif uppercase tracking-widest text-[#5c4629] font-bold">
             Curated Showcase
           </span>
           <h2 className="text-2xl md:text-4xl font-serif font-bold text-primary tracking-tight">
@@ -300,7 +281,7 @@ const BowyerProfileContent = () => {
                   {/* Details */}
                   <div className="p-5 flex-1 flex flex-col justify-between">
                     <div className="space-y-2">
-                      <div className="text-[9px] text-[#7d603a] font-serif uppercase tracking-widest font-bold">
+                      <div className="text-[9px] text-[#5c4629] font-serif uppercase tracking-widest font-bold">
                         {cleanTitle(parentLabel)}
                       </div>
                       <h3 className="text-lg font-serif font-bold text-primary leading-snug group-hover:text-accent transition-colors duration-300 line-clamp-1">
