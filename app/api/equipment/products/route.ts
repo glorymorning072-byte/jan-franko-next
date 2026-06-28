@@ -1,24 +1,46 @@
 import { NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
 
 export async function GET() {
   try {
-    // 1. Fetch products from WordPress (10 mins cache revalidation)
+    // 1. Attempt to fetch products live from WordPress
     const res = await fetch("https://janfranko.com/wp-json/wp/v2/product?per_page=100", {
       next: { revalidate: 600 } // 10 minutes cache
     });
-    if (!res.ok) {
-      return NextResponse.json({ error: "Failed to fetch products" }, { status: res.status });
+    
+    let products = [];
+    if (res.ok) {
+      products = await res.json();
     }
-    const products = await res.json();
 
-    // 2. Fetch all unique media IDs in the products list
+    // 2. If live fetch returns empty or fails, fall back to local JSON
+    if (!Array.isArray(products) || products.length === 0) {
+      const filePath = path.join(process.cwd(), "data", "products.json");
+      const localData = fs.readFileSync(filePath, "utf-8");
+      const localProducts = JSON.parse(localData);
+
+      const mappedLocal = localProducts.map((p: any) => ({
+        id: p.id,
+        slug: p.slug,
+        title: p.title,
+        content: p.content,
+        excerpt: p.excerpt,
+        date: p.date,
+        image: p.image,
+        categories: p.categories.map((c: any) => c.id),
+        brands: [] // brands are resolved from categories dynamically
+      }));
+      return NextResponse.json(mappedLocal);
+    }
+
+    // 3. If live fetch succeeded, map WordPress fields and resolve media
     const mediaIds = Array.from(new Set(products.map((p: any) => p.featured_media).filter(Boolean)));
 
     let mediaMap: Record<number, string> = {};
     if (mediaIds.length > 0) {
-      // Fetch media assets with 24 hours cache revalidation
       const mediaRes = await fetch(`https://janfranko.com/wp-json/wp/v2/media?include=${mediaIds.join(",")}&per_page=100`, {
-        next: { revalidate: 86400 } // media details rarely change, so cache them longer
+        next: { revalidate: 86400 }
       });
       if (mediaRes.ok) {
         const mediaItems = await mediaRes.json();
@@ -28,7 +50,6 @@ export async function GET() {
       }
     }
 
-    // 3. Map products to return a simplified structured response
     const mapped = products.map((p: any) => ({
       id: p.id,
       slug: p.slug,
@@ -43,6 +64,26 @@ export async function GET() {
 
     return NextResponse.json(mapped);
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    // Catch-all local fallback on server errors
+    try {
+      const filePath = path.join(process.cwd(), "data", "products.json");
+      const localData = fs.readFileSync(filePath, "utf-8");
+      const localProducts = JSON.parse(localData);
+      
+      const mappedLocal = localProducts.map((p: any) => ({
+        id: p.id,
+        slug: p.slug,
+        title: p.title,
+        content: p.content,
+        excerpt: p.excerpt,
+        date: p.date,
+        image: p.image,
+        categories: p.categories.map((c: any) => c.id),
+        brands: []
+      }));
+      return NextResponse.json(mappedLocal);
+    } catch (fallbackErr: any) {
+      return NextResponse.json({ error: err.message }, { status: 500 });
+    }
   }
 }

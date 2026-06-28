@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
 
 export async function GET() {
   try {
@@ -15,13 +17,41 @@ export async function GET() {
     const prodRes = await fetch("https://janfranko.com/wp-json/wp/v2/product?per_page=100", {
       next: { revalidate: 600 }
     });
-    if (!prodRes.ok) {
-      // Fallback: return all categories if products fetch fails
-      return NextResponse.json(categories);
+    
+    let products = [];
+    if (prodRes.ok) {
+      products = await prodRes.json();
     }
-    const products = await prodRes.json();
 
-    // 3. Build set of active category IDs (including all ancestor IDs)
+    // 3. Fallback to local products list if live fetch returns empty
+    if (!Array.isArray(products) || products.length === 0) {
+      const filePath = path.join(process.cwd(), "data", "products.json");
+      const localData = fs.readFileSync(filePath, "utf-8");
+      const localProducts = JSON.parse(localData);
+
+      // Extract active category IDs from local products list
+      const activeIds = new Set<number>();
+      const addCategoryAndAncestors = (catId: number) => {
+        activeIds.add(catId);
+        const cat = categories.find((c: any) => c.id === catId);
+        if (cat && cat.parent !== 0) {
+          addCategoryAndAncestors(cat.parent);
+        }
+      };
+
+      localProducts.forEach((p: any) => {
+        if (Array.isArray(p.categories)) {
+          p.categories.forEach((c: any) => {
+            addCategoryAndAncestors(c.id);
+          });
+        }
+      });
+
+      const filteredCategories = categories.filter((c: any) => activeIds.has(c.id));
+      return NextResponse.json(filteredCategories);
+    }
+
+    // 4. Standard live filter path
     const activeIds = new Set<number>();
     const addCategoryAndAncestors = (catId: number) => {
       activeIds.add(catId);
@@ -39,9 +69,7 @@ export async function GET() {
       }
     });
 
-    // 4. Return only categories that are currently associated with products
     const filteredCategories = categories.filter((c: any) => activeIds.has(c.id));
-
     return NextResponse.json(filteredCategories);
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
