@@ -39,7 +39,6 @@ const EquipmentContent = () => {
   // Search & Filter States
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState("");
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [sortBy, setSortBy] = useState("newest");
 
@@ -79,8 +78,9 @@ const EquipmentContent = () => {
       if (term) setSelectedCategory(term.id.toString());
     }
     if (brandParam) {
+      // Map legacy brand link parameter to category filter
       const term = categories.find((c) => c.slug === brandParam);
-      if (term) setSelectedBrand(term.id.toString());
+      if (term) setSelectedCategory(term.id.toString());
     }
     if (queryParam) {
       setSearchQuery(queryParam);
@@ -103,16 +103,7 @@ const EquipmentContent = () => {
         overwrite: "auto"
       }
     );
-  }, [loading, searchQuery, selectedCategory, selectedBrand, sortBy]);
-
-  // Resolve Category Dropdowns
-  // Top-level categories (parent is 0 or 28 - Equipment, excluding Bowyers 114)
-  const filterCategories = categories.filter(
-    (c) => (c.parent === 0 || c.parent === 28) && c.id !== 114
-  );
-
-  // Bowyers / Brands (parent is 114 - Master Bowyers)
-  const brandCategories = categories.filter((c) => c.parent === 114);
+  }, [loading, searchQuery, selectedCategory, sortBy]);
 
   // Helper to recursively get all subcategory IDs for deep matching
   const getCategoryDescendants = (catId: number): number[] => {
@@ -129,6 +120,31 @@ const EquipmentContent = () => {
     return ids;
   };
 
+  // Build a recursive category tree list for hierarchy select options
+  const getCategoryTree = (): { id: number; name: string; level: number }[] => {
+    const list: { id: number; name: string; level: number }[] = [];
+    
+    const buildTree = (parentId: number, level: number) => {
+      const children = categories.filter((c) => c.parent === parentId);
+      children.sort((a, b) => a.name.localeCompare(b.name));
+      
+      children.forEach((child) => {
+        list.push({ id: child.id, name: child.name, level });
+        buildTree(child.id, level + 1);
+      });
+    };
+
+    const roots = categories.filter((c) => c.parent === 0 && c.id !== 28);
+    roots.sort((a, b) => a.name.localeCompare(b.name));
+    
+    roots.forEach((root) => {
+      list.push({ id: root.id, name: root.name, level: 0 });
+      buildTree(root.id, 1);
+    });
+
+    return list;
+  };
+
   // Filter Logic
   const getFilteredProducts = () => {
     return products.filter((product) => {
@@ -140,14 +156,7 @@ const EquipmentContent = () => {
         if (!matchesCategory) return false;
       }
 
-      // 2. Brand Filter (match bowyer subcategory)
-      if (selectedBrand) {
-        const brandId = parseInt(selectedBrand);
-        const matchesBrand = product.categories.includes(brandId);
-        if (!matchesBrand) return false;
-      }
-
-      // 3. Text Search Query
+      // 2. Text Search Query
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const matchesTitle = product.title.toLowerCase().includes(query);
@@ -176,7 +185,7 @@ const EquipmentContent = () => {
 
   const filteredProducts = getFilteredProducts();
   const sortedProducts = getSortedProducts(filteredProducts);
-  const isFiltersActive = searchQuery !== "" || selectedCategory !== "" || selectedBrand !== "";
+  const isFiltersActive = searchQuery !== "" || selectedCategory !== "";
 
   // Helper to clean HTML entities in title
   const cleanTitle = (raw: string | undefined) => {
@@ -285,42 +294,20 @@ const EquipmentContent = () => {
           }`}
         >
           <div className="bg-white border border-primary/5 p-6 rounded-3xl shadow-sm space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              
-              {/* Category Filter */}
-              <div className="flex flex-col space-y-2">
-                <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Category</label>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent cursor-pointer"
-                >
-                  <option value="">All Categories</option>
-                  {filterCategories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cleanTitle(cat.name)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Brand/Bowyer Filter */}
-              <div className="flex flex-col space-y-2">
-                <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Bowyer / Brand</label>
-                <select
-                  value={selectedBrand}
-                  onChange={(e) => setSelectedBrand(e.target.value)}
-                  className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent cursor-pointer"
-                >
-                  <option value="">All Brands</option>
-                  {brandCategories.map((brand) => (
-                    <option key={brand.id} value={brand.id}>
-                      {cleanTitle(brand.name)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
+            <div className="max-w-md mx-auto space-y-2">
+              <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Category</label>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent cursor-pointer font-sans"
+              >
+                <option value="">All Categories</option>
+                {getCategoryTree().map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {"— ".repeat(cat.level) + cleanTitle(cat.name)}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Reset Controls */}
@@ -328,7 +315,6 @@ const EquipmentContent = () => {
               <button
                 onClick={() => {
                   setSelectedCategory("");
-                  setSelectedBrand("");
                 }}
                 className="px-4 py-2 border border-primary/20 hover:border-primary text-primary text-xs font-serif uppercase tracking-wider rounded-xl transition-colors duration-300 cursor-pointer"
               >
@@ -360,18 +346,9 @@ const EquipmentContent = () => {
                 </button>
               </span>
             )}
-            {selectedBrand && (
-              <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#7d603a] px-3 py-1 rounded-full text-xs font-sans font-medium">
-                Brand: {cleanTitle(categories.find(c => c.id.toString() === selectedBrand)?.name || "")}
-                <button onClick={() => setSelectedBrand("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            )}
             <button
               onClick={() => {
                 setSelectedCategory("");
-                setSelectedBrand("");
                 setSearchQuery("");
               }}
               className="text-[#7d603a] hover:text-[#0e3b2e] text-xs font-serif font-bold underline ml-2 cursor-pointer transition-colors"
