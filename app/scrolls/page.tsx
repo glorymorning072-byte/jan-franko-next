@@ -22,9 +22,11 @@ const ScrollsContent = () => {
   useEffect(() => {
     const regionParam = searchParams.get("region");
     const categoryParam = searchParams.get("category");
+    const queryParam = searchParams.get("query");
 
     if (regionParam) setSelectedRegion(regionParam);
     if (categoryParam) setSelectedCategory(categoryParam);
+    if (queryParam) setSearchQuery(queryParam);
   }, [searchParams]);
 
   // GSAP Stagger Entrance Animation for Article Cards

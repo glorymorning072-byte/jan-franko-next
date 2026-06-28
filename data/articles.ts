@@ -46,6 +46,16 @@ export const categories: Category[] = [
     id: "history",
     title: "History & Lore",
     description: "Exploring the historical significance, cultural traditions, and tactical warfare roles of traditional archery across nomadic empires and medieval kingdoms."
+  },
+  {
+    id: "archery-philosophy",
+    title: "Philosophy & Zen",
+    description: "The mental training, breathing cycles, and mindfulness practices that elevate traditional bowmanship from combat to spiritual discipline."
+  },
+  {
+    id: "expedition-survival",
+    title: "Expedition & Survival",
+    description: "Essential survival woodcraft, tracking, and environmental resilience tips gathered from remote expedition fields."
   }
 ];
 
@@ -87,7 +97,11 @@ export const tags: Tag[] = [
   { id: "composite", title: "Composite Bow" },
   { id: "flight", title: "Flight Archery" },
   { id: "zen", title: "Kyudo" },
-  { id: "horn-bow", title: "Horn Bow" }
+  { id: "horn-bow", title: "Horn Bow" },
+  { id: "philosophy", title: "Philosophy" },
+  { id: "survival", title: "Survival" },
+  { id: "arrow", title: "Arrow Craft" },
+  { id: "meditation", title: "Meditation" }
 ];
 
 export const articles: Article[] = [
@@ -125,8 +139,8 @@ export const articles: Article[] = [
     subtitle: "Mastering release anchors and bow maintenance in sub-zero wilderness.",
     excerpt: "Winter changes everything. Learn how extreme cold affects bowstrings, timber flexibility, and the archer's anchor points in snowy climates.",
     regionId: "nordic",
-    categories: ["technique"],
-    tags: ["winter"],
+    categories: ["technique", "expedition-survival"],
+    tags: ["winter", "survival"],
     date: "June 25, 2026",
     readTime: "4 min read",
     image: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=1200&q=80",
@@ -327,8 +341,8 @@ export const articles: Article[] = [
     subtitle: "Standing zen, ritual breathing, and the spiritual focus of the asymmetric yumi.",
     excerpt: "Kyudo is more than shooting; it is active meditation. Explore the eight stages of the Japanese draw and the asymmetric yumi bow.",
     regionId: "east-asia",
-    categories: ["history", "technique"],
-    tags: ["zen"],
+    categories: ["history", "technique", "archery-philosophy"],
+    tags: ["zen", "philosophy", "meditation"],
     date: "May 29, 2026",
     readTime: "5 min read",
     image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1200&q=80",
