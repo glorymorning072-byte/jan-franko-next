@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
-import { Compass, Shield, Award, ChevronLeft, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Compass, Shield, ChevronLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/Button";
 
 interface Product {
@@ -38,24 +38,18 @@ const ProductDetailPage = () => {
   // Detail States
   const [product, setProduct] = useState<Product | null>(null);
   const [categories, setCategories] = useState<CategoryTerm[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [parsedContent, setParsedContent] = useState("");
   const [specifications, setSpecifications] = useState<SpecRow[]>([]);
 
-  // Wizard States
-  const [showWizard, setShowWizard] = useState(false);
-  const [wizardStep, setWizardStep] = useState(1);
-  const [drawWeight, setDrawWeight] = useState("45 lbs");
-  const [drawLength, setDrawLength] = useState("30 inches");
-  const [handDominance, setHandDominance] = useState("Right Hand");
-  const [riserWood, setRiserWood] = useState("Ash");
-  const [hornOverlays, setHornOverlays] = useState(false);
-  const [customVeneers, setCustomVeneers] = useState(false);
+  // Inquiry Form States
+  const [showInquiryForm, setShowInquiryForm] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [country, setCountry] = useState("");
-  const [customEngraving, setCustomEngraving] = useState("");
+  const [message, setMessage] = useState("");
+  const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Fetch product on mount
@@ -70,6 +64,7 @@ const ProductDetailPage = () => {
           const prods: Product[] = await prodRes.json();
           const cats: CategoryTerm[] = await catRes.json();
           setCategories(cats);
+          setAllProducts(prods);
 
           const found = prods.find((p) => p.slug === slug);
           if (found) {
@@ -121,40 +116,32 @@ const ProductDetailPage = () => {
   useEffect(() => {
     if (loading || !product) return;
 
+    // Reset view states when slug changes
+    setShowInquiryForm(false);
+    setSubmitted(false);
+
     gsap.fromTo(
       ".detail-fade-in",
       { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" }
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: "power2.out", overwrite: "auto" }
     );
-  }, [loading, product]);
+  }, [loading, slug, product]);
 
-  // Form Validation
-  const handleNextStep = () => {
-    if (wizardStep === 3) {
-      // Validate Contact Information
-      const newErrors: Record<string, string> = {};
-      if (!fullName.trim()) newErrors.fullName = "Full Name is required";
-      if (!email.trim() || !email.includes("@")) newErrors.email = "Valid Email is required";
-      if (!phone.trim()) newErrors.phone = "Phone number is required";
-      if (!country.trim()) newErrors.country = "Country is required";
+  // Form Submission
+  const handleSubmitInquiry = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newErrors: Record<string, string> = {};
+    if (!fullName.trim()) newErrors.fullName = "Full Name is required";
+    if (!email.trim() || !email.includes("@")) newErrors.email = "Valid Email is required";
+    if (!phone.trim()) newErrors.phone = "Phone number is required";
+    if (!message.trim()) newErrors.message = "Message text is required";
 
-      if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
-        return;
-      }
-      setErrors({});
-      setWizardStep(4); // Completion
-    } else {
-      setWizardStep(wizardStep + 1);
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
     }
-  };
-
-  const handlePrevStep = () => {
-    if (wizardStep === 1) {
-      setShowWizard(false);
-    } else {
-      setWizardStep(wizardStep - 1);
-    }
+    setErrors({});
+    setSubmitted(true);
   };
 
   if (loading) {
@@ -199,6 +186,21 @@ const ProductDetailPage = () => {
       .replace(/&amp;/g, "&");
   };
 
+  // Helper to strip HTML tags for card excerpt
+  const cleanExcerpt = (rawHtml: string) => {
+    const textOnly = rawHtml.replace(/<[^>]*>/g, "");
+    return textOnly.length > 120 ? textOnly.slice(0, 120) + "..." : textOnly;
+  };
+
+  // Resolve Related Products (matching same category, up to 3 items)
+  const relatedProducts = allProducts
+    .filter(
+      (p) =>
+        p.id !== product.id &&
+        p.categories.some((catId) => product.categories.includes(catId))
+    )
+    .slice(0, 3);
+
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative pb-24">
       {/* CSS Overrides for WordPress Body Typography */}
@@ -225,6 +227,17 @@ const ProductDetailPage = () => {
           color: rgba(15, 23, 42, 0.85);
           line-height: 1.7;
           margin-bottom: 1rem;
+        }
+        .product-body-content ul {
+          padding-left: 1.25rem;
+          margin-bottom: 1rem;
+          list-style-type: disc;
+        }
+        .product-body-content li {
+          font-family: var(--font-sans), sans-serif;
+          font-size: 0.9rem;
+          margin-bottom: 0.35rem;
+          color: rgba(15, 23, 42, 0.85);
         }
         .product-body-content blockquote {
           font-family: var(--font-serif), Georgia, serif;
@@ -284,7 +297,7 @@ const ProductDetailPage = () => {
           )}
         </div>
 
-        {/* Right Side (60%): Description & Custom Order Wizard */}
+        {/* Right Side (60%): Description & Consultation inquiry form */}
         <div className="lg:col-span-7 space-y-8 detail-fade-in">
           
           {/* Title & Brand Header */}
@@ -299,7 +312,7 @@ const ProductDetailPage = () => {
             <div className="flex flex-wrap items-center gap-3 pt-1 text-xs text-primary/50 font-sans">
               <span className="flex items-center gap-1">
                 <Compass className="w-4 h-4 text-accent" />
-                Handcrafted Custom Build
+                Handcrafted Traditional Gear
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
@@ -309,167 +322,61 @@ const ProductDetailPage = () => {
             </div>
           </div>
 
-          {/* Wizard or Description Container */}
-          {!showWizard ? (
+          {/* Inquiry Form or Details Panel */}
+          {!showInquiryForm ? (
             <div className="bg-white border border-primary/5 p-8 md:p-12 rounded-3xl shadow-sm space-y-8">
               
-              {/* Request Consultation Action Box */}
+              {/* Inquiry Action Box */}
               <div className="bg-[#0e3b2e] p-6 rounded-2xl text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-inner">
                 <div className="space-y-1 text-center sm:text-left">
                   <h4 className="font-serif text-base font-bold text-white uppercase tracking-wider">
-                    Order Consultation
+                    Inquire &amp; Order
                   </h4>
                   <p className="text-xs text-white/70 font-sans leading-relaxed">
-                    Custom draw weights, lengths, riser woods, and reinforcements.
+                    Contact our academy craft coordinators to discuss sizing, lead times, or customized specifications.
                   </p>
                 </div>
                 <button
-                  onClick={() => setShowWizard(true)}
+                  onClick={() => {
+                    setShowInquiryForm(true);
+                    setMessage(`I would like to inquire about ordering the "${cleanTitle(product.title)}" and would appreciate more details on current lead times.`);
+                  }}
                   className="px-6 py-2.5 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer shrink-0"
                 >
-                  Configure Build
+                  Request Details
                 </button>
               </div>
 
-              {/* Main Description */}
+              {/* Description Body */}
               <div 
                 className="product-body-content text-slate-800 leading-relaxed font-sans text-sm md:text-base space-y-6"
                 dangerouslySetInnerHTML={{ __html: parsedContent }}
               />
             </div>
           ) : (
-            // Consultation Form Wizard
-            <div className="bg-white border border-primary/5 p-8 md:p-12 rounded-3xl shadow-sm space-y-8">
-              
-              {/* Wizard Steps Header */}
-              <div className="flex items-center justify-between border-b border-primary/5 pb-4">
-                <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-serif font-bold">
-                  Custom Build Wizard
-                </h4>
-                <span className="text-xs font-sans text-primary/40">Step {wizardStep} of 3</span>
-              </div>
-
-              {/* Progress Indicator */}
-              <div className="w-full bg-secondary h-1 rounded-full overflow-hidden">
-                <div 
-                  className="bg-accent h-full transition-all duration-300"
-                  style={{ width: `${(wizardStep / 3) * 100}%` }}
-                />
-              </div>
-
-              {/* STEP 1: Specs */}
-              {wizardStep === 1 && (
-                <div className="space-y-6">
-                  <h3 className="text-lg font-serif font-bold text-primary">Step 1: Draw Specifications</h3>
-                  
-                  {/* Weight Selector */}
-                  <div className="flex flex-col space-y-2">
-                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Preferred Draw Weight</label>
-                    <select
-                      value={drawWeight}
-                      onChange={(e) => setDrawWeight(e.target.value)}
-                      className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent cursor-pointer"
+            // Inquiry Contact Form
+            <div className="bg-white border border-primary/5 p-8 md:p-12 rounded-3xl shadow-sm space-y-6">
+              {!submitted ? (
+                <form onSubmit={handleSubmitInquiry} className="space-y-6">
+                  <div className="flex items-center justify-between border-b border-primary/5 pb-3">
+                    <h3 className="text-lg font-serif font-bold text-primary">Request a Consultation</h3>
+                    <button
+                      type="button"
+                      onClick={() => setShowInquiryForm(false)}
+                      className="text-xs font-serif font-bold tracking-widest uppercase text-primary/40 hover:text-primary transition-colors cursor-pointer"
                     >
-                      {["30 lbs", "35 lbs", "40 lbs", "45 lbs", "50 lbs", "55 lbs", "60 lbs", "65 lbs", "70 lbs"].map((w) => (
-                        <option key={w} value={w}>{w}</option>
-                      ))}
-                    </select>
+                      Cancel
+                    </button>
                   </div>
 
-                  {/* Draw Length Selector */}
-                  <div className="flex flex-col space-y-2">
-                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Preferred Draw Length</label>
-                    <select
-                      value={drawLength}
-                      onChange={(e) => setDrawLength(e.target.value)}
-                      className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent cursor-pointer"
-                    >
-                      {["26 inches", "27 inches", "28 inches", "29 inches", "30 inches", "31 inches", "32 inches"].map((l) => (
-                        <option key={l} value={l}>{l}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Hand Dominance */}
-                  <div className="flex flex-col space-y-2">
-                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Hand Dominance</label>
-                    <div className="grid grid-cols-2 gap-4">
-                      {["Right Hand", "Left Hand"].map((h) => (
-                        <button
-                          key={h}
-                          type="button"
-                          onClick={() => setHandDominance(h)}
-                          className={`py-2.5 text-xs font-sans rounded-xl border transition-all cursor-pointer ${
-                            handDominance === h
-                              ? "bg-primary text-secondary border-primary font-semibold"
-                              : "bg-white border-primary/15 text-primary hover:border-primary/30"
-                          }`}
-                        >
-                          {h}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* STEP 2: Upgrades */}
-              {wizardStep === 2 && (
-                <div className="space-y-6">
-                  <h3 className="text-lg font-serif font-bold text-primary">Step 2: Timber &amp; Add-ons</h3>
-                  
-                  {/* Riser Wood Selector */}
-                  <div className="flex flex-col space-y-2">
-                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Core / Riser Wood</label>
-                    <select
-                      value={riserWood}
-                      onChange={(e) => setRiserWood(e.target.value)}
-                      className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent cursor-pointer"
-                    >
-                      {["Ash (Included)", "Walnut (Included)", "Wenge (+100 EUR)", "Bocote (+100 EUR)", "Bespoke stabilized burls (+150 EUR)"].map((wd) => (
-                        <option key={wd} value={wd}>{wd}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Checkbox Options */}
-                  <div className="space-y-4 pt-2">
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={hornOverlays}
-                        onChange={(e) => setHornOverlays(e.target.checked)}
-                        className="w-4.5 h-4.5 border border-primary/20 rounded accent-accent"
-                      />
-                      <span className="text-xs font-sans text-primary">Add custom horn tip overlays and riser overlays (+60 EUR)</span>
-                    </label>
-                    
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={customVeneers}
-                        onChange={(e) => setCustomVeneers(e.target.checked)}
-                        className="w-4.5 h-4.5 border border-primary/20 rounded accent-accent"
-                      />
-                      <span className="text-xs font-sans text-primary">Select premium outer limb veneers (+80 EUR)</span>
-                    </label>
-                  </div>
-                </div>
-              )}
-
-              {/* STEP 3: Contact */}
-              {wizardStep === 3 && (
-                <div className="space-y-6">
-                  <h3 className="text-lg font-serif font-bold text-primary">Step 3: Contact Details</h3>
-                  
-                  {/* Full Name */}
+                  {/* Name */}
                   <div className="flex flex-col space-y-1">
                     <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Full Name</label>
                     <input
                       type="text"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Enter your full name"
+                      placeholder="Your name"
                       className={`w-full bg-secondary text-primary border rounded-xl p-2.5 text-xs outline-none focus:border-accent ${
                         errors.fullName ? "border-red-500" : "border-primary/10"
                       }`}
@@ -477,7 +384,7 @@ const ProductDetailPage = () => {
                     {errors.fullName && <span className="text-[10px] text-red-500 font-sans">{errors.fullName}</span>}
                   </div>
 
-                  {/* Email & Phone */}
+                  {/* Contact Fields */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col space-y-1">
                       <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Email Address</label>
@@ -492,14 +399,14 @@ const ProductDetailPage = () => {
                       />
                       {errors.email && <span className="text-[10px] text-red-500 font-sans">{errors.email}</span>}
                     </div>
-                    
+
                     <div className="flex flex-col space-y-1">
                       <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Phone Number</label>
                       <input
                         type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+380..."
+                        placeholder="Phone number"
                         className={`w-full bg-secondary text-primary border rounded-xl p-2.5 text-xs outline-none focus:border-accent ${
                           errors.phone ? "border-red-500" : "border-primary/10"
                         }`}
@@ -508,83 +415,154 @@ const ProductDetailPage = () => {
                     </div>
                   </div>
 
-                  {/* Country */}
+                  {/* Inquiry Message */}
                   <div className="flex flex-col space-y-1">
-                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Country / Region</label>
-                    <input
-                      type="text"
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                      placeholder="e.g. Ukraine, Germany"
-                      className={`w-full bg-secondary text-primary border rounded-xl p-2.5 text-xs outline-none focus:border-accent ${
-                        errors.country ? "border-red-500" : "border-primary/10"
+                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Inquiry Details</label>
+                    <textarea
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      rows={4}
+                      className={`w-full bg-secondary text-primary border rounded-xl p-2.5 text-xs outline-none focus:border-accent resize-none ${
+                        errors.message ? "border-red-500" : "border-primary/10"
                       }`}
                     />
-                    {errors.country && <span className="text-[10px] text-red-500 font-sans">{errors.country}</span>}
+                    {errors.message && <span className="text-[10px] text-red-500 font-sans">{errors.message}</span>}
                   </div>
 
-                  {/* Custom Engraving */}
-                  <div className="flex flex-col space-y-1">
-                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Special Requests or Engravings (Optional)</label>
-                    <textarea
-                      value={customEngraving}
-                      onChange={(e) => setCustomEngraving(e.target.value)}
-                      placeholder="e.g. Custom name engraving on the riser, target draw weight tips..."
-                      rows={3}
-                      className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent resize-none"
-                    />
+                  {/* Submit Controls */}
+                  <div className="flex justify-between items-center pt-4 border-t border-primary/5">
+                    <button
+                      type="button"
+                      onClick={() => setShowInquiryForm(false)}
+                      className="text-xs font-serif font-bold tracking-widest uppercase hover:text-accent transition-colors cursor-pointer"
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex items-center gap-2 px-6 py-2.5 bg-primary text-secondary font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer"
+                    >
+                      Send Message
+                      <ArrowRight className="w-3.5 h-3.5 text-accent" />
+                    </button>
                   </div>
-                </div>
-              )}
-
-              {/* STEP 4: Completion Screen */}
-              {wizardStep === 4 && (
+                </form>
+              ) : (
+                // Submit confirmation screen
                 <div className="text-center py-10 space-y-6">
                   <div className="flex justify-center">
                     <CheckCircle2 className="w-16 h-16 text-accent animate-bounce" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-serif font-bold text-primary">Request Submitted</h3>
+                    <h3 className="text-2xl font-serif font-bold text-primary">Inquiry Sent</h3>
                     <p className="text-sm text-primary/80 font-sans max-w-md mx-auto leading-relaxed">
-                      Thank you, {fullName}. Your custom build configuration for the {cleanTitle(product.title)} has been sent. Jan Franko or the bowyer will reach out to you within 48 hours for review.
+                      Thank you, {fullName}. We have received your inquiry regarding the {cleanTitle(product.title)}. Our craft coordinators will reach out to you within 48 hours for consultation.
                     </p>
                   </div>
                   <div className="pt-4 flex justify-center gap-4">
-                    <Button onClick={() => setShowWizard(false)} variant="primary">
-                      Close Configurator
-                    </Button>
-                    <Button href="/equipment" variant="outline">
-                      Return to Catalog
-                    </Button>
+                    <button
+                      onClick={() => {
+                        setShowInquiryForm(false);
+                        setSubmitted(false);
+                      }}
+                      className="px-6 py-2.5 bg-primary text-secondary font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer"
+                    >
+                      Return to Details
+                    </button>
+                    <Link
+                      href="/equipment"
+                      className="px-6 py-2.5 border border-primary/20 hover:border-primary text-primary font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all cursor-pointer inline-block"
+                    >
+                      Armory Catalog
+                    </Link>
                   </div>
                 </div>
               )}
-
-              {/* Navigation Controls */}
-              {wizardStep < 4 && (
-                <div className="flex justify-between items-center pt-6 border-t border-primary/5">
-                  <button
-                    onClick={handlePrevStep}
-                    className="text-xs font-serif font-bold tracking-widest uppercase hover:text-accent transition-colors cursor-pointer"
-                  >
-                    Back
-                  </button>
-                  <button
-                    onClick={handleNextStep}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-primary text-secondary font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer"
-                  >
-                    {wizardStep === 3 ? "Submit Request" : "Continue"}
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              )}
-
             </div>
           )}
 
         </div>
 
       </div>
+
+      {/* 3. Related Products Section (Bottom) */}
+      {relatedProducts.length > 0 && (
+        <div className="max-w-6xl mx-auto px-6 mt-20 border-t border-primary/10 pt-16 space-y-8 detail-fade-in">
+          <div className="space-y-2">
+            <span className="text-[10px] uppercase tracking-widest text-[#7d603a] font-serif font-bold">
+              Complete your Set
+            </span>
+            <h2 className="text-2xl md:text-3xl font-serif font-bold tracking-tight text-primary">
+              Related Equipment
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {relatedProducts.map((p) => {
+              // Resolve category labels
+              const relParentId = p.categories.find(
+                (id) => categories.find((c) => c.id === id)?.parent === 0
+              );
+              const relParentLabel = relParentId
+                ? categories.find((c) => c.id === relParentId)?.name
+                : "Equipment";
+
+              const relBrandId = p.categories.find(
+                (id) => categories.find((c) => c.id === id)?.parent === 114
+              );
+              const relBrandLabel = relBrandId
+                ? categories.find((c) => c.id === relBrandId)?.name
+                : null;
+
+              return (
+                <Link
+                  key={p.slug}
+                  href={`/equipment/${p.slug}`}
+                  className="group bg-white border border-primary/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:border-accent/40 transition-all duration-300 flex flex-col h-[380px] cursor-pointer"
+                >
+                  {/* Image Container */}
+                  <div className="relative w-full h-[180px] bg-primary/10 overflow-hidden">
+                    <Image
+                      src={p.image}
+                      alt={p.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover group-hover:scale-102 transition-transform duration-700 ease-out"
+                    />
+                  </div>
+
+                  {/* Body details */}
+                  <div className="p-5 flex-1 flex flex-col justify-between">
+                    <div className="space-y-1.5">
+                      <div className="flex flex-wrap items-center gap-1 text-[9px] text-[#7d603a] font-serif uppercase tracking-widest font-bold">
+                        <span>{cleanTitle(relParentLabel)}</span>
+                        {relBrandLabel && (
+                          <>
+                            <span className="text-primary/30 font-sans">•</span>
+                            <span>{cleanTitle(relBrandLabel)}</span>
+                          </>
+                        )}
+                      </div>
+                      <h3 className="text-base font-serif font-bold text-primary group-hover:text-accent transition-colors duration-300 line-clamp-1">
+                        {cleanTitle(p.title)}
+                      </h3>
+                      <p className="text-xs text-primary/75 leading-relaxed font-sans line-clamp-2">
+                        {cleanExcerpt(p.excerpt)}
+                      </p>
+                    </div>
+
+                    <div className="border-t border-primary/5 pt-3.5 flex items-center justify-between text-[10px] font-serif uppercase tracking-widest font-bold text-accent group-hover:translate-x-1 transition-transform duration-300">
+                      <span>Inspect Specs</span>
+                      <span>→</span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
