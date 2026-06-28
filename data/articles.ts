@@ -116,7 +116,7 @@ export const articles: Article[] = [
     tags: ["flatbow", "winter"],
     date: "June 12, 2026",
     readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1547989453-11e67ffb3885?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1654593321497-1dea66d89091?q=80&w=1896&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     author: "Academy Bowyer",
     featured: false,
     content: `
@@ -143,7 +143,7 @@ export const articles: Article[] = [
     tags: ["winter", "survival"],
     date: "June 25, 2026",
     readTime: "4 min read",
-    image: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.pexels.com/photos/6620627/pexels-photo-6620627.jpeg",
     author: "Expedition Guide",
     featured: false,
     content: `
@@ -171,7 +171,7 @@ export const articles: Article[] = [
     tags: ["yew", "warbow"],
     date: "May 18, 2026",
     readTime: "7 min read",
-    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.pexels.com/photos/11807514/pexels-photo-11807514.jpeg",
     author: "Jan Franko",
     featured: true,
     content: `
@@ -202,6 +202,7 @@ export const articles: Article[] = [
     date: "June 5, 2026",
     readTime: "6 min read",
     image: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80",
+    // 
     author: "Academy Historian",
     featured: false,
     content: `
@@ -229,7 +230,7 @@ export const articles: Article[] = [
     tags: ["thumb-draw", "composite"],
     date: "June 20, 2026",
     readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.pexels.com/photos/30876954/pexels-photo-30876954.jpeg",
     author: "Expedition Master",
     featured: false,
     content: `
@@ -259,7 +260,7 @@ export const articles: Article[] = [
     tags: ["horse", "thumb-draw"],
     date: "June 27, 2026",
     readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1598974357801-cbca100e65d3?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.pexels.com/photos/18047510/pexels-photo-18047510.jpeg",
     author: "Steppe Trainer",
     featured: false,
     content: `
@@ -287,7 +288,7 @@ export const articles: Article[] = [
     tags: ["composite", "horn-bow"],
     date: "April 29, 2026",
     readTime: "8 min read",
-    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.pexels.com/photos/6669402/pexels-photo-6669402.jpeg",
     author: "Jan Franko",
     featured: false,
     content: `
@@ -317,7 +318,7 @@ export const articles: Article[] = [
     tags: ["flight", "composite"],
     date: "June 2, 2026",
     readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1627831927345-ea86fd92b789?q=80&w=1474&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     author: "Academy Historian",
     featured: false,
     content: `
@@ -345,7 +346,7 @@ export const articles: Article[] = [
     tags: ["zen", "philosophy", "meditation"],
     date: "May 29, 2026",
     readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.pexels.com/photos/7126201/pexels-photo-7126201.jpeg",
     author: "Kyudo Instructor",
     featured: false,
     content: `
@@ -385,7 +386,7 @@ export const articles: Article[] = [
     tags: ["composite", "horn-bow"],
     date: "June 10, 2026",
     readTime: "7 min read",
-    image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.pexels.com/photos/15306764/pexels-photo-15306764.jpeg",
     author: "Jan Franko",
     featured: false,
     content: `
