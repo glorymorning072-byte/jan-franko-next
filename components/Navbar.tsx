@@ -27,6 +27,8 @@ const Navbar = () => {
   const [skills, setSkills] = useState<Term[]>([]);
   const [regions, setRegions] = useState<Term[]>([]);
   const [equipmentCategories, setEquipmentCategories] = useState<CategoryTerm[]>([]);
+  const [bowyers, setBowyers] = useState<any[]>([]);
+  const [activeBowyerIndex, setActiveBowyerIndex] = useState(0);
   
   const pathname = usePathname();
 
@@ -38,13 +40,14 @@ const Navbar = () => {
     setIsEquipmentMobileOpen(false);
   }, [pathname]);
 
-  // Fetch all taxonomies on mount to populate Mega Menu columns dynamically
+  // Fetch all taxonomies and bowyer partners on mount to populate Mega Menu columns dynamically
   useEffect(() => {
     const fetchTaxonomies = async () => {
       try {
-        const [navRes, eqRes] = await Promise.all([
+        const [navRes, eqRes, bowyerRes] = await Promise.all([
           fetch("/api/nav-taxonomies"),
-          fetch("/api/equipment/categories")
+          fetch("/api/equipment/categories"),
+          fetch("/api/equipment/bowyers")
         ]);
 
         if (navRes.ok) {
@@ -57,6 +60,10 @@ const Navbar = () => {
           const eqData = await eqRes.json();
           setEquipmentCategories(eqData || []);
         }
+        if (bowyerRes.ok) {
+          const bowyerData = await bowyerRes.json();
+          setBowyers(bowyerData || []);
+        }
       } catch (err) {
         console.error("Failed to fetch nav menu taxonomies:", err);
       }
@@ -64,6 +71,15 @@ const Navbar = () => {
 
     fetchTaxonomies();
   }, []);
+
+  // Auto-play timer for the partner bowyers carousel
+  useEffect(() => {
+    if (bowyers.length <= 1) return;
+    const timer = setInterval(() => {
+      setActiveBowyerIndex((prev) => (prev + 1) % bowyers.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [bowyers]);
 
   // Filter top-level categories (parent is 0 or 28, excluding Bowyers 114)
   const topCats = equipmentCategories.filter(
@@ -262,24 +278,92 @@ const Navbar = () => {
                 {gridSlots.map((slot, index) => {
                   if (slot.type === "special") {
                     return (
-                      <div key="special-promo" className="bg-[#0e3b2e] rounded-2xl p-5 text-white flex flex-col justify-between space-y-4 shadow-inner col-span-1 h-full min-h-[180px]">
-                        <div className="space-y-1.5">
-                          <span className="text-[10px] uppercase tracking-widest text-accent font-bold font-sans">
-                            Custom Armory
-                          </span>
-                          <h5 className="font-serif text-lg font-bold leading-snug">
-                            Bespoke Bowyer Craft
-                          </h5>
-                          <p className="text-[11px] text-white/70 font-sans leading-relaxed">
-                            Order a custom, handcrafted traditional bow designed for your exact specifications.
-                          </p>
-                        </div>
-                        <Link
-                          href="/equipment?custom=true"
-                          className="inline-block text-center py-2 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-[10px] tracking-wider uppercase rounded-xl transition-all"
-                        >
-                          Request Custom Build
-                        </Link>
+                      <div key="special-promo" className="bg-[#0e3b2e] rounded-2xl p-4 text-white flex flex-col justify-between space-y-3.5 shadow-inner col-span-1 h-full min-h-[380px] relative overflow-hidden group/carousel">
+                        {bowyers.length === 0 ? (
+                          <div className="flex items-center justify-center h-full text-white/50 text-[10px] italic font-sans">
+                            Loading partners...
+                          </div>
+                        ) : (
+                          <div className="relative flex-1 flex flex-col justify-between space-y-3 animate-in fade-in duration-500">
+                            <div className="space-y-2.5 z-10 flex-1">
+                              {/* Header Label and Dots Row */}
+                              <div className="flex items-center justify-between">
+                                <span className="text-[9px] uppercase tracking-widest text-accent font-bold font-sans">
+                                  Master Bowyer / Partner
+                                </span>
+                                <div className="flex gap-1">
+                                  {bowyers.map((_, i) => (
+                                    <button
+                                      key={i}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                        setActiveBowyerIndex(i);
+                                      }}
+                                      className={`w-1.5 h-1.5 rounded-full transition-all cursor-pointer ${
+                                        i === activeBowyerIndex ? "bg-accent w-3" : "bg-white/30"
+                                      }`}
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                              
+                              {/* Full-width Taller Banner Image (3:4 aspect ratio) */}
+                              <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden shadow-md">
+                                <img
+                                  src={bowyers[activeBowyerIndex].image}
+                                  alt={bowyers[activeBowyerIndex].name}
+                                  className="w-full h-full object-cover group-hover/carousel:scale-102 transition-transform duration-500"
+                                />
+                              </div>
+
+                              {/* Title & Description Details */}
+                              <div className="space-y-0.5">
+                                <h5 className="font-serif text-sm font-bold leading-tight">
+                                  {cleanTitle(bowyers[activeBowyerIndex].name)}
+                                </h5>
+                                <p className="text-[9px] text-accent font-serif italic line-clamp-1">
+                                  "{cleanTitle(bowyers[activeBowyerIndex].heading)}"
+                                </p>
+                                <p className="text-[10px] text-white/75 font-sans leading-relaxed line-clamp-2 pt-1">
+                                  {bowyers[activeBowyerIndex].story}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Button and Controls Row */}
+                            <div className="flex items-center gap-2 z-10 pt-1.5 border-t border-white/10">
+                              <Link
+                                href={`/equipment?category=${bowyers[activeBowyerIndex].slug}`}
+                                className="flex-1 text-center py-2 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-[9px] tracking-wider uppercase rounded-xl transition-all"
+                              >
+                                View Crafts
+                              </Link>
+                              <div className="flex gap-1">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    setActiveBowyerIndex((prev) => (prev - 1 + bowyers.length) % bowyers.length);
+                                  }}
+                                  className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors cursor-pointer"
+                                >
+                                  <ChevronDown className="w-3.5 h-3.5 rotate-90" />
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    setActiveBowyerIndex((prev) => (prev + 1) % bowyers.length);
+                                  }}
+                                  className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors cursor-pointer"
+                                >
+                                  <ChevronDown className="w-3.5 h-3.5 -rotate-90" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     );
                   }
@@ -287,8 +371,13 @@ const Navbar = () => {
                   return (
                     <div key={slot.parent.id} className="space-y-4">
                       <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-2 flex items-center gap-1.5 font-sans">
-                        <Tag className="w-4 h-4" />
-                        {cleanTitle(slot.parent.name)}
+                        <Tag className="w-4 h-4 text-accent" />
+                        <Link
+                          href={`/equipment?category=${slot.parent.slug}`}
+                          className="hover:text-accent transition-colors cursor-pointer"
+                        >
+                          {cleanTitle(slot.parent.name)}
+                        </Link>
                       </h4>
                       <ul className="space-y-2.5 font-sans text-xs tracking-wider normal-case text-primary/80">
                         {slot.items.length === 0 ? (
