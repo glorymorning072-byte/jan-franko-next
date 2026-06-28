@@ -233,6 +233,12 @@ const BowyerProductContent = () => {
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative pb-24">
+      <title>{`${product.title} | Master Bowyer Creation - Jan Franko`}</title>
+      <meta name="description" content={product.excerpt ? product.excerpt.replace(/<[^>]*>/g, "") : `Handcrafted traditional bow creation.`} />
+      <meta property="og:title" content={`${product.title} | Master Bowyer Creation - Jan Franko`} />
+      <meta property="og:description" content={product.excerpt ? product.excerpt.replace(/<[^>]*>/g, "") : `Handcrafted traditional bow creation.`} />
+      <meta property="og:image" content={product.image} />
+      
       {/* 1. Navigation Breadcrumb Banner */}
       <div className="max-w-6xl mx-auto px-6 pt-8 pb-4 flex items-center justify-between text-xs font-serif uppercase tracking-widest text-[#5c4629] font-bold">
         <Link href="/equipment" className="flex items-center gap-1.5 hover:text-[#0e3b2e] transition-colors">

@@ -26,6 +26,11 @@ export default function ArticlePage({ params }: PageProps) {
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
+      <title>{`${article.title} | Archery Chronicles - Jan Franko`}</title>
+      <meta name="description" content={article.subtitle || `Read historic traditional archery insights from Jan Franko's scrolls.`} />
+      <meta property="og:title" content={`${article.title} | Archery Chronicles - Jan Franko`} />
+      <meta property="og:description" content={article.subtitle || `Read historic traditional archery insights from Jan Franko's scrolls.`} />
+      <meta property="og:image" content={article.image} />
       
       {/* HTML Inject Styles for Rich-Text content */}
       <style dangerouslySetInnerHTML={{ __html: `

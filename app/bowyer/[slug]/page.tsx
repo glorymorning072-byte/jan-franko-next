@@ -122,6 +122,11 @@ const BowyerProfileContent = () => {
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
+      <title>{`${bowyer.name} | Master Bowyer Profile - Jan Franko`}</title>
+      <meta name="description" content={`Explore the bio, crafting philosophy, and vetted traditional bows handcrafted by Master Bowyer ${bowyer.name}.`} />
+      <meta property="og:title" content={`${bowyer.name} | Master Bowyer Profile - Jan Franko`} />
+      <meta property="og:description" content={`Explore the bio, crafting philosophy, and vetted traditional bows handcrafted by Master Bowyer ${bowyer.name}.`} />
+      <meta property="og:image" content={bowyer.image} />
       
       {/* Back to Armory Nav bar */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-6">

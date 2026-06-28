@@ -25,6 +25,11 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "Jan Franko - Traditional Archery",
   description: "A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.",
+  icons: {
+    icon: "https://janfranko.com/wp-content/uploads/2026/03/Frame-212.svg",
+    shortcut: "https://janfranko.com/wp-content/uploads/2026/03/Frame-212.svg",
+    apple: "https://janfranko.com/wp-content/uploads/2026/03/Frame-212.svg",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",

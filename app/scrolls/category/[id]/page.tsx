@@ -26,6 +26,10 @@ export default function CategoryFeedPage({ params }: PageProps) {
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
+      <title>{`${category.title} Scrolls | Traditional Archery - Jan Franko`}</title>
+      <meta name="description" content={category.description || `Read historic archery scrolls categorized under ${category.title}.`} />
+      <meta property="og:title" content={`${category.title} Scrolls | Traditional Archery - Jan Franko`} />
+      <meta property="og:description" content={category.description || `Read historic archery scrolls categorized under ${category.title}.`} />
       
       {/* 1. Hero Header */}
       <div className="relative w-full bg-[#0e3b2e] text-white py-16 md:py-20 px-6 overflow-hidden flex flex-col items-center justify-center border-b border-primary/10">

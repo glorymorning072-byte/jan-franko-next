@@ -47,6 +47,11 @@ const PartnersPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
+      <title>Vetted Bowyers & Partners | Traditional Archery - Jan Franko</title>
+      <meta name="description" content="Vetting elite master bowyers and traditional craftsmen globally. Explore our artisan network dedicated to historical bow construction standards." />
+      <meta property="og:title" content="Vetted Bowyers & Partners | Traditional Archery - Jan Franko" />
+      <meta property="og:description" content="Vetting elite master bowyers and traditional craftsmen globally. Explore our artisan network dedicated to historical bow construction standards." />
+      
       {/* Hero Header Section */}
       <div className="relative w-full bg-[#0e3b2e] text-white py-20 md:py-24 px-6 overflow-hidden flex flex-col items-center justify-center border-b border-primary/10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12),transparent_70%)] z-0" />

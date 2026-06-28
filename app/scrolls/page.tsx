@@ -114,6 +114,10 @@ const ScrollsContent = () => {
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
+      <title>The Scrolls | Archery Lore & Journal - Jan Franko</title>
+      <meta name="description" content="Historical insights, combat archery research, and logs from wilderness expeditions exploring global archery lineages." />
+      <meta property="og:title" content="The Scrolls | Archery Lore & Journal - Jan Franko" />
+      <meta property="og:description" content="Historical insights, combat archery research, and logs from wilderness expeditions exploring global archery lineages." />
       
       {/* 1. Hero Section */}
       <div className="relative w-full bg-[#0e3b2e] text-white py-16 md:py-24 px-6 overflow-hidden flex flex-col items-center justify-center border-b border-primary/10">

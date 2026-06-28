@@ -205,6 +205,10 @@ const EquipmentContent = () => {
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
+      <title>The Armory | Traditional Archery Equipment - Jan Franko</title>
+      <meta name="description" content="Explore curated traditional archery bows, quivers, arrows, and bespoke gear vetted through rigorous field testing and traditional craft." />
+      <meta property="og:title" content="The Armory | Traditional Archery Equipment - Jan Franko" />
+      <meta property="og:description" content="Explore curated traditional archery bows, quivers, arrows, and bespoke gear vetted through rigorous field testing and traditional craft." />
       
       {/* 1. Hero Header Section */}
       <div className="relative w-full bg-[#0e3b2e] text-white py-16 md:py-24 px-6 overflow-hidden flex flex-col items-center justify-center border-b border-primary/10">

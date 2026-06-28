@@ -524,6 +524,10 @@ const ProgramsContent = () => {
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
+      <title>Training Programs & Expeditions | Traditional Archery - Jan Franko</title>
+      <meta name="description" content="Discover structured training, cultural study, and seasonal wilderness expeditions designed for traditional archers of all skill levels." />
+      <meta property="og:title" content="Training Programs & Expeditions | Traditional Archery - Jan Franko" />
+      <meta property="og:description" content="Discover structured training, cultural study, and seasonal wilderness expeditions designed for traditional archers of all skill levels." />
       
       {/* 1. Hero Section */}
       <div className="relative w-full bg-[#0e3b2e] text-white py-20 md:py-28 px-6 overflow-hidden flex flex-col items-center justify-center border-b border-primary/10">

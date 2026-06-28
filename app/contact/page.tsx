@@ -31,6 +31,11 @@ const ContactPage = () => {
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
+      <title>Connect | Traditional Archery Academy - Jan Franko</title>
+      <meta name="description" content="Inquire about custom bows, apply for upcoming training cohorts, or register for traditional archery expeditions." />
+      <meta property="og:title" content="Connect | Traditional Archery Academy - Jan Franko" />
+      <meta property="og:description" content="Inquire about custom bows, apply for upcoming training cohorts, or register for traditional archery expeditions." />
+      
       {/* Hero Header Section */}
       <div className="relative w-full bg-[#0e3b2e] text-white py-16 md:py-24 px-6 overflow-hidden flex flex-col items-center justify-center border-b border-primary/10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12),transparent_70%)] z-0" />

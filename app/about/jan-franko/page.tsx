@@ -46,6 +46,11 @@ const JanFrankoProfilePage = () => {
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
+      <title>Jan Franko | Founder & Traditional Archer - Jan Franko</title>
+      <meta name="description" content="Discover the lineage, training credentials, and Swiss federation bowhunting certifications of founder Jan Franko." />
+      <meta property="og:title" content="Jan Franko | Founder & Traditional Archer - Jan Franko" />
+      <meta property="og:description" content="Discover the lineage, training credentials, and Swiss federation bowhunting certifications of founder Jan Franko." />
+      
       {/* Hero Header Section */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-10 md:py-16 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
         

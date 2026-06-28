@@ -26,6 +26,10 @@ export default function RegionFeedPage({ params }: PageProps) {
 
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
+      <title>{`${region.title} Region Scrolls | Traditional Archery - Jan Franko`}</title>
+      <meta name="description" content={region.description || `Read historic archery scrolls from the ${region.title} region.`} />
+      <meta property="og:title" content={`${region.title} Region Scrolls | Traditional Archery - Jan Franko`} />
+      <meta property="og:description" content={region.description || `Read historic archery scrolls from the ${region.title} region.`} />
       
       {/* 1. Hero Header */}
       <div className="relative w-full bg-[#0e3b2e] text-white py-16 md:py-20 px-6 overflow-hidden flex flex-col items-center justify-center border-b border-primary/10">
