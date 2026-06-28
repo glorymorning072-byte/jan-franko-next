@@ -263,7 +263,7 @@ const BowyerProfileContent = () => {
               return (
                 <Link
                   key={product.slug}
-                  href={`/equipment/${product.slug}`}
+                  href={`/master-bower-product/${product.slug}`}
                   className="product-card group bg-white border border-primary/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:border-accent/40 transition-all duration-300 flex flex-col h-[400px] cursor-pointer"
                 >
                   {/* Card Image banner */}
