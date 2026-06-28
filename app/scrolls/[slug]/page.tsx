@@ -77,6 +77,7 @@ export default function ArticlePage({ params }: PageProps) {
             alt={article.title}
             fill
             priority
+            sizes="100vw"
             className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/70 to-transparent z-10" />
@@ -190,6 +191,7 @@ export default function ArticlePage({ params }: PageProps) {
                         src={rel.image}
                         alt={rel.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, 300px"
                         className="object-cover group-hover:scale-102 transition-transform duration-500"
                       />
                     </div>

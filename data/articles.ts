@@ -116,7 +116,7 @@ export const articles: Article[] = [
     tags: ["flatbow", "winter"],
     date: "June 12, 2026",
     readTime: "5 min read",
-    image: "https://images.unsplash.com/photo-1608976478519-06caef25a2f8?auto=format&fit=crop&w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1547989453-11e67ffb3885?auto=format&fit=crop&w=1200&q=80",
     author: "Academy Bowyer",
     featured: false,
     content: `

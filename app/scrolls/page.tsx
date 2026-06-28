@@ -31,6 +31,8 @@ const ScrollsContent = () => {
 
   // GSAP Stagger Entrance Animation for Article Cards
   useEffect(() => {
+    if (document.querySelectorAll(".scroll-card").length === 0) return;
+    
     gsap.fromTo(
       ".scroll-card",
       { opacity: 0, y: 20 },
@@ -306,6 +308,7 @@ const ScrollsContent = () => {
                   src={featuredArticle.image}
                   alt={featuredArticle.title}
                   fill
+                  sizes="(max-w-1024px) 100vw, 60vw"
                   className="object-cover group-hover:scale-102 transition-transform duration-700 ease-out"
                 />
                 <div className="absolute top-4 left-4 z-10 px-3.5 py-1.5 bg-[#0e3b2e] border border-accent/30 rounded-full text-[10px] font-serif font-bold text-white shadow-sm uppercase tracking-widest">
@@ -362,6 +365,7 @@ const ScrollsContent = () => {
                     src={article.image}
                     alt={article.title}
                     fill
+                    sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
                     className="object-cover group-hover:scale-103 transition-transform duration-700 ease-out"
                   />
                   <div className="absolute top-4 right-4 z-10 px-2.5 py-1 bg-secondary/95 border border-primary/15 rounded-full text-[9px] font-sans font-bold text-primary uppercase tracking-wider">

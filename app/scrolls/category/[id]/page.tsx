@@ -86,6 +86,7 @@ export default function CategoryFeedPage({ params }: PageProps) {
                     src={article.image}
                     alt={article.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover group-hover:scale-103 transition-transform duration-700 ease-out"
                   />
                   <div className="absolute top-4 right-4 z-10 px-2.5 py-1 bg-secondary/95 border border-primary/15 rounded-full text-[9px] font-sans font-bold text-primary uppercase tracking-wider">
