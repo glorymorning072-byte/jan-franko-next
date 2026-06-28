@@ -49,7 +49,19 @@ export const ArcheryTransition = ({ children }: { children: React.ReactNode }) =
             onComplete: () => {
               // Add a pause delay once fully covered, before navigating
               setTimeout(() => {
+                const targetPath = href.split("?")[0];
+                const currentPath = pathname;
+
                 router.push(href);
+
+                // If navigating to the same page with different query parameters,
+                // Next.js will NOT trigger a pathname change. We must trigger
+                // the entrance reveal transition manually!
+                if (targetPath === currentPath) {
+                  setTimeout(() => {
+                    runEntranceAnimation();
+                  }, 120);
+                }
               }, 450);
             }
           });
@@ -103,41 +115,46 @@ export const ArcheryTransition = ({ children }: { children: React.ReactNode }) =
     return () => document.removeEventListener("click", handleLinkClick, true);
   }, [pathname, router]);
 
+  // Shared helper function to split panels open and reset transitions
+  const runEntranceAnimation = () => {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        setIsTransitioning(false);
+        // Instantly reset panels/target elements back off-screen
+        gsap.set(topPanelRef.current, { y: "-100%" });
+        gsap.set(bottomPanelRef.current, { y: "100%" });
+        gsap.set(targetRef.current, { opacity: 0, scale: 0.5, x: 0 });
+        gsap.set(arrowRef.current, { opacity: 0, x: "-250px" });
+      }
+    });
+
+    // 1. Dissolve target and arrow
+    tl.to([targetRef.current, arrowRef.current], {
+      opacity: 0,
+      scale: 0.8,
+      duration: 0.3,
+      ease: "power2.in"
+    }, 0);
+
+    // 2. Split top and bottom panels apart vertically
+    tl.to(topPanelRef.current, {
+      y: "-100%",
+      duration: 0.5,
+      ease: "power2.inOut"
+    }, 0.15);
+
+    tl.to(bottomPanelRef.current, {
+      y: "100%",
+      duration: 0.5,
+      ease: "power2.inOut"
+    }, 0.15);
+  };
+
   // Entrance transition triggered upon Next.js page change
   useEffect(() => {
     // Small buffer delay to allow DOM hydration and painting behind the cover
     const timer = setTimeout(() => {
-      const tl = gsap.timeline({
-        onComplete: () => {
-          setIsTransitioning(false);
-          // Instantly reset panels/target elements back off-screen
-          gsap.set(topPanelRef.current, { y: "-100%" });
-          gsap.set(bottomPanelRef.current, { y: "100%" });
-          gsap.set(targetRef.current, { opacity: 0, scale: 0.5, x: 0 });
-          gsap.set(arrowRef.current, { opacity: 0, x: "-250px" });
-        }
-      });
-
-      // 1. Dissolve target and arrow
-      tl.to([targetRef.current, arrowRef.current], {
-        opacity: 0,
-        scale: 0.8,
-        duration: 0.3,
-        ease: "power2.in"
-      }, 0);
-
-      // 2. Split top and bottom panels apart vertically
-      tl.to(topPanelRef.current, {
-        y: "-100%",
-        duration: 0.5,
-        ease: "power2.inOut"
-      }, 0.15);
-
-      tl.to(bottomPanelRef.current, {
-        y: "100%",
-        duration: 0.5,
-        ease: "power2.inOut"
-      }, 0.15);
+      runEntranceAnimation();
     }, 90);
 
     return () => clearTimeout(timer);
