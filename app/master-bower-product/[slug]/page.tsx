@@ -549,7 +549,11 @@ const BowyerProductContent = () => {
 
       {/* 4. Storytelling Narrative Sections (Lineage & Reliability) */}
       {(product.acf?.lineage_content || product.acf?.reliability_content) && (
-        <div className="max-w-6xl mx-auto px-6 mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 detail-fade-in">
+        <div className={`max-w-6xl mx-auto px-6 mt-12 detail-fade-in ${
+          product.acf?.lineage_content && product.acf?.reliability_content
+            ? "grid grid-cols-1 md:grid-cols-2 gap-8"
+            : "w-full"
+        }`}>
           {product.acf?.lineage_content && (
             <div className="bg-[#0e3b2e] text-white p-8 rounded-3xl shadow-sm space-y-4 relative overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(197,168,128,0.06),transparent_60%)] pointer-events-none" />
