@@ -169,7 +169,7 @@ const AboutPage = () => {
                 "Shoot with attention. Move with awareness. Practice regularly in real environments."
               </blockquote>
               <p>
-                The goal is not just perfect technique, but consistent presence, mental stability, and physical control under pressure. Jan Franko unites two decades of therapeutic practice with traditional bow disciplines to guide archers to instinctive mastery.
+                The goal is not just mechanical technique, but consistent presence, mental stability, and physical control under pressure. Jan Franko unites more than 25 years of therapeutic practice and Traditional Chinese Medicine with traditional bow disciplines to guide archers to instinctive mastery.
               </p>
               <div className="pt-4 flex flex-wrap gap-4">
                 <Link

@@ -597,15 +597,19 @@ const Navbar = () => {
                     <div className="space-y-2.5 text-xs text-white/80 font-sans">
                       <div className="flex items-center gap-2">
                         <MapPin className="w-3.5 h-3.5 text-accent shrink-0" />
-                        <span>Košice, Slovakia</span>
+                        <span>Tirol, Austria &amp; Košice, Slovakia</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Mail className="w-3.5 h-3.5 text-accent shrink-0" />
-                        <span>contact@janfranko.com</span>
+                        <a href="mailto:janfranko@tutanota.com" className="hover:text-accent transition-colors">
+                          janfranko@tutanota.com
+                        </a>
                       </div>
                       <div className="flex items-center gap-2">
                         <Phone className="w-3.5 h-3.5 text-accent shrink-0" />
-                        <span>+43 664 93296890</span>
+                        <a href="https://wa.me/436641645360" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                          +43 664 164 53 60
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -650,7 +654,7 @@ const Navbar = () => {
                         LinkedIn
                       </a>
                       <a
-                        href="https://wa.me/4366493296890"
+                        href="https://wa.me/436641645360"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 bg-[#f4f1e8] hover:bg-[#ebd9bd]/25 px-3 py-2 rounded-xl text-[10px] font-sans font-medium text-primary hover:text-accent transition-colors group"

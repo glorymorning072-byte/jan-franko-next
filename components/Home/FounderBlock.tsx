@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -11,13 +12,13 @@ if (typeof window !== "undefined") {
 }
 
 const FOUNDER_DATA = {
-  role: "Head Instructor",
+  role: "Founder & Head Instructor",
   name: "Jan Franko",
   biography: [
-    "Training and expeditions are led by Jan Franko, founder of the academy. The academy is led by an instructor with decades of experience in traditional archery. Practical teaching extends back to the year 2000.",
-    "This dual focus on physical biomechanics and mental stillness ensures practitioners build instinct through rigorous, measurable structure."
+    "Training and expeditions are led by Jan Franko, founder of the academy. He unites more than 25 years of international professional experience in therapeutic bodywork, Traditional Chinese Medicine (TCM), and Qigong with traditional archery mastery.",
+    "This deep synthesis of physical biomechanics, breath regulation, and instinctive focus ensures practitioners develop enduring stamina and natural alignment in any terrain."
   ],
-  quote: "The arrow does not seek the target, it simply finds its way when the mind is no longer in the way. Discipline is not a restriction, but the architecture of freedom.",
+  quote: "Archery is not only about the bow and the arrow. It is about the relationship between the body, breath, movement, attention and intention.",
   image: {
     src: "https://janfranko.com/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-11-at-11.33.11-PM-12.png",
     alt: "Jan Franko - Founder & Head Instructor"
@@ -191,6 +192,16 @@ const FounderBlock = () => {
                 — {FOUNDER_DATA.name}
               </cite>
             </blockquote>
+
+            <div className="pt-2 flex justify-start">
+              <Link
+                href="/about/jan-franko"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-secondary hover:bg-accent hover:text-[#0e3b2e] rounded-full font-serif text-xs uppercase tracking-widest font-bold transition-all shadow-md hover:scale-105"
+              >
+                <span>Read Instructor Profile &amp; Lineage</span>
+                <span>→</span>
+              </Link>
+            </div>
           </div>
 
           {/* Right Image Column */}
