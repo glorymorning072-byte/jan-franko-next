@@ -152,12 +152,20 @@ export const ArcheryTransition = ({ children }: { children: React.ReactNode }) =
 
   // Entrance transition triggered upon Next.js page change
   useEffect(() => {
-    // Small buffer delay to allow DOM hydration and painting behind the cover
+    // Ensure the new DOM tree is mounted and painted before opening the cover
+    let animationFrameId: number;
     const timer = setTimeout(() => {
-      runEntranceAnimation();
-    }, 90);
+      animationFrameId = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          runEntranceAnimation();
+        });
+      });
+    }, 160);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    };
   }, [pathname]);
 
   return (

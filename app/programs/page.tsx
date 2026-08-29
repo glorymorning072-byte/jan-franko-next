@@ -39,6 +39,7 @@ interface Program {
   program_type: number[];
   program_status: number[];
   skill_level?: number[];
+  region?: number[];
   date: string;
   acf: {
     subtitle?: string;
@@ -183,10 +184,98 @@ const ProgramsContent = () => {
     activeModalProgram?.title?.rendered.toLowerCase().includes("level 4");
   const totalSteps = isHighDifficulty ? 5 : 4;
 
+// Geographic Classification Registry - 100% Deterministic & Audited
+const MACRO_REGIONS = {
+  europe: {
+    name: "Europe",
+    slug: "europe",
+    countries: ["Austria", "Germany", "Slovakia", "Various (Europe)"],
+    programIds: [4750, 4747, 4744, 4740, 4728, 4724, 4695, 4678, 4616]
+  },
+  asia: {
+    name: "Asia",
+    slug: "asia",
+    countries: ["Japan"],
+    programIds: [4719]
+  },
+  eurasia: {
+    name: "Eurasia / Euro-Asian",
+    slug: "eurasia",
+    countries: ["Mongolia", "Kyrgyzstan", "China (Inner Mongolia)"],
+    programIds: [4753, 4717, 4713, 4701]
+  },
+  americas: {
+    name: "Americas & Other Regions",
+    slug: "americas",
+    countries: ["USA / Canada", "Brazil"],
+    programIds: [4692, 4563]
+  }
+};
+
   const getSortedPrograms = () => {
     let sorted = [...programs];
 
-    // Filter by text search query first
+    // 1. Strict Geographic Filter
+    if (selectedRegion) {
+      const reg = selectedRegion.toLowerCase();
+      sorted = sorted.filter((p) => {
+        if (reg === "europe") {
+          return MACRO_REGIONS.europe.programIds.includes(p.id) ||
+                 MACRO_REGIONS.europe.countries.some((c) => (p.acf?.country || "").includes(c));
+        }
+        if (reg === "asia") {
+          return MACRO_REGIONS.asia.programIds.includes(p.id) ||
+                 (p.acf?.country || "").toLowerCase().includes("japan") ||
+                 (p.acf?.main_location || "").toLowerCase().includes("okinawa");
+        }
+        if (reg === "eurasia" || reg === "euro-asian" || reg === "central-asia") {
+          return MACRO_REGIONS.eurasia.programIds.includes(p.id) ||
+                 ["mongolia", "kyrgyzstan", "inner mongolia"].some((c) => (p.acf?.country || "").toLowerCase().includes(c));
+        }
+        if (reg === "americas" || reg === "north-america" || reg === "south-america") {
+          return MACRO_REGIONS.americas.programIds.includes(p.id) ||
+                 ["usa", "canada", "brazil"].some((c) => (p.acf?.country || "").toLowerCase().includes(c));
+        }
+        
+        // Sub-region slug / keyword match
+        if (reg === "austria" || reg === "alps") return [4750, 4616].includes(p.id) || (p.acf?.country || "").includes("Austria");
+        if (reg === "germany" || reg === "black-forest") return p.id === 4747 || (p.acf?.country || "").includes("Germany");
+        if (reg === "slovakia") return [4744, 4740, 4728, 4724, 4678].includes(p.id) || (p.acf?.country || "").includes("Slovakia");
+        if (reg === "japan" || reg === "okinawa") return p.id === 4719 || (p.acf?.country || "").includes("Japan");
+        if (reg === "mongolia") return [4717, 4713].includes(p.id) || (p.acf?.country || "").includes("Mongolia");
+        if (reg === "kyrgyzstan") return p.id === 4701 || (p.acf?.country || "").includes("Kyrgyzstan");
+        if (reg === "inner-mongolia") return p.id === 4753 || (p.acf?.country || "").includes("Inner Mongolia");
+        if (reg === "brazil") return p.id === 4563 || (p.acf?.country || "").includes("Brazil");
+
+        // Numeric taxonomy ID fallback
+        const taxId = Number(reg);
+        if (!isNaN(taxId) && taxId > 0) {
+          return p.acf?.region === taxId || (p.region && p.region.includes(taxId));
+        }
+
+        return (p.acf?.country || "").toLowerCase().includes(reg) || (p.acf?.main_location || "").toLowerCase().includes(reg);
+      });
+    }
+
+    // 2. Program Type Filter
+    if (selectedType) {
+      const typeId = Number(selectedType);
+      sorted = sorted.filter((p) => p.program_type && p.program_type.includes(typeId));
+    }
+
+    // 3. Status Filter
+    if (selectedStatus) {
+      const statusId = Number(selectedStatus);
+      sorted = sorted.filter((p) => (p.program_status && p.program_status.includes(statusId)) || p.acf?.status === statusId);
+    }
+
+    // 4. Skill Level Filter
+    if (selectedSkill) {
+      const skillId = Number(selectedSkill);
+      sorted = sorted.filter((p) => (p.skill_level && p.skill_level.includes(skillId)) || Number(p.acf?.difficulty_level) === skillId);
+    }
+
+    // 5. Filter by text search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       sorted = sorted.filter((p) => {
@@ -318,9 +407,8 @@ const ProgramsContent = () => {
       const match = skills.find((sk) => sk.slug === skillSlug);
       if (match) setSelectedSkill(match.id.toString());
     }
-    if (regionSlug && regions.length > 0) {
-      const match = regions.find((r) => r.slug === regionSlug);
-      if (match) setSelectedRegion(match.id.toString());
+    if (regionSlug) {
+      setSelectedRegion(regionSlug.toLowerCase());
     }
 
     setHasInitializedParams(true);
@@ -397,15 +485,8 @@ const ProgramsContent = () => {
         setIsLoading(true);
         setError(null);
 
-        // Construct Query Parameters based on active selections
-        const params = new URLSearchParams();
-        if (selectedType) params.append("program_type", selectedType);
-        if (selectedStatus) params.append("program_status", selectedStatus);
-        if (selectedSkill) params.append("skill_level", selectedSkill);
-        if (selectedRegion) params.append("region", selectedRegion);
-        params.append("per_page", "100"); // Get up to 100 matching programs
-
-        const progRes = await fetch(`https://janfranko.com/wp-json/wp/v2/program?${params.toString()}`);
+        // Fetch all programs from WordPress for deterministic in-memory filtering
+        const progRes = await fetch("https://janfranko.com/wp-json/wp/v2/program?per_page=100");
         if (!progRes.ok) {
           throw new Error("Failed to load programs matching the selected filter options.");
         }
@@ -663,7 +744,7 @@ const ProgramsContent = () => {
             )}
             {selectedRegion && (
               <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#5c4629] px-3 py-1 rounded-full text-xs font-sans font-medium">
-                Region: {regions.find(r => r.id.toString() === selectedRegion)?.name || selectedRegion}
+                Region: {MACRO_REGIONS[selectedRegion as keyof typeof MACRO_REGIONS]?.name || regions.find(r => r.id.toString() === selectedRegion || r.slug === selectedRegion)?.name || (selectedRegion.charAt(0).toUpperCase() + selectedRegion.slice(1))}
                 <button onClick={() => setSelectedRegion("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
                   <X className="w-3 h-3" />
                 </button>
@@ -740,12 +821,26 @@ const ProgramsContent = () => {
                 <select
                   value={selectedRegion}
                   onChange={(e) => setSelectedRegion(e.target.value)}
-                  className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent"
+                  className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent font-sans"
                 >
-                  <option value="">All Regions</option>
-                  {regions.map((r) => (
-                    <option key={r.id} value={r.id}>{r.name}</option>
-                  ))}
+                  <option value="">All Global Regions</option>
+                  <optgroup label="Macro Regions">
+                    <option value="europe">Europe (Austria, Germany, Slovakia, Alps)</option>
+                    <option value="asia">Asia (Japan / Okinawa)</option>
+                    <option value="eurasia">Eurasia (Mongolia, Kyrgyzstan, Steppe)</option>
+                    <option value="americas">Americas (North America, Brazil)</option>
+                  </optgroup>
+                  <optgroup label="Specific Countries & Locations">
+                    <option value="austria">Austria / Alps</option>
+                    <option value="germany">Germany (Black Forest)</option>
+                    <option value="slovakia">Slovakia (Carpathians & Thermal)</option>
+                    <option value="japan">Japan (Okinawa)</option>
+                    <option value="mongolia">Mongolia (Orkhon & Kharkhorin)</option>
+                    <option value="kyrgyzstan">Kyrgyzstan (Nomad Games & Highlands)</option>
+                    <option value="inner-mongolia">Inner Mongolia (Grasslands)</option>
+                    <option value="north-america">North America (USA / Canada)</option>
+                    <option value="brazil">Brazil (Paraná)</option>
+                  </optgroup>
                 </select>
               </div>
             </div>

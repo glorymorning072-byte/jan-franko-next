@@ -80,8 +80,8 @@ const ContactPage = () => {
                 </div>
                 <div className="space-y-0.5">
                   <span className="text-[9px] uppercase tracking-widest text-primary/45 font-bold font-sans">Email Address</span>
-                  <a href="mailto:contact@janfranko.com" className="text-xs font-sans font-medium text-primary hover:text-accent transition-colors block">
-                    contact@janfranko.com
+                  <a href="mailto:janfranko@tutanota.com" className="text-xs font-sans font-medium text-primary hover:text-accent transition-colors block">
+                    janfranko@tutanota.com
                   </a>
                 </div>
               </li>
@@ -90,9 +90,9 @@ const ContactPage = () => {
                   <Phone className="w-4 h-4" />
                 </div>
                 <div className="space-y-0.5">
-                  <span className="text-[9px] uppercase tracking-widest text-primary/45 font-bold font-sans">WhatsApp Chat</span>
-                  <a href="https://wa.me/4366493296890" target="_blank" rel="noopener noreferrer" className="text-xs font-sans font-medium text-primary hover:text-accent transition-colors block">
-                    +43 664 93296890
+                  <span className="text-[9px] uppercase tracking-widest text-primary/45 font-bold font-sans">WhatsApp &amp; Phone</span>
+                  <a href="https://wa.me/436641645360" target="_blank" rel="noopener noreferrer" className="text-xs font-sans font-medium text-primary hover:text-accent transition-colors block">
+                    +43 664 164 53 60
                   </a>
                 </div>
               </li>
@@ -103,7 +103,7 @@ const ContactPage = () => {
                 <div className="space-y-0.5">
                   <span className="text-[9px] uppercase tracking-widest text-primary/45 font-bold font-sans">Location Base</span>
                   <span className="text-xs font-sans font-medium text-primary block">
-                    Košice, Slovakia (Central Europe)
+                    Tirol, Austria &amp; Košice, Slovakia
                   </span>
                 </div>
               </li>

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function CategoryRedirectPage() {
+export default function EditorialRedirectPage() {
   redirect("/knowledge");
 }

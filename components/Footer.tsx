@@ -77,8 +77,8 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href="/scrolls" className="hover:text-accent transition-colors block py-0.5">
-                Knowledge Scrolls
+              <Link href="/knowledge" className="hover:text-accent transition-colors block py-0.5">
+                Knowledge &amp; Field Editorials
               </Link>
             </li>
           </ul>
@@ -92,18 +92,18 @@ const Footer = () => {
           <ul className="space-y-3 text-sm font-sans text-[#f0e9d9]/80 font-medium">
             <li className="flex items-start gap-3">
               <MapPin className="w-4 h-4 text-accent mt-0.5 shrink-0" />
-              <span>Košice, Slovakia (Central Europe)</span>
+              <span>Tirol, Austria &amp; Košice, Slovakia</span>
             </li>
             <li className="flex items-center gap-3">
               <Mail className="w-4 h-4 text-accent shrink-0" />
-              <a href="mailto:contact@janfranko.com" className="hover:text-accent transition-colors">
-                contact@janfranko.com
+              <a href="mailto:janfranko@tutanota.com" className="hover:text-accent transition-colors">
+                janfranko@tutanota.com
               </a>
             </li>
             <li className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-accent shrink-0" />
-              <a href="https://wa.me/4366493296890" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-                +43 664 93296890
+              <a href="https://wa.me/436641645360" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                +43 664 164 53 60
               </a>
             </li>
           </ul>
@@ -133,7 +133,7 @@ const Footer = () => {
               </svg>
             </a>
             <a
-              href="https://wa.me/4366493296890"
+              href="https://wa.me/436641645360"
               target="_blank"
               rel="noopener noreferrer"
               className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-[#f0e9d9] hover:text-[#0e3b2e] hover:bg-accent transition-all"

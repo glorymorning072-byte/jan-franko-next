@@ -408,9 +408,9 @@ const Navbar = () => {
           {/* Knowledge Mega Menu Trigger (Hover active) */}
           <li className="group h-full flex items-center static">
             <Link
-              href="/scrolls"
+              href="/knowledge"
               className={`hover:text-accent transition-colors py-2 border-b-2 flex items-center gap-1 cursor-pointer ${
-                pathname === "/scrolls" ? "border-accent text-accent font-semibold" : "border-transparent text-primary/90"
+                pathname.startsWith("/knowledge") ? "border-accent text-accent font-semibold" : "border-transparent text-primary/90"
               }`}
             >
               Knowledge
@@ -420,120 +420,115 @@ const Navbar = () => {
             {/* MEGA MENU CONTAINER */}
             <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-t border-primary/5 border-b border-primary/10 rounded-b-3xl shadow-2xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
               <div className="max-w-7xl mx-auto px-12 py-10 grid grid-cols-4 gap-8">
-                {/* Column 1: Categories */}
+                {/* Column 1: Major Lineages */}
                 <div className="space-y-4">
                   <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-2 flex items-center gap-1.5 font-sans">
-                    <Tag className="w-4 h-4" />
-                    Categories
+                    <Compass className="w-4 h-4 text-accent" />
+                    Major Lineages (Level 1)
                   </h4>
                   <ul className="space-y-2.5 font-sans text-xs tracking-wider normal-case text-primary/80">
                     <li>
-                      <Link href="/scrolls?category=bowyer-craft" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        Bowyer Craft
+                      <Link href="/knowledge/east-archery" className="hover:text-[#7d603a] hover:underline block py-0.5 font-semibold">
+                        Eastern Archery Lineages
                       </Link>
                     </li>
                     <li>
-                      <Link href="/scrolls?category=technique" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        Technique &amp; Discipline
+                      <Link href="/knowledge/composite-archery" className="hover:text-[#7d603a] hover:underline block py-0.5 font-semibold">
+                        Composite Archery
                       </Link>
                     </li>
                     <li>
-                      <Link href="/scrolls?category=history" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        History &amp; Lore
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Column 2: Regions */}
-                <div className="space-y-4">
-                  <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-2 flex items-center gap-1.5 font-sans">
-                    <Compass className="w-4 h-4" />
-                    Expedition Regions
-                  </h4>
-                  <ul className="space-y-2.5 font-sans text-xs tracking-wider normal-case text-primary/80">
-                    <li>
-                      <Link href="/scrolls?region=nordic" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        Nordic Region
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/scrolls?region=europe" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        Europe
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/scrolls?region=steppe" className="hover:text-[#7d603a] hover:underline block py-0.5">
+                      <Link href="/knowledge/mongolia-expedition" className="hover:text-[#7d603a] hover:underline block py-0.5">
                         Central Asian Steppe
                       </Link>
                     </li>
                     <li>
-                      <Link href="/scrolls?region=ottoman" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        Ottoman Archery
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/scrolls?region=east-asia" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        East Asian
+                      <Link href="/knowledge/cultural-legacy" className="hover:text-[#7d603a] hover:underline block py-0.5">
+                        Cultural Archery Legacy
                       </Link>
                     </li>
                   </ul>
                 </div>
 
-                {/* Column 3: Topics / Tags */}
+                {/* Column 2: Expedition Volumes */}
                 <div className="space-y-4">
                   <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-2 flex items-center gap-1.5 font-sans">
-                    <BookOpen className="w-4 h-4" />
-                    Popular Topics
+                    <MapPin className="w-4 h-4 text-accent" />
+                    Expedition Volumes
                   </h4>
                   <ul className="space-y-2.5 font-sans text-xs tracking-wider normal-case text-primary/80">
                     <li>
-                      <Link href="/scrolls?query=flatbow" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        Flatbow Design
+                      <Link href="/knowledge/yukon-expedition" className="hover:text-[#7d603a] hover:underline block py-0.5">
+                        Yukon: Sub-Arctic Corridor
                       </Link>
                     </li>
                     <li>
-                      <Link href="/scrolls?query=yew" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        Alpine Yew Wood
+                      <Link href="/knowledge/bhutan-expedition" className="hover:text-[#7d603a] hover:underline block py-0.5">
+                        Bhutanese Mountain Mastery
                       </Link>
                     </li>
                     <li>
-                      <Link href="/scrolls?query=warbow" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        Heavy Warbows
+                      <Link href="/knowledge/patagonia-expedition" className="hover:text-[#7d603a] hover:underline block py-0.5">
+                        Patagonia Steppe Vanguard
                       </Link>
                     </li>
                     <li>
-                      <Link href="/scrolls?query=horse" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        Mounted Archery
+                      <Link href="/knowledge/nomad-games" className="hover:text-[#7d603a] hover:underline block py-0.5">
+                        World Nomad Games
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 3: Tactical Studies */}
+                <div className="space-y-4">
+                  <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-2 flex items-center gap-1.5 font-sans">
+                    <BookOpen className="w-4 h-4 text-accent" />
+                    Tactical Monographs (Level 2)
+                  </h4>
+                  <ul className="space-y-2.5 font-sans text-xs tracking-wider normal-case text-primary/80">
+                    <li>
+                      <Link href="/knowledge/yukon-expedition/navigation" className="hover:text-[#7d603a] hover:underline block py-0.5">
+                        Northern Navigation &amp; Maps
                       </Link>
                     </li>
                     <li>
-                      <Link href="/scrolls?query=composite" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        Composite Bows
+                      <Link href="/knowledge/yukon-expedition/sub-zero" className="hover:text-[#7d603a] hover:underline block py-0.5">
+                        Sub-Zero Survival Archery
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/knowledge/yukon-expedition/outpost" className="hover:text-[#7d603a] hover:underline block py-0.5">
+                        Wilderness Outpost Isolation
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/knowledge/east-archery/kyudo" className="hover:text-[#7d603a] hover:underline block py-0.5">
+                        Kyudo: Mindful Path of the Bow
                       </Link>
                     </li>
                   </ul>
                 </div>
 
                 {/* Column 4: Promo Card */}
-                <div className="relative bg-primary text-secondary rounded-2xl p-6 overflow-hidden flex flex-col justify-between shadow-inner h-[220px]">
-                  <div className="absolute inset-0 bg-cover bg-center opacity-25 z-0" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80')" }}></div>
+                <div className="relative bg-[#0e3b2e] text-secondary rounded-2xl p-6 overflow-hidden flex flex-col justify-between shadow-inner h-[220px]">
+                  <div className="absolute inset-0 bg-cover bg-center opacity-30 z-0" style={{ backgroundImage: "url('https://images.pexels.com/photos/36919857/pexels-photo-36919857.jpeg')" }}></div>
                   <div className="relative z-10 space-y-2">
                     <span className="text-[9px] text-accent font-serif font-bold tracking-widest uppercase block">
-                      Featured Lore
+                      Featured Monograph
                     </span>
                     <h5 className="text-sm font-serif font-bold text-white leading-snug line-clamp-2">
-                      The Alpine Bowyer: Crafting Yew Bows in Austria
+                      Eastern Archery Lineages
                     </h5>
-                    <p className="text-[10px] text-white/70 font-sans leading-relaxed line-clamp-3">
-                      Harvesting and splitting high-altitude mountain yew from the Tyrolean peaks.
+                    <p className="text-[10px] text-white/70 font-sans leading-relaxed line-clamp-2">
+                      Comprehensive immersion into the meditative and martial archery traditions of Asia.
                     </p>
                   </div>
                   <Link
-                    href="/scrolls/alpine-bowyer-crafting-yew-bows-austria"
+                    href="/knowledge/east-archery"
                     className="relative z-10 inline-block text-center py-2.5 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-[10px] tracking-wider uppercase rounded-xl transition-all"
                   >
-                    Read Article
+                    Read Monograph
                   </Link>
                 </div>
               </div>
@@ -896,8 +891,8 @@ const Navbar = () => {
               <li className="space-y-3">
                 <div className="flex items-center justify-between py-1 group">
                   <Link
-                    href="/scrolls"
-                    className={`flex-1 uppercase tracking-widest font-bold ${pathname.startsWith("/scrolls") ? "text-[#7d603a]" : "text-primary/90 hover:text-[#7d603a] transition-colors"}`}
+                    href="/knowledge"
+                    className={`flex-1 uppercase tracking-widest font-bold ${pathname.startsWith("/knowledge") ? "text-[#7d603a]" : "text-primary/90 hover:text-[#7d603a] transition-colors"}`}
                   >
                     Knowledge
                   </Link>
@@ -914,74 +909,74 @@ const Navbar = () => {
                 {isKnowledgeMobileOpen && (
                   <div className="pl-4 border-l border-primary/10 space-y-4 pt-1 pb-3 animate-in slide-in-from-top-2 duration-200">
                     
-                    {/* Categories Subgroup */}
+                    {/* Major Lineages Subgroup */}
                     <div className="space-y-1.5">
                       <button
-                        onClick={() => toggleSubgroup("know-cats")}
+                        onClick={() => toggleSubgroup("know-lineages")}
                         className="w-full flex justify-between items-center text-xs font-serif font-bold text-[#7d603a] tracking-wider uppercase py-1 hover:opacity-85 text-left cursor-pointer group"
                       >
-                        <span>Categories</span>
+                        <span>Major Lineages</span>
                         <ChevronDown
-                          className={`w-5 h-5 p-0.5 text-primary/50 bg-primary/5 group-hover:bg-[#ebd9bd]/50 rounded-md transition-all duration-200 ${openSubgroups["know-cats"] ? "rotate-180" : ""}`}
+                          className={`w-5 h-5 p-0.5 text-primary/50 bg-primary/5 group-hover:bg-[#ebd9bd]/50 rounded-md transition-all duration-200 ${openSubgroups["know-lineages"] ? "rotate-180" : ""}`}
                         />
                       </button>
-                      {openSubgroups["know-cats"] && (
+                      {openSubgroups["know-lineages"] && (
                         <ul className="space-y-1.5 pl-2 font-sans text-xs tracking-wide text-primary/80 font-medium normal-case animate-in slide-in-from-top-1 duration-150">
                           <li>
-                            <Link href="/scrolls?category=bowyer-craft" className="hover:text-[#7d603a] block py-1 transition-colors">
-                              Bowyer Craft
+                            <Link href="/knowledge/east-archery" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Eastern Archery Lineages
                             </Link>
                           </li>
                           <li>
-                            <Link href="/scrolls?category=technique" className="hover:text-[#7d603a] block py-1 transition-colors">
-                              Technique &amp; Discipline
+                            <Link href="/knowledge/composite-archery" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Composite Archery
                             </Link>
                           </li>
                           <li>
-                            <Link href="/scrolls?category=history" className="hover:text-[#7d603a] block py-1 transition-colors">
-                              History &amp; Lore
+                            <Link href="/knowledge/mongolia-expedition" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Central Asian Steppe
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/knowledge/cultural-legacy" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Cultural Archery Legacy
                             </Link>
                           </li>
                         </ul>
                       )}
                     </div>
 
-                    {/* Regions Subgroup */}
+                    {/* Expedition Volumes Subgroup */}
                     <div className="space-y-1.5">
                       <button
-                        onClick={() => toggleSubgroup("know-regions")}
+                        onClick={() => toggleSubgroup("know-volumes")}
                         className="w-full flex justify-between items-center text-xs font-serif font-bold text-[#7d603a] tracking-wider uppercase py-1 hover:opacity-85 text-left cursor-pointer group"
                       >
-                        <span>Regions</span>
+                        <span>Expedition Volumes</span>
                         <ChevronDown
-                          className={`w-5 h-5 p-0.5 text-primary/50 bg-primary/5 group-hover:bg-[#ebd9bd]/50 rounded-md transition-all duration-200 ${openSubgroups["know-regions"] ? "rotate-180" : ""}`}
+                          className={`w-5 h-5 p-0.5 text-primary/50 bg-primary/5 group-hover:bg-[#ebd9bd]/50 rounded-md transition-all duration-200 ${openSubgroups["know-volumes"] ? "rotate-180" : ""}`}
                         />
                       </button>
-                      {openSubgroups["know-regions"] && (
+                      {openSubgroups["know-volumes"] && (
                         <ul className="space-y-1.5 pl-2 font-sans text-xs tracking-wide text-primary/80 font-medium normal-case animate-in slide-in-from-top-1 duration-150">
                           <li>
-                            <Link href="/scrolls?region=nordic" className="hover:text-[#7d603a] block py-1 transition-colors">
-                              Nordic Region
+                            <Link href="/knowledge/yukon-expedition" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Yukon: Sub-Arctic Corridor
                             </Link>
                           </li>
                           <li>
-                            <Link href="/scrolls?region=europe" className="hover:text-[#7d603a] block py-1 transition-colors">
-                              Europe
+                            <Link href="/knowledge/bhutan-expedition" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Bhutanese Mountain Mastery
                             </Link>
                           </li>
                           <li>
-                            <Link href="/scrolls?region=steppe" className="hover:text-[#7d603a] block py-1 transition-colors">
-                              Central Asian Steppe
+                            <Link href="/knowledge/patagonia-expedition" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Patagonia Steppe Vanguard
                             </Link>
                           </li>
                           <li>
-                            <Link href="/scrolls?region=ottoman" className="hover:text-[#7d603a] block py-1 transition-colors">
-                              Ottoman Archery
-                            </Link>
-                          </li>
-                          <li>
-                            <Link href="/scrolls?region=east-asia" className="hover:text-[#7d603a] block py-1 transition-colors">
-                              East Asian
+                            <Link href="/knowledge/nomad-games" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              World Nomad Games
                             </Link>
                           </li>
                         </ul>

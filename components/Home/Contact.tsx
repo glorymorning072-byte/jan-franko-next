@@ -106,12 +106,12 @@ const Contact = () => {
                   />
                 </svg>
                 <a
-                  href="https://wa.me/4366493296890"
+                  href="https://wa.me/436641645360"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-base md:text-lg text-white hover:text-accent font-serif tracking-wide transition-colors duration-300"
                 >
-                  Whatsapp : +43 664 93296890
+                  WhatsApp: +43 664 164 53 60
                 </a>
               </div>
 
@@ -135,10 +135,10 @@ const Contact = () => {
                   />
                 </svg>
                 <a
-                  href="mailto:info@janfranko.com"
+                  href="mailto:janfranko@tutanota.com"
                   className="text-base md:text-lg text-white hover:text-accent font-serif tracking-wide transition-colors duration-300"
                 >
-                  Email: info@janfranko.com
+                  Email: janfranko@tutanota.com
                 </a>
               </div>
 

@@ -4,7 +4,7 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export default async function ScrollSlugRedirectPage({ params }: PageProps) {
+export default async function EditorialSlugRedirectPage({ params }: PageProps) {
   const { slug } = await params;
   redirect(`/knowledge/${slug}`);
 }
