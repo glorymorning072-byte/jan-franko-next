@@ -144,12 +144,12 @@ const Hero = () => {
           <div className="absolute inset-0 bg-[#c5a880]/10 rounded-full filter blur-3xl opacity-50 scale-90 translate-y-12 select-none pointer-events-none z-0" />
           
           <Image
-            src="/Jan.png"
+            src="/Jan-f.png"
             alt="Jan Franko"
             fill
             priority
             sizes="(max-w-768px) 100vw, 40vw"
-            className="object-contain object-bottom z-10 drop-shadow-[0_15px_40px_rgba(14,59,46,0.12)] hover:scale-[1.01] transition-transform duration-500 ease-out select-none"
+            className="object-contain object-bottom p-2 z-10 drop-shadow-[0_15px_40px_rgba(14,59,46,0.12)] hover:scale-[1.01] transition-transform duration-500 ease-out select-none"
           />
         </div>
       </div>
