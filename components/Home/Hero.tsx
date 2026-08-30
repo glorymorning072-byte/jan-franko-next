@@ -144,7 +144,7 @@ const Hero = () => {
           <div className="absolute inset-0 bg-[#c5a880]/10 rounded-full filter blur-3xl opacity-50 scale-90 translate-y-12 select-none pointer-events-none z-0" />
           
           <Image
-            src="/Jan-f.png"
+            src="/JanReal.png"
             alt="Jan Franko"
             fill
             priority
