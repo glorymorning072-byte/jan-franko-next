@@ -190,7 +190,7 @@ const RegionRow = ({ volume, index }: { volume: EditorialItem; index: number }) 
       {/* Glassmorphic Text Container */}
       <div
         ref={textColRef}
-        className={`w-full min-h-[35vh] md:h-auto md:w-5/12 rounded-3xl backdrop-blur-2xl text-center md:text-left ${
+        className={`w-full min-h-[35vh] md:h-auto md:w-9/12 xl:w-6/12 rounded-3xl backdrop-blur-2xl text-center md:text-left ${
           !isOdd ? "bg-primary/75 text-secondary border border-white/10" : "bg-secondary/85 text-primary border border-primary/10"
         } flex flex-col justify-center p-8 md:p-12 relative z-10 shadow-2xl space-y-6`}
       >
