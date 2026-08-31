@@ -19,10 +19,14 @@ export default function GoogleTranslate() {
     // Hide standard Google translation banners and top frame offsets
     const addStyles = () => {
       const css = `
-        /* Hide Google Translate top bar frame */
-        iframe.goog-te-banner-frame {
+        /* Hide Google Translate top bar frame and dynamic container */
+        iframe.goog-te-banner-frame,
+        .skiptranslate iframe,
+        iframe.skiptranslate,
+        .VIpgJd-ZVi9od-ORHb-OEVmcd {
           display: none !important;
           visibility: hidden !important;
+          width: 0 !important;
           height: 0 !important;
         }
         /* Hide Google translation balloon hover dialogs */
