@@ -74,7 +74,7 @@ export default function GoogleTranslate() {
         new window.google.translate.TranslateElement(
           {
             pageLanguage: "en",
-            includedLanguages: "de,sk,cs,en,es,ru,fr,it,ja",
+            includedLanguages: "de,sk,cs,en,es,ru,fr,it,ja,pl,uk,hu,ro,bg,el,hy,ka,et,lv,lt,pt,mn,ko,zh-CN,th,vi,tl,am,dz,no,sv,fi,da,is",
             layout: 0, // InlineLayout.SIMPLE
             autoDisplay: false,
           },
