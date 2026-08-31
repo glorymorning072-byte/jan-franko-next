@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ArcheryTransition } from "@/components/ArcheryTransition";
+import GoogleTranslate from "@/components/GoogleTranslate";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -59,6 +60,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col relative bg-[#f0e9d9] text-[#0e3b2e]">
+        <GoogleTranslate />
         <Navbar />
         <main className="flex-grow">
           <ArcheryTransition>

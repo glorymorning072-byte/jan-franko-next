@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, Compass, MapPin, Award, Sliders, BookOpen, Tag, Mail, Phone } from "lucide-react";
+import { Menu, X, ChevronDown, Compass, MapPin, Award, Sliders, BookOpen, Tag, Mail, Phone, Globe } from "lucide-react";
 import { clientFetch } from "@/data/clientFetch";
 
 interface Term {
@@ -32,6 +32,71 @@ const Navbar = () => {
   const [equipmentCategories, setEquipmentCategories] = useState<CategoryTerm[]>([]);
   const [bowyers, setBowyers] = useState<any[]>([]);
   const [activeBowyerIndex, setActiveBowyerIndex] = useState(0);
+
+  // Translation states & supported languages (matching Instructor Jan Franko's languages)
+  const LANGUAGES = [
+    { code: "en", name: "English" },
+    { code: "de", name: "Deutsch" },
+    { code: "sk", name: "Slovenčina" },
+    { code: "cs", name: "Čeština" },
+    { code: "es", name: "Español" },
+    { code: "ru", name: "Русский" },
+    { code: "fr", name: "Français" },
+    { code: "it", name: "Italiano" },
+    { code: "ja", name: "日本語" }
+  ];
+
+  const [currentLang, setCurrentLang] = useState("en");
+  const [isLangOpen, setIsLangOpen] = useState(false);
+
+  // Read the active translation language from Google's standard cookie on mount
+  useEffect(() => {
+    const checkCookie = () => {
+      const cookies = document.cookie.split("; ");
+      const transCookie = cookies.find((row) => row.startsWith("googtrans="));
+      if (transCookie) {
+        const parts = transCookie.split("=");
+        if (parts.length > 1) {
+          const val = parts[1];
+          const lang = val.split("/").pop();
+          if (lang) {
+            setCurrentLang(lang);
+          }
+        }
+      }
+    };
+    checkCookie();
+
+    const interval = setInterval(checkCookie, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    if (!isLangOpen) return;
+    const handleOutsideClick = () => setIsLangOpen(false);
+    window.addEventListener("click", handleOutsideClick);
+    return () => window.removeEventListener("click", handleOutsideClick);
+  }, [isLangOpen]);
+
+  const handleLanguageChange = (langCode: string) => {
+    // Set cookie path and domains to make it stick
+    document.cookie = `googtrans=/en/${langCode}; path=/;`;
+    document.cookie = `googtrans=/en/${langCode}; path=/; domain=${window.location.hostname};`;
+    
+    setCurrentLang(langCode);
+    setIsLangOpen(false);
+
+    // Apply value to Google Translate combo box and dispatch trigger
+    const select = document.querySelector("select.goog-te-combo") as HTMLSelectElement | null;
+    if (select) {
+      select.value = langCode;
+      select.dispatchEvent(new Event("change"));
+    } else {
+      // If scripts are still loading, fallback to simple page refresh
+      window.location.reload();
+    }
+  };
   
   const pathname = usePathname();
 
@@ -685,6 +750,39 @@ const Navbar = () => {
               </div>
             </div>
           </li>
+
+          {/* Desktop Language Selector Dropdown */}
+          <li className="relative flex items-center h-full">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsLangOpen(!isLangOpen);
+              }}
+              className="flex items-center gap-1.5 hover:text-accent text-primary/90 transition-colors cursor-pointer focus:outline-none py-2"
+            >
+              <Globe className="w-3.5 h-3.5 text-accent" />
+              <span>{currentLang.toUpperCase()}</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isLangOpen ? "rotate-180 text-accent" : ""}`} />
+            </button>
+
+            {isLangOpen && (
+              <div className="absolute top-[80%] right-0 mt-2 w-36 bg-white border border-primary/10 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
+                <div className="max-h-60 overflow-y-auto">
+                  {LANGUAGES.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => handleLanguageChange(lang.code)}
+                      className={`w-full text-left px-4 py-2 text-xs font-sans font-medium transition-colors hover:bg-secondary/40 ${
+                        currentLang === lang.code ? "text-accent font-semibold" : "text-primary/80"
+                      }`}
+                    >
+                      {lang.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </li>
         </ul>
 
         {/* Hamburger Menu Icon (Mobile/Tablet Viewports) */}
@@ -1047,6 +1145,43 @@ const Navbar = () => {
                         </ul>
                       )}
                     </div>
+                  </div>
+                )}
+              </li>
+
+              {/* Mobile Language Selector Accordion */}
+              <li className="space-y-3">
+                <div className="flex items-center justify-between py-1 group">
+                  <span className="flex-1 uppercase tracking-widest font-bold text-primary/95 flex items-center gap-1.5">
+                    <Globe className="w-4 h-4 text-accent" />
+                    Language: {currentLang.toUpperCase()}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsLangOpen(!isLangOpen);
+                    }}
+                    className="p-1.5 -mr-1 text-primary/70 bg-primary/5 hover:bg-[#ebd9bd]/50 group-hover:bg-[#ebd9bd]/30 rounded-lg cursor-pointer transition-all duration-200"
+                  >
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-300 ${isLangOpen ? "rotate-180 text-accent" : ""}`}
+                    />
+                  </button>
+                </div>
+
+                {isLangOpen && (
+                  <div className="pl-4 border-l border-primary/10 grid grid-cols-2 gap-2 pt-1 pb-3 animate-in slide-in-from-top-2 duration-200">
+                    {LANGUAGES.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => handleLanguageChange(lang.code)}
+                        className={`text-left py-1.5 px-3 rounded-lg text-xs font-sans font-medium transition-all ${
+                          currentLang === lang.code ? "bg-[#0e3b2e] text-white font-bold" : "bg-white border border-primary/10 text-primary/80 hover:bg-secondary/40"
+                        }`}
+                      >
+                        {lang.name}
+                      </button>
+                    ))}
                   </div>
                 )}
               </li>
