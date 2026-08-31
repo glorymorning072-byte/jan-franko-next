@@ -70,6 +70,25 @@ const Navbar = () => {
     { code: "is", name: "Íslenska", flag: "🇮🇸" }
   ];
 
+  const LANGUAGE_COLUMNS = [
+    {
+      title: "Central & Western Europe",
+      codes: ["en", "de", "sk", "cs", "pl", "es", "it", "pt"]
+    },
+    {
+      title: "Eastern Europe & Caucasus",
+      codes: ["uk", "ru", "hu", "ro", "bg", "el", "hy", "ka"]
+    },
+    {
+      title: "Northern Europe & Baltic",
+      codes: ["et", "lv", "lt", "no", "sv", "fi", "da", "is"]
+    },
+    {
+      title: "Asia & Global",
+      codes: ["ja", "mn", "ko", "zh-CN", "th", "vi", "tl", "am", "dz"]
+    }
+  ];
+
   const [currentLang, setCurrentLang] = useState("en");
   const [isLangOpen, setIsLangOpen] = useState(false);
 
@@ -775,38 +794,49 @@ const Navbar = () => {
             </div>
           </li>
 
-          {/* Desktop Language Selector Dropdown */}
-          <li className="relative flex items-center h-full">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsLangOpen(!isLangOpen);
-              }}
-              className="flex items-center gap-1.5 hover:text-accent text-primary/90 transition-colors cursor-pointer focus:outline-none py-2"
+          {/* Desktop Language Selector Mega Menu */}
+          <li className="group h-full flex items-center static">
+            <div
+              className={`hover:text-accent transition-colors py-2 border-b-2 flex items-center gap-1.5 cursor-pointer ${
+                currentLang !== "en" ? "border-accent text-accent font-semibold" : "border-transparent text-primary/90"
+              }`}
             >
               <Globe className="w-3.5 h-3.5 text-accent" />
               <span>{LANGUAGES.find((l) => l.code === currentLang)?.flag || "🇬🇧"} {currentLang.toUpperCase()}</span>
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isLangOpen ? "rotate-180 text-accent" : ""}`} />
-            </button>
+              <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-accent" />
+            </div>
 
-            {isLangOpen && (
-              <div className="absolute top-[80%] right-0 mt-2 w-44 bg-white border border-primary/10 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
-                <div className="max-h-60 overflow-y-auto">
-                  {LANGUAGES.map((lang) => (
-                    <button
-                      key={lang.code}
-                      onClick={() => handleLanguageChange(lang.code)}
-                      className={`w-full text-left px-4 py-2 text-xs font-sans font-medium transition-colors hover:bg-secondary/40 flex items-center gap-2.5 ${
-                        currentLang === lang.code ? "text-accent font-semibold" : "text-primary/80"
-                      }`}
-                    >
-                      <span className="text-sm shrink-0">{lang.flag}</span>
-                      <span>{lang.name}</span>
-                    </button>
-                  ))}
-                </div>
+            {/* LANGUAGES MEGA MENU CONTAINER */}
+            <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-t border-primary/5 border-b border-primary/10 rounded-b-3xl shadow-2xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
+              <div className="max-w-7xl mx-auto px-12 py-8 grid grid-cols-4 gap-6 items-stretch">
+                {LANGUAGE_COLUMNS.map((col, idx) => (
+                  <div key={idx} className="space-y-3">
+                    <h4 className="text-[10px] uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-2 font-sans">
+                      {col.title}
+                    </h4>
+                    <ul className="space-y-1 font-sans text-xs tracking-wider normal-case text-primary/80">
+                      {col.codes.map((code) => {
+                        const lang = LANGUAGES.find((l) => l.code === code);
+                        if (!lang) return null;
+                        return (
+                          <li key={code}>
+                            <button
+                              onClick={() => handleLanguageChange(code)}
+                              className={`w-full text-left py-1.5 px-2 rounded-xl hover:bg-secondary/40 transition-colors flex items-center gap-2 ${
+                                currentLang === code ? "text-accent font-semibold bg-secondary/35" : "text-primary/70"
+                              }`}
+                            >
+                              <span className="text-sm shrink-0">{lang.flag}</span>
+                              <span>{lang.name}</span>
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ))}
               </div>
-            )}
+            </div>
           </li>
         </ul>
 
