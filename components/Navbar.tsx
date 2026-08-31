@@ -1246,11 +1246,11 @@ const Navbar = () => {
         <span className="text-[10px] uppercase tracking-widest text-[#7d603a] font-bold font-sans">
           Select Language
         </span>
-        <div className="relative">
+        <div>
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setIsLangOpen(!isLangOpen);
+              setIsLangOpen(true);
             }}
             className="flex items-center gap-1.5 text-xs text-primary/95 font-serif font-bold tracking-wider hover:text-accent focus:outline-none"
           >
@@ -1262,30 +1262,71 @@ const Navbar = () => {
               className="object-contain shrink-0 rounded-sm"
             />
             <span>{currentLang.toUpperCase()}</span>
-            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isLangOpen ? "rotate-180 text-accent" : ""}`} />
+            <ChevronDown className="w-3.5 h-3.5 text-accent" />
           </button>
 
+          {/* Full Screen Pop-up Overlay / Modal (visible when isLangOpen is true) */}
           {isLangOpen && (
-            <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-primary/10 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
-              <div className="max-h-60 overflow-y-auto">
-                {LANGUAGES.map((lang) => (
-                  <button
-                    key={lang.code}
-                    onClick={() => handleLanguageChange(lang.code)}
-                    className={`w-full text-left px-4 py-2 text-xs font-sans font-medium transition-colors hover:bg-secondary/40 flex items-center gap-2.5 ${
-                      currentLang === lang.code ? "text-accent font-semibold" : "text-primary/80"
-                    }`}
+            <div 
+              onClick={() => setIsLangOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+            >
+              <div 
+                onClick={(e) => e.stopPropagation()} 
+                className="bg-white rounded-3xl w-full max-w-md max-h-[80vh] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+              >
+                {/* Modal Header */}
+                <div className="p-5 border-b border-primary/5 flex justify-between items-center bg-[#f4f1e8]/50">
+                  <h3 className="font-serif text-sm font-bold tracking-wider uppercase text-primary">
+                    Select Language
+                  </h3>
+                  <button 
+                    onClick={() => setIsLangOpen(false)}
+                    className="p-1.5 rounded-full hover:bg-secondary/60 text-primary transition-colors focus:outline-none"
                   >
-                    <img
-                      src={`https://flagcdn.com/w40/${lang.flagCode}.png`}
-                      width="27"
-                      height="18"
-                      alt=""
-                      className="object-contain shrink-0 rounded-sm"
-                    />
-                    <span>{lang.name}</span>
+                    <X className="w-4 h-4" />
                   </button>
-                ))}
+                </div>
+
+                {/* Modal Body (Scrollable regions grid) */}
+                <div className="p-5 overflow-y-auto space-y-6 max-h-[calc(80vh-80px)]">
+                  {LANGUAGE_COLUMNS.map((col, idx) => (
+                    <div key={idx} className="space-y-2.5">
+                      <h4 className="text-[10px] uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-1 font-sans">
+                        {col.title}
+                      </h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {col.codes.map((code) => {
+                          const lang = LANGUAGES.find((l) => l.code === code);
+                          if (!lang) return null;
+                          return (
+                            <button
+                              key={code}
+                              onClick={() => {
+                                handleLanguageChange(code);
+                                setIsLangOpen(false);
+                              }}
+                              className={`text-left py-2 px-3 rounded-xl text-xs font-sans font-medium transition-all flex items-center gap-2.5 border ${
+                                currentLang === code 
+                                  ? "bg-[#0e3b2e] text-white font-bold border-[#0e3b2e]" 
+                                  : "bg-[#f4f1e8] border-transparent text-primary/80 hover:bg-[#ebd9bd]/25"
+                              }`}
+                            >
+                              <img
+                                src={`https://flagcdn.com/w40/${lang.flagCode}.png`}
+                                width="27"
+                                height="18"
+                                alt=""
+                                className="object-contain shrink-0 rounded-sm"
+                              />
+                              <span>{lang.name}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
