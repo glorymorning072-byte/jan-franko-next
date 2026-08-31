@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, Compass, MapPin, Award, Sliders, BookOpen, Tag, Mail, Phone, Globe } from "lucide-react";
@@ -91,9 +92,11 @@ const Navbar = () => {
 
   const [currentLang, setCurrentLang] = useState("en");
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // Read the active translation language from Google's standard cookie on mount
   useEffect(() => {
+    setMounted(true);
     const checkCookie = () => {
       const cookies = document.cookie.split("; ");
       const transCookie = cookies.find((row) => row.startsWith("googtrans="));
@@ -1265,11 +1268,11 @@ const Navbar = () => {
             <ChevronDown className="w-3.5 h-3.5 text-accent" />
           </button>
 
-          {/* Full Screen Pop-up Overlay / Modal (visible when isLangOpen is true) */}
-          {isLangOpen && (
+          {/* Full Screen Pop-up Overlay / Modal (visible when isLangOpen is true, portal-mounted to prevent offset constraints) */}
+          {isLangOpen && mounted && createPortal(
             <div 
               onClick={() => setIsLangOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 notranslate"
             >
               <div 
                 onClick={(e) => e.stopPropagation()} 
@@ -1328,7 +1331,8 @@ const Navbar = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            </div>,
+            document.body
           )}
         </div>
       </div>
