@@ -803,11 +803,10 @@ const Navbar = () => {
                 currentLang !== "en" ? "border-accent text-accent font-semibold" : "border-transparent text-primary/90"
               }`}
             >
-              <Globe className="w-3.5 h-3.5 text-accent" />
               <img
-                src={`https://flagcdn.com/w20/${LANGUAGES.find((l) => l.code === currentLang)?.flagCode || "gb"}.png`}
-                width="18"
-                height="12"
+                src={`https://flagcdn.com/w40/${LANGUAGES.find((l) => l.code === currentLang)?.flagCode || "gb"}.png`}
+                width="27"
+                height="18"
                 alt=""
                 className="object-contain shrink-0 rounded-sm"
               />
@@ -836,9 +835,9 @@ const Navbar = () => {
                               }`}
                             >
                               <img
-                                src={`https://flagcdn.com/w20/${lang.flagCode}.png`}
-                                width="18"
-                                height="12"
+                                src={`https://flagcdn.com/w40/${lang.flagCode}.png`}
+                                width="27"
+                                height="18"
                                 alt=""
                                 className="object-contain shrink-0 rounded-sm"
                               />
@@ -1223,14 +1222,13 @@ const Navbar = () => {
               <li className="space-y-3 notranslate">
                 <div className="flex items-center justify-between py-1 group">
                   <span className="flex-1 uppercase tracking-widest font-bold text-primary/95 flex items-center gap-1.5">
-                    <Globe className="w-4 h-4 text-accent" />
                     Language:
                     <img
-                      src={`https://flagcdn.com/w20/${LANGUAGES.find((l) => l.code === currentLang)?.flagCode || "gb"}.png`}
-                      width="18"
-                      height="12"
+                      src={`https://flagcdn.com/w40/${LANGUAGES.find((l) => l.code === currentLang)?.flagCode || "gb"}.png`}
+                      width="27"
+                      height="18"
                       alt=""
-                      className="object-contain shrink-0 rounded-sm"
+                      className="object-contain shrink-0 rounded-sm animate-fade-in"
                     />
                     <span>{currentLang.toUpperCase()}</span>
                   </span>
@@ -1258,9 +1256,9 @@ const Navbar = () => {
                         }`}
                       >
                         <img
-                          src={`https://flagcdn.com/w20/${lang.flagCode}.png`}
-                          width="18"
-                          height="12"
+                          src={`https://flagcdn.com/w40/${lang.flagCode}.png`}
+                          width="27"
+                          height="18"
                           alt=""
                           className="object-contain shrink-0 rounded-sm"
                         />
