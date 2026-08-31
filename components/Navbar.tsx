@@ -1218,56 +1218,7 @@ const Navbar = () => {
                 )}
               </li>
 
-              {/* Mobile Language Selector Accordion */}
-              <li className="space-y-3 notranslate">
-                <div className="flex items-center justify-between py-1 group">
-                  <span className="flex-1 uppercase tracking-widest font-bold text-primary/95 flex items-center gap-1.5">
-                    Language:
-                    <img
-                      src={`https://flagcdn.com/w40/${LANGUAGES.find((l) => l.code === currentLang)?.flagCode || "gb"}.png`}
-                      width="27"
-                      height="18"
-                      alt=""
-                      className="object-contain shrink-0 rounded-sm animate-fade-in"
-                    />
-                    <span>{currentLang.toUpperCase()}</span>
-                  </span>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsLangOpen(!isLangOpen);
-                    }}
-                    className="p-1.5 -mr-1 text-primary/70 bg-primary/5 hover:bg-[#ebd9bd]/50 group-hover:bg-[#ebd9bd]/30 rounded-lg cursor-pointer transition-all duration-200"
-                  >
-                    <ChevronDown
-                      className={`w-4 h-4 transition-transform duration-300 ${isLangOpen ? "rotate-180 text-accent" : ""}`}
-                    />
-                  </button>
-                </div>
 
-                {isLangOpen && (
-                  <div className="pl-4 border-l border-primary/10 grid grid-cols-2 gap-2 pt-1 pb-3 animate-in slide-in-from-top-2 duration-200 max-h-60 overflow-y-auto">
-                    {LANGUAGES.map((lang) => (
-                      <button
-                        key={lang.code}
-                        onClick={() => handleLanguageChange(lang.code)}
-                        className={`text-left py-1.5 px-3 rounded-lg text-xs font-sans font-medium transition-all flex items-center gap-2 ${
-                          currentLang === lang.code ? "bg-[#0e3b2e] text-white font-bold" : "bg-white border border-primary/10 text-primary/80 hover:bg-secondary/40"
-                        }`}
-                      >
-                        <img
-                          src={`https://flagcdn.com/w40/${lang.flagCode}.png`}
-                          width="27"
-                          height="18"
-                          alt=""
-                          className="object-contain shrink-0 rounded-sm"
-                        />
-                        <span>{lang.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </li>
             </ul>
           </div>
 
@@ -1289,6 +1240,57 @@ const Navbar = () => {
         </div>
 
       </nav>
+
+      {/* After-Header Language Bar (Visible only on Mobile, placed below the main header line) */}
+      <div className="lg:hidden w-full bg-[#ebd9bd]/15 border-t border-primary/10 py-2.5 px-6 flex justify-between items-center notranslate relative z-40">
+        <span className="text-[10px] uppercase tracking-widest text-[#7d603a] font-bold font-sans">
+          Select Language
+        </span>
+        <div className="relative">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsLangOpen(!isLangOpen);
+            }}
+            className="flex items-center gap-1.5 text-xs text-primary/95 font-serif font-bold tracking-wider hover:text-accent focus:outline-none"
+          >
+            <img
+              src={`https://flagcdn.com/w40/${LANGUAGES.find((l) => l.code === currentLang)?.flagCode || "gb"}.png`}
+              width="27"
+              height="18"
+              alt=""
+              className="object-contain shrink-0 rounded-sm"
+            />
+            <span>{currentLang.toUpperCase()}</span>
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isLangOpen ? "rotate-180 text-accent" : ""}`} />
+          </button>
+
+          {isLangOpen && (
+            <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-primary/10 rounded-2xl shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-1 duration-200">
+              <div className="max-h-60 overflow-y-auto">
+                {LANGUAGES.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => handleLanguageChange(lang.code)}
+                    className={`w-full text-left px-4 py-2 text-xs font-sans font-medium transition-colors hover:bg-secondary/40 flex items-center gap-2.5 ${
+                      currentLang === lang.code ? "text-accent font-semibold" : "text-primary/80"
+                    }`}
+                  >
+                    <img
+                      src={`https://flagcdn.com/w40/${lang.flagCode}.png`}
+                      width="27"
+                      height="18"
+                      alt=""
+                      className="object-contain shrink-0 rounded-sm"
+                    />
+                    <span>{lang.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </header>
   );
 };
