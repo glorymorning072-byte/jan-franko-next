@@ -33,41 +33,41 @@ const Navbar = () => {
   const [bowyers, setBowyers] = useState<any[]>([]);
   const [activeBowyerIndex, setActiveBowyerIndex] = useState(0);
 
-  // Translation states & supported languages (matching the full list of requested languages with flags)
+  // Translation states & supported languages (matching the full list of requested languages with flagcdn codes)
   const LANGUAGES = [
-    { code: "en", name: "English", flag: "🇬🇧" },
-    { code: "de", name: "Deutsch", flag: "🇩🇪" },
-    { code: "sk", name: "Slovenčina", flag: "🇸🇰" },
-    { code: "cs", name: "Čeština", flag: "🇨🇿" },
-    { code: "pl", name: "Polski", flag: "🇵🇱" },
-    { code: "uk", name: "Українська", flag: "🇺🇦" },
-    { code: "ru", name: "Русский", flag: "🇷🇺" },
-    { code: "hu", name: "Magyar", flag: "🇭🇺" },
-    { code: "ro", name: "Română", flag: "🇷🇴" },
-    { code: "bg", name: "Български", flag: "🇧🇬" },
-    { code: "el", name: "Ελληνικά", flag: "🇬🇷" },
-    { code: "hy", name: "Հայերեն", flag: "🇦🇲" },
-    { code: "ka", name: "ქართული", flag: "🇬🇪" },
-    { code: "et", name: "Eesti", flag: "🇪🇪" },
-    { code: "lv", name: "Latviešu", flag: "🇱🇻" },
-    { code: "lt", name: "Lietuvių", flag: "🇱🇹" },
-    { code: "es", name: "Español", flag: "🇪🇸" },
-    { code: "it", name: "Italiano", flag: "🇮🇹" },
-    { code: "pt", name: "Português", flag: "🇵🇹" },
-    { code: "ja", name: "日本語", flag: "🇯🇵" },
-    { code: "mn", name: "Монгол", flag: "🇲🇳" },
-    { code: "ko", name: "한국어", flag: "🇰🇷" },
-    { code: "zh-CN", name: "中文 (简体)", flag: "🇨🇳" },
-    { code: "th", name: "ไทย", flag: "🇹🇭" },
-    { code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
-    { code: "tl", name: "Filipino", flag: "🇵🇭" },
-    { code: "am", name: "አማርኛ", flag: "🇪🇹" },
-    { code: "dz", name: "རྫོང་ཁ", flag: "🇧🇹" },
-    { code: "no", name: "Norsk", flag: "🇳🇴" },
-    { code: "sv", name: "Svenska", flag: "🇸🇪" },
-    { code: "fi", name: "Suomi", flag: "🇫🇮" },
-    { code: "da", name: "Dansk", flag: "🇩🇰" },
-    { code: "is", name: "Íslenska", flag: "🇮🇸" }
+    { code: "en", name: "English", flagCode: "gb" },
+    { code: "de", name: "Deutsch", flagCode: "de" },
+    { code: "sk", name: "Slovenčina", flagCode: "sk" },
+    { code: "cs", name: "Čeština", flagCode: "cz" },
+    { code: "pl", name: "Polski", flagCode: "pl" },
+    { code: "uk", name: "Українська", flagCode: "ua" },
+    { code: "ru", name: "Русский", flagCode: "ru" },
+    { code: "hu", name: "Magyar", flagCode: "hu" },
+    { code: "ro", name: "Română", flagCode: "ro" },
+    { code: "bg", name: "Български", flagCode: "bg" },
+    { code: "el", name: "Ελληνικά", flagCode: "gr" },
+    { code: "hy", name: "Հայերեն", flagCode: "am" },
+    { code: "ka", name: "ქართული", flagCode: "ge" },
+    { code: "et", name: "Eesti", flagCode: "ee" },
+    { code: "lv", name: "Latviešu", flagCode: "lv" },
+    { code: "lt", name: "Lietuvių", flagCode: "lt" },
+    { code: "es", name: "Español", flagCode: "es" },
+    { code: "it", name: "Italiano", flagCode: "it" },
+    { code: "pt", name: "Português", flagCode: "pt" },
+    { code: "ja", name: "日本語", flagCode: "jp" },
+    { code: "mn", name: "Монгол", flagCode: "mn" },
+    { code: "ko", name: "한국어", flagCode: "kr" },
+    { code: "zh-CN", name: "中文 (简体)", flagCode: "cn" },
+    { code: "th", name: "ไทย", flagCode: "th" },
+    { code: "vi", name: "Tiếng Việt", flagCode: "vn" },
+    { code: "tl", name: "Filipino", flagCode: "ph" },
+    { code: "am", name: "አማርኛ", flagCode: "et" },
+    { code: "dz", name: "རྫོང་ཁ", flagCode: "bt" },
+    { code: "no", name: "Norsk", flagCode: "no" },
+    { code: "sv", name: "Svenska", flagCode: "se" },
+    { code: "fi", name: "Suomi", flagCode: "fi" },
+    { code: "da", name: "Dansk", flagCode: "dk" },
+    { code: "is", name: "Íslenska", flagCode: "is" }
   ];
 
   const LANGUAGE_COLUMNS = [
@@ -100,13 +100,15 @@ const Navbar = () => {
       if (transCookie) {
         const parts = transCookie.split("=");
         if (parts.length > 1) {
-          const val = parts[1];
+          const val = decodeURIComponent(parts[1]);
           const lang = val.split("/").pop();
           if (lang) {
             setCurrentLang(lang);
+            return;
           }
         }
       }
+      setCurrentLang("en");
     };
     checkCookie();
 
@@ -795,14 +797,21 @@ const Navbar = () => {
           </li>
 
           {/* Desktop Language Selector Mega Menu */}
-          <li className="group h-full flex items-center static">
+          <li className="group h-full flex items-center static notranslate">
             <div
               className={`hover:text-accent transition-colors py-2 border-b-2 flex items-center gap-1.5 cursor-pointer ${
                 currentLang !== "en" ? "border-accent text-accent font-semibold" : "border-transparent text-primary/90"
               }`}
             >
               <Globe className="w-3.5 h-3.5 text-accent" />
-              <span>{LANGUAGES.find((l) => l.code === currentLang)?.flag || "🇬🇧"} {currentLang.toUpperCase()}</span>
+              <img
+                src={`https://flagcdn.com/w20/${LANGUAGES.find((l) => l.code === currentLang)?.flagCode || "gb"}.png`}
+                width="18"
+                height="12"
+                alt=""
+                className="object-contain shrink-0 rounded-sm"
+              />
+              <span>{currentLang.toUpperCase()}</span>
               <ChevronDown className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-180 text-accent" />
             </div>
 
@@ -826,7 +835,13 @@ const Navbar = () => {
                                 currentLang === code ? "text-accent font-semibold bg-secondary/35" : "text-primary/70"
                               }`}
                             >
-                              <span className="text-sm shrink-0">{lang.flag}</span>
+                              <img
+                                src={`https://flagcdn.com/w20/${lang.flagCode}.png`}
+                                width="18"
+                                height="12"
+                                alt=""
+                                className="object-contain shrink-0 rounded-sm"
+                              />
                               <span>{lang.name}</span>
                             </button>
                           </li>
@@ -1205,11 +1220,19 @@ const Navbar = () => {
               </li>
 
               {/* Mobile Language Selector Accordion */}
-              <li className="space-y-3">
+              <li className="space-y-3 notranslate">
                 <div className="flex items-center justify-between py-1 group">
                   <span className="flex-1 uppercase tracking-widest font-bold text-primary/95 flex items-center gap-1.5">
                     <Globe className="w-4 h-4 text-accent" />
-                    Language: {LANGUAGES.find((l) => l.code === currentLang)?.flag || "🇬🇧"} {currentLang.toUpperCase()}
+                    Language:
+                    <img
+                      src={`https://flagcdn.com/w20/${LANGUAGES.find((l) => l.code === currentLang)?.flagCode || "gb"}.png`}
+                      width="18"
+                      height="12"
+                      alt=""
+                      className="object-contain shrink-0 rounded-sm"
+                    />
+                    <span>{currentLang.toUpperCase()}</span>
                   </span>
                   <button
                     onClick={(e) => {
@@ -1234,7 +1257,13 @@ const Navbar = () => {
                           currentLang === lang.code ? "bg-[#0e3b2e] text-white font-bold" : "bg-white border border-primary/10 text-primary/80 hover:bg-secondary/40"
                         }`}
                       >
-                        <span className="text-sm shrink-0">{lang.flag}</span>
+                        <img
+                          src={`https://flagcdn.com/w20/${lang.flagCode}.png`}
+                          width="18"
+                          height="12"
+                          alt=""
+                          className="object-contain shrink-0 rounded-sm"
+                        />
                         <span>{lang.name}</span>
                       </button>
                     ))}
