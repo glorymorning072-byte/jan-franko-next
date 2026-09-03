@@ -19,6 +19,11 @@ export default function Institute() {
   const cardsContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Disable scroll animations on mobile & tablet screens (< 1024px) for 100% reliable rendering
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      return;
+    }
+
     const ctx = gsap.context(() => {
       // 1. Label and Line animation
       gsap.fromTo(

@@ -145,6 +145,11 @@ const RegionRow = ({ volume, index }: { volume: EditorialItem; index: number }) 
   const buttonsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Disable scroll animations on mobile & tablet screens (< 1024px) for 100% reliable rendering
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      return;
+    }
+
     const ctx = gsap.context(() => {
       // Animate text elements sliding up staggeredly when row enters viewport
       gsap.fromTo(
