@@ -57,9 +57,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} h-full antialiased scroll-smooth`}
+      className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} h-full antialiased scroll-smooth overflow-x-hidden max-w-full`}
     >
-      <body className="min-h-full flex flex-col relative bg-[#f0e9d9] text-[#0e3b2e]">
+      <body className="min-h-full flex flex-col relative bg-[#f0e9d9] text-[#0e3b2e] overflow-x-hidden max-w-full">
         <GoogleTranslate />
         <Navbar />
         <main className="flex-grow">

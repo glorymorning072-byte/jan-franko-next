@@ -867,8 +867,8 @@ const Navbar = () => {
 
         {/* 2. MOBILE NAVIGATION SLIDING DRAWER */}
         <div
-          className={`fixed top-20 right-0 h-[calc(100vh-80px)] w-full sm:w-[350px] bg-secondary border-l border-primary/10 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out lg:hidden flex flex-col justify-between overflow-y-auto ${
-            isOpen ? "translate-x-0" : "translate-x-full"
+          className={`fixed top-20 right-0 h-[calc(100vh-80px)] w-full sm:w-[350px] bg-secondary border-l border-primary/10 shadow-2xl z-50 transform transition-all duration-300 ease-in-out lg:hidden flex flex-col justify-between overflow-y-auto ${
+            isOpen ? "translate-x-0 opacity-100 visible pointer-events-auto" : "translate-x-full opacity-0 invisible pointer-events-none"
           }`}
         >
           {/* Navigation Links */}
