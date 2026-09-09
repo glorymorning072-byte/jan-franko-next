@@ -55,9 +55,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function RootSlugAliasPage({ params }: PageProps) {
   const { slug } = await params;
 
-  // 1. If it's a known academy alias, redirect cleanly or render Academy page
+  // 1. If it's a known academy alias, 301 redirect to canonical /academy/ route
+  if (slug === "the-academy") {
+    redirect("/academy");
+  }
   if (ALIAS_MAP[slug]) {
-    return <AcademyPage params={Promise.resolve({ slug: ALIAS_MAP[slug] })} />;
+    redirect(`/academy/${ALIAS_MAP[slug]}`);
   }
 
   // 2. Archery games fallback

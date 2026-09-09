@@ -18,6 +18,32 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // 1. Academy Governance & Curriculum Root Aliases -> Canonical /academy/...
+      { source: "/the-academy", destination: "/academy", permanent: true },
+      { source: "/certification", destination: "/academy/certification", permanent: true },
+      { source: "/explorer-rank-system", destination: "/academy/explorer-rank-system", permanent: true },
+      { source: "/rank-system", destination: "/academy/explorer-rank-system", permanent: true },
+      { source: "/code-of-conduct", destination: "/academy/code-of-conduct", permanent: true },
+      { source: "/summit-protocol", destination: "/academy/summit-protocol", permanent: true },
+      { source: "/environmental-stress-index", destination: "/academy/environmental-stress-index-esi", permanent: true },
+      { source: "/environmental-stress-index-esi", destination: "/academy/environmental-stress-index-esi", permanent: true },
+      { source: "/esi", destination: "/academy/environmental-stress-index-esi", permanent: true },
+      { source: "/explorer-path", destination: "/academy/explorer-path", permanent: true },
+
+      // 2. Legacy Editorial & Scrolls Paths -> Canonical /knowledge/...
+      { source: "/editorial", destination: "/knowledge", permanent: true },
+      { source: "/editorial/mongolia", destination: "/knowledge/mongolia-expedition", permanent: true },
+      { source: "/editorial/:slug*", destination: "/knowledge/:slug*", permanent: true },
+      { source: "/scrolls", destination: "/knowledge", permanent: true },
+      { source: "/scrolls/mongolia", destination: "/knowledge/mongolia-expedition", permanent: true },
+      { source: "/scrolls/category/:path*", destination: "/knowledge", permanent: true },
+      { source: "/scrolls/region/:path*", destination: "/knowledge", permanent: true },
+      { source: "/scrolls/:slug*", destination: "/knowledge/:slug*", permanent: true },
+      { source: "/knowledge/mongolia", destination: "/knowledge/mongolia-expedition", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

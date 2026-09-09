@@ -24,6 +24,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://janfranko.com"),
   title: "Jan Franko - Traditional Archery",
   description: "A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.",
   icons: {
