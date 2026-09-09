@@ -250,7 +250,7 @@ const Navbar = () => {
         {/* Logo Branding */}
         <Link href="/" className="flex items-center">
           <img
-            src="https://janfranko.com/wp-content/uploads/2026/03/cropped-jan-franko-logo-rgb-04@2x-160x97.png"
+            src="/images/wp-assets/logo.png"
             alt="JanFranko Logo"
             className="h-12 object-contain hover:opacity-90 transition-opacity"
           />

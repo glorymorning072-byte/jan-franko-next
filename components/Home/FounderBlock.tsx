@@ -20,7 +20,7 @@ const FOUNDER_DATA = {
   ],
   quote: "Archery is not only about the bow and the arrow. It is about the relationship between the body, breath, movement, attention and intention.",
   image: {
-    src: "https://janfranko.com/wp-content/uploads/2026/02/WhatsApp-Image-2026-02-11-at-11.33.11-PM-12.png",
+    src: "/images/wp-assets/founder-gallery-1.png",
     alt: "Jan Franko - Founder & Head Instructor"
   }
 };

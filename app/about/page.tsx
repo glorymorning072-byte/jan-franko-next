@@ -149,7 +149,7 @@ const AboutPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
           <div className="lg:col-span-5 relative aspect-square rounded-3xl overflow-hidden bg-primary/10 border border-primary/10 shadow-lg">
             <img
-              src="https://janfranko.com/wp-content/uploads/2026/02/image-25-02-2026-11-33-59.webp"
+              src="/images/wp-assets/contact-bg.webp"
               alt="Archery Discipline"
               className="w-full h-full object-cover"
             />

@@ -49,7 +49,7 @@ const Contact = () => {
       id="contact"
       className="relative w-full py-24 px-6 md:px-12 lg:px-24 overflow-hidden border-t border-accent/15 bg-fixed bg-cover bg-center bg-no-repeat min-h-screen flex items-center justify-center z-10"
       style={{
-        backgroundImage: "url('https://janfranko.com/wp-content/uploads/2026/02/image-25-02-2026-11-33-59.webp')",
+        backgroundImage: "url('/images/wp-assets/contact-bg.webp')",
       }}
     >
       {/* Transparent Dark Primary Color Overlay */}
