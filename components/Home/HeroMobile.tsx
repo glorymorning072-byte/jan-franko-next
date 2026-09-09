@@ -11,8 +11,8 @@ const HeroMobile = () => {
         backgroundImage: "url('/images/wp-assets/contact-bg.webp')",
       }}
     >
-      {/* Rich Brand Color Overlay */}
-      <div className="absolute inset-0 bg-[#0e3b2e]/85 backdrop-blur-[1px] z-0 pointer-events-none" />
+      {/* Rich Brand Color Overlay (Reduced opacity to 65% for enhanced background image visibility) */}
+      <div className="absolute inset-0 bg-[#0e3b2e]/65 backdrop-blur-[1px] z-0 pointer-events-none" />
 
       {/* Premium Double Framed Borders */}
       <div className="border-outer absolute inset-5 border border-accent/20 rounded-2xl pointer-events-none z-0" />
