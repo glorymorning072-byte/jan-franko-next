@@ -175,13 +175,18 @@ const Navbar = () => {
           clientFetch<any[]>("/api/equipment/bowyers")
         ]);
 
-        setTypes(navData.types || []);
-        setSkills(navData.skills || []);
-        setRegions(navData.regions || []);
+        setTypes(navData?.types || []);
+        setSkills(navData?.skills || []);
+        setRegions(navData?.regions || []);
         setEquipmentCategories(eqData || []);
         setBowyers(bowyerData || []);
       } catch (err) {
         console.error("Failed to fetch nav menu taxonomies:", err);
+      } finally {
+        if (typeof window !== "undefined") {
+          (window as any).__MEGAMENU_READY = true;
+          window.dispatchEvent(new Event("megamenu-ready"));
+        }
       }
     };
 

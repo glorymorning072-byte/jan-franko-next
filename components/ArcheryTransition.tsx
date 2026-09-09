@@ -151,20 +151,69 @@ export const ArcheryTransition = ({ children }: { children: React.ReactNode }) =
     }, 0.15);
   };
 
-  // Entrance transition triggered upon Next.js page change
+  const isInitialLoadRef = useRef(true);
+
+  // Entrance transition triggered upon Next.js page change & initial website load
   useEffect(() => {
-    // Ensure the new DOM tree is mounted and painted before opening the cover
     let animationFrameId: number;
-    const timer = setTimeout(() => {
+    let safetyTimer: NodeJS.Timeout;
+
+    const triggerReveal = () => {
+      clearTimeout(safetyTimer);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("megamenu-ready", triggerReveal);
+      }
       animationFrameId = requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           runEntranceAnimation();
         });
       });
-    }, 160);
+    };
+
+    if (isInitialLoadRef.current) {
+      isInitialLoadRef.current = false;
+
+      // On initial site load, check if mega menu data is already ready
+      if (typeof window !== "undefined" && (window as any).__MEGAMENU_READY) {
+        triggerReveal();
+      } else {
+        // Keep shutters closed over the screen while mega menu data fetches
+        gsap.set(topPanelRef.current, { y: "0%" });
+        gsap.set(bottomPanelRef.current, { y: "0%" });
+        gsap.set(targetRef.current, { opacity: 1, scale: 1, x: 0 });
+        gsap.set(arrowRef.current, { opacity: 1, x: "0px" });
+
+        // Listen for megamenu-ready event
+        if (typeof window !== "undefined") {
+          window.addEventListener("megamenu-ready", triggerReveal);
+        }
+
+        // Safety fallback timeout: if data isn't received within 4000ms, close preloader anyway
+        safetyTimer = setTimeout(() => {
+          triggerReveal();
+        }, 4000);
+      }
+    } else {
+      // Normal page navigation transition
+      const timer = setTimeout(() => {
+        animationFrameId = requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            runEntranceAnimation();
+          });
+        });
+      }, 160);
+
+      return () => {
+        clearTimeout(timer);
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      };
+    }
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(safetyTimer);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("megamenu-ready", triggerReveal);
+      }
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
   }, [pathname]);
@@ -179,21 +228,21 @@ export const ArcheryTransition = ({ children }: { children: React.ReactNode }) =
       {/* Top Shutter Panel */}
       <div
         ref={topPanelRef}
-        style={{ transform: "translate3d(0, -100%, 0)" }}
+        style={{ transform: "translate3d(0, 0%, 0)" }}
         className="fixed top-0 left-0 w-full h-[50vh] bg-[#0e3b2e] z-[9999] pointer-events-none shadow-2xl border-b border-accent/10"
       />
 
       {/* Bottom Shutter Panel */}
       <div
         ref={bottomPanelRef}
-        style={{ transform: "translate3d(0, 100%, 0)" }}
+        style={{ transform: "translate3d(0, 0%, 0)" }}
         className="fixed bottom-0 left-0 w-full h-[50vh] bg-[#0e3b2e] z-[9999] pointer-events-none shadow-2xl border-t border-accent/10"
       />
 
       {/* Central Target Face & Arrow */}
       <div
         ref={targetRef}
-        style={{ opacity: 0, transform: "translate3d(-50%, -50%, 0) scale(0.5)" }}
+        style={{ opacity: 1, transform: "translate3d(-50%, -50%, 0) scale(1)" }}
         className="fixed top-1/2 left-1/2 z-[10000] pointer-events-none flex items-center justify-center"
       >
         {/* Archery Target Circular Face */}
@@ -220,7 +269,7 @@ export const ArcheryTransition = ({ children }: { children: React.ReactNode }) =
               ref={arrowRef}
               viewBox="0 0 100 20"
               fill="none"
-              style={{ opacity: 0 }}
+              style={{ opacity: 1 }}
               className="w-24 md:w-32 h-6 md:h-8 text-accent drop-shadow-[0_0_10px_rgba(197,168,128,0.55)]"
             >
               {/* Shaft */}
