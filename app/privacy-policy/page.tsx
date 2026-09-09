@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,75 +11,80 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="min-h-screen bg-secondary text-primary pt-28 pb-20 select-text font-sans">
-      <div className="max-w-3xl mx-auto px-6 md:px-8 space-y-8">
-        
-        {/* Simple Header */}
-        <div className="border-b border-primary/10 pb-6 space-y-2">
-          <nav className="text-xs text-primary/60 font-medium">
-            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-            <span className="mx-2">/</span>
-            <span className="text-primary font-semibold">Privacy Policy</span>
+    <main className="min-h-screen bg-secondary text-primary select-text font-sans">
+      {/* Distinct Dark Hero Section with Generous Vertical Padding */}
+      <section className="relative border-b border-primary/10 bg-[#0e3b2e] text-white pt-32 pb-16 md:pt-40 md:pb-20 overflow-hidden select-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12),transparent_70%)] pointer-events-none" />
+        <div className="max-w-4xl mx-auto px-6 md:px-8 relative z-10 space-y-3">
+          <nav className="flex items-center gap-2 text-xs font-serif uppercase tracking-widest text-accent/80 font-semibold">
+            <Link href="/" className="hover:text-accent transition-colors">
+              Home
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-accent/50" />
+            <span className="text-white font-bold">Privacy Policy</span>
           </nav>
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-primary tracking-tight">
-            Privacy Policy
-          </h1>
-          <p className="text-xs sm:text-sm text-primary/70 font-sans">
-            How we handle personal data under the EU General Data Protection Regulation (GDPR).
+
+          <div className="space-y-2">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white tracking-tight">
+              Privacy Policy
+            </h1>
+            <p className="text-xs sm:text-sm text-white/80 font-sans max-w-xl leading-relaxed">
+              How we handle personal data under the EU General Data Protection Regulation (GDPR).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Clean Minimal Text Body */}
+      <div className="max-w-4xl mx-auto px-6 md:px-8 py-14 md:py-20 space-y-10">
+        
+        <section className="space-y-3">
+          <h2 className="text-lg font-serif font-bold text-primary border-b border-primary/10 pb-2">
+            1. Data Controller
+          </h2>
+          <p className="text-sm text-primary/80 leading-relaxed">
+            The data controller for this website under Article 4(7) GDPR is:
           </p>
-        </div>
+          <div className="text-xs text-primary/80 space-y-1 font-sans">
+            <p><strong>Jan Franko Traditional Archery Academy</strong></p>
+            <p>Representative: Jan Franko</p>
+            <p>Podunajská 23, 941 48 Podhájska, Slovak Republic</p>
+            <p>Email: <a href="mailto:janfranko@tutanota.com" className="text-[#7d603a] underline">janfranko@tutanota.com</a></p>
+          </div>
+        </section>
 
-        {/* Legal Text Body */}
-        <div className="space-y-8 text-sm text-primary/85 leading-relaxed font-sans">
-          
-          <section className="space-y-3">
-            <h2 className="text-lg font-serif font-bold text-primary border-b border-primary/10 pb-1">
-              1. Data Controller
-            </h2>
+        <section className="space-y-3">
+          <h2 className="text-lg font-serif font-bold text-primary border-b border-primary/10 pb-2">
+            2. Data We Collect
+          </h2>
+          <div className="space-y-3 text-sm text-primary/80 leading-relaxed">
             <p>
-              The data controller for this website under Article 4(7) GDPR is:
+              <strong>A. Admission &amp; Contact Queries:</strong> When you send an inquiry, we process the information you provide (name, email address, phone number, message content) to respond to your request (Art. 6(1)(b) GDPR).
             </p>
-            <div className="text-xs text-primary/80 space-y-0.5 font-sans">
-              <p><strong>Jan Franko Traditional Archery Academy</strong></p>
-              <p>Representative: Jan Franko</p>
-              <p>Podunajská 23, 941 48 Podhájska, Slovak Republic</p>
-              <p>Email: <a href="mailto:janfranko@tutanota.com" className="text-[#7d603a] underline">janfranko@tutanota.com</a></p>
-            </div>
-          </section>
-
-          <section className="space-y-3">
-            <h2 className="text-lg font-serif font-bold text-primary border-b border-primary/10 pb-1">
-              2. Data We Collect
-            </h2>
-            <div className="space-y-2 text-primary/80">
-              <p>
-                <strong>A. Admission &amp; Contact Queries:</strong> When you send an inquiry, we process the information you provide (name, email address, phone number, message content) to respond to your request (Art. 6(1)(b) GDPR).
-              </p>
-              <p>
-                <strong>B. Server Logs:</strong> Web servers automatically collect access logs (IP address, browser version, timestamp) to maintain site security and stability (Art. 6(1)(f) GDPR).
-              </p>
-            </div>
-          </section>
-
-          <section className="space-y-3">
-            <h2 className="text-lg font-serif font-bold text-primary border-b border-primary/10 pb-1">
-              3. Cookies &amp; Third-Party Services
-            </h2>
             <p>
-              We do not use intrusive cross-site advertising cookies or tracking pixels. Hosting infrastructure is provided by Vercel Inc. under GDPR-compliant data processing terms.
+              <strong>B. Server Logs:</strong> Web servers automatically collect access logs (IP address, browser version, timestamp) to maintain site security and stability (Art. 6(1)(f) GDPR).
             </p>
-          </section>
+          </div>
+        </section>
 
-          <section className="space-y-3">
-            <h2 className="text-lg font-serif font-bold text-primary border-b border-primary/10 pb-1">
-              4. Your Rights Under GDPR
-            </h2>
-            <p>
-              You have the right to request access to (Art. 15), correction of (Art. 16), or deletion of (Art. 17) your personal data. You may also lodge a complaint with a supervisory authority (Úrad na ochranu osobných údajov SR: <a href="https://dataprotection.gov.sk" target="_blank" rel="noopener noreferrer" className="text-[#7d603a] underline">www.dataprotection.gov.sk</a>).
-            </p>
-          </section>
+        <section className="space-y-3">
+          <h2 className="text-lg font-serif font-bold text-primary border-b border-primary/10 pb-2">
+            3. Cookies &amp; Third-Party Services
+          </h2>
+          <p className="text-sm text-primary/80 leading-relaxed">
+            We do not use intrusive cross-site advertising cookies or tracking pixels. Hosting infrastructure is provided by Vercel Inc. under GDPR-compliant data processing terms.
+          </p>
+        </section>
 
-        </div>
+        <section className="space-y-3">
+          <h2 className="text-lg font-serif font-bold text-primary border-b border-primary/10 pb-2">
+            4. Your Rights Under GDPR
+          </h2>
+          <p className="text-sm text-primary/80 leading-relaxed">
+            You have the right to request access to (Art. 15), correction of (Art. 16), or deletion of (Art. 17) your personal data. You may also lodge a complaint with a supervisory authority (Úrad na ochranu osobných údajov SR: <a href="https://dataprotection.gov.sk" target="_blank" rel="noopener noreferrer" className="text-[#7d603a] underline">www.dataprotection.gov.sk</a>).
+          </p>
+        </section>
+
       </div>
     </main>
   );
