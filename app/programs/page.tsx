@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
 import {
@@ -629,6 +630,79 @@ const MACRO_REGIONS = {
           </p>
           <div className="pt-2 flex justify-center">
             <div className="w-12 h-[1px] bg-[#c5a880]/30" />
+          </div>
+        </div>
+      </div>
+
+      {/* 1.5 Academy Systems & Governance Hub Bar */}
+      <div className="bg-[#0b3126] text-[#f0e9d9] border-b border-accent/20 py-10 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-accent/15 pb-4">
+            <div>
+              <span className="text-[10px] font-serif uppercase tracking-[0.2em] text-accent font-bold block">
+                Governance &amp; Verification Standards
+              </span>
+              <h2 className="text-xl md:text-2xl font-serif font-bold text-white">
+                Academy Curriculum Systems
+              </h2>
+            </div>
+            <Link
+              href="/academy"
+              className="inline-flex items-center gap-2 text-xs font-serif font-bold uppercase tracking-wider text-accent hover:underline"
+            >
+              <span>Explore The Academy Hub</span>
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <Link
+              href="/academy/certification"
+              className="bg-white/5 border border-white/10 hover:border-accent/50 hover:bg-white/10 p-3.5 rounded-2xl space-y-1 transition-all group"
+            >
+              <span className="text-[9px] font-mono uppercase tracking-widest text-accent font-bold block">Safety Audit</span>
+              <span className="text-xs font-serif font-bold text-white group-hover:text-accent block">Certification</span>
+            </Link>
+
+            <Link
+              href="/academy/explorer-rank-system"
+              className="bg-white/5 border border-white/10 hover:border-accent/50 hover:bg-white/10 p-3.5 rounded-2xl space-y-1 transition-all group"
+            >
+              <span className="text-[9px] font-mono uppercase tracking-widest text-accent font-bold block">5 Ecosystems</span>
+              <span className="text-xs font-serif font-bold text-white group-hover:text-accent block">Rank System</span>
+            </Link>
+
+            <Link
+              href="/academy/summit-protocol"
+              className="bg-white/5 border border-white/10 hover:border-accent/50 hover:bg-white/10 p-3.5 rounded-2xl space-y-1 transition-all group"
+            >
+              <span className="text-[9px] font-mono uppercase tracking-widest text-accent font-bold block">Tier III Apex</span>
+              <span className="text-xs font-serif font-bold text-white group-hover:text-accent block">Summit Protocol</span>
+            </Link>
+
+            <Link
+              href="/academy/environmental-stress-index-esi"
+              className="bg-white/5 border border-white/10 hover:border-accent/50 hover:bg-white/10 p-3.5 rounded-2xl space-y-1 transition-all group"
+            >
+              <span className="text-[9px] font-mono uppercase tracking-widest text-accent font-bold block">Load Metric</span>
+              <span className="text-xs font-serif font-bold text-white group-hover:text-accent block">ESI Metric</span>
+            </Link>
+
+            <Link
+              href="/academy/code-of-conduct"
+              className="bg-white/5 border border-white/10 hover:border-accent/50 hover:bg-white/10 p-3.5 rounded-2xl space-y-1 transition-all group"
+            >
+              <span className="text-[9px] font-mono uppercase tracking-widest text-accent font-bold block">Ethics</span>
+              <span className="text-xs font-serif font-bold text-white group-hover:text-accent block">Code of Conduct</span>
+            </Link>
+
+            <Link
+              href="/archery-games"
+              className="bg-accent/15 border border-accent/30 hover:bg-accent hover:text-[#0e3b2e] p-3.5 rounded-2xl space-y-1 transition-all group"
+            >
+              <span className="text-[9px] font-mono uppercase tracking-widest text-accent font-bold group-hover:text-[#0e3b2e] block">Gatherings</span>
+              <span className="text-xs font-serif font-bold text-white group-hover:text-[#0e3b2e] block">Archery Games</span>
+            </Link>
           </div>
         </div>
       </div>

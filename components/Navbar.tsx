@@ -22,6 +22,7 @@ interface CategoryTerm {
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false); // Mobile drawer toggle
+  const [isAcademyMobileOpen, setIsAcademyMobileOpen] = useState(false); // Mobile academy sub-accordion
   const [isProgramsMobileOpen, setIsProgramsMobileOpen] = useState(false); // Mobile programs sub-accordion
   const [isKnowledgeMobileOpen, setIsKnowledgeMobileOpen] = useState(false); // Mobile knowledge sub-accordion
   const [isEquipmentMobileOpen, setIsEquipmentMobileOpen] = useState(false); // Mobile equipment sub-accordion
@@ -285,13 +286,58 @@ const Navbar = () => {
             {/* MEGA MENU CONTAINER */}
             <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-t border-primary/5 border-b border-primary/10 rounded-b-3xl shadow-2xl opacity-0 translate-y-2 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible transition-all duration-300 z-40">
               <div className="max-w-7xl mx-auto px-12 py-10 grid grid-cols-4 gap-8">
-                {/* Column 1: Types */}
+                {/* Column 1: Academy & Governance */}
                 <div className="space-y-4">
                   <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-2 flex items-center gap-1.5 font-sans">
-                    <Compass className="w-4 h-4" />
+                    <Compass className="w-4 h-4 text-accent" />
+                    Academy Curriculum
+                  </h4>
+                  <ul className="space-y-2 font-sans text-xs tracking-wider normal-case text-primary/80 font-medium">
+                    <li>
+                      <Link href="/academy" className="hover:text-accent transition-colors block py-0.5 font-semibold text-primary">
+                        The Academy Overview
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/academy/certification" className="hover:text-accent transition-colors block py-0.5">
+                        Certification &amp; Audit
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/academy/explorer-rank-system" className="hover:text-accent transition-colors block py-0.5">
+                        Explorer Rank System
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/academy/summit-protocol" className="hover:text-accent transition-colors block py-0.5">
+                        Summit Protocol (Tier III)
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/academy/environmental-stress-index-esi" className="hover:text-accent transition-colors block py-0.5">
+                        Environmental Stress Index (ESI)
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/academy/code-of-conduct" className="hover:text-accent transition-colors block py-0.5">
+                        Code of Conduct &amp; Neutrality
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/archery-games" className="hover:text-accent transition-colors block py-0.5 font-semibold text-[#7d603a]">
+                        Archery Games &amp; Events
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Column 2: Program Types */}
+                <div className="space-y-4">
+                  <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-2 flex items-center gap-1.5 font-sans">
+                    <Award className="w-4 h-4 text-accent" />
                     Program Types
                   </h4>
-                  <ul className="space-y-2.5 font-sans text-xs tracking-wider normal-case text-primary/80">
+                  <ul className="space-y-2 font-sans text-xs tracking-wider normal-case text-primary/80">
                     {types.length === 0 ? (
                       <li className="text-primary/40 italic">Loading types...</li>
                     ) : (
@@ -309,52 +355,38 @@ const Navbar = () => {
                   </ul>
                 </div>
 
-                {/* Column 2: Skill Levels */}
+                {/* Column 3: Skill Levels & Regions */}
                 <div className="space-y-4">
                   <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-2 flex items-center gap-1.5 font-sans">
-                    <Award className="w-4 h-4" />
-                    Skill Levels
+                    <MapPin className="w-4 h-4 text-accent" />
+                    Skill Levels &amp; Regions
                   </h4>
-                  <ul className="space-y-2.5 font-sans text-xs tracking-wider normal-case text-primary/80">
-                    {skills.length === 0 ? (
-                      <li className="text-primary/40 italic">Loading levels...</li>
-                    ) : (
-                      skills.map((s) => (
-                        <li key={s.id}>
-                          <Link
-                            href={`/programs?skill_level=${s.slug}`}
-                            className="hover:text-accent transition-colors block py-0.5"
-                          >
-                            {s.name}
-                          </Link>
-                        </li>
-                      ))
-                    )}
-                  </ul>
-                </div>
-
-                {/* Column 3: Regions */}
-                <div className="space-y-4">
-                  <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-bold border-b border-primary/5 pb-2 flex items-center gap-1.5 font-sans">
-                    <MapPin className="w-4 h-4" />
-                    Regions
-                  </h4>
-                  <ul className="space-y-2.5 font-sans text-xs tracking-wider normal-case text-primary/80">
-                    {regions.length === 0 ? (
-                      <li className="text-primary/40 italic">Loading regions...</li>
-                    ) : (
-                      regions.map((r) => (
-                        <li key={r.id}>
-                          <Link
-                            href={`/programs?region=${r.slug}`}
-                            className="hover:text-accent transition-colors block py-0.5"
-                          >
-                            {r.name}
-                          </Link>
-                        </li>
-                      ))
-                    )}
-                  </ul>
+                  <div className="space-y-3 font-sans text-xs tracking-wider normal-case text-primary/80">
+                    <div>
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-[#7d603a] font-bold block mb-1">Levels</span>
+                      <ul className="space-y-1">
+                        {skills.slice(0, 4).map((s) => (
+                          <li key={s.id}>
+                            <Link href={`/programs?skill_level=${s.slug}`} className="hover:text-accent transition-colors block py-0.5">
+                              {s.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-[#7d603a] font-bold block mb-1">Regions</span>
+                      <ul className="space-y-1">
+                        {regions.slice(0, 4).map((r) => (
+                          <li key={r.id}>
+                            <Link href={`/programs?region=${r.slug}`} className="hover:text-accent transition-colors block py-0.5">
+                              {r.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Column 4: Featured Promo Card */}
@@ -909,6 +941,58 @@ const Navbar = () => {
 
                 {isProgramsMobileOpen && (
                   <div className="pl-4 border-l border-primary/10 space-y-4 pt-1 pb-3 animate-in slide-in-from-top-2 duration-200">
+                    
+                    {/* Academy Curriculum Subgroup */}
+                    <div className="space-y-1.5">
+                      <button
+                        onClick={() => toggleSubgroup("prog-academy")}
+                        className="w-full flex justify-between items-center text-xs font-serif font-bold text-[#7d603a] tracking-wider uppercase py-1 hover:opacity-85 text-left cursor-pointer group"
+                      >
+                        <span>Academy Curriculum</span>
+                        <ChevronDown
+                          className={`w-5 h-5 p-0.5 text-primary/50 bg-primary/5 group-hover:bg-[#ebd9bd]/50 rounded-md transition-all duration-200 ${openSubgroups["prog-academy"] ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                      {openSubgroups["prog-academy"] && (
+                        <ul className="space-y-1.5 pl-2 font-sans text-xs tracking-wide text-primary/80 font-medium normal-case animate-in slide-in-from-top-1 duration-150">
+                          <li>
+                            <Link href="/academy" className="hover:text-[#7d603a] block py-1 font-semibold transition-colors">
+                              The Academy Overview
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/academy/certification" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Certification &amp; Audit
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/academy/explorer-rank-system" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Explorer Rank System
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/academy/summit-protocol" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Summit Protocol (Tier III)
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/academy/environmental-stress-index-esi" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Environmental Stress Index (ESI)
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/academy/code-of-conduct" className="hover:text-[#7d603a] block py-1 transition-colors">
+                              Code of Conduct &amp; Neutrality
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/archery-games" className="hover:text-[#7d603a] block py-1 font-semibold transition-colors text-[#7d603a]">
+                              Archery Games &amp; Events
+                            </Link>
+                          </li>
+                        </ul>
+                      )}
+                    </div>
                     
                     {/* Types Subgroup */}
                     <div className="space-y-1.5">

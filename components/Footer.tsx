@@ -31,12 +31,17 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Column 2: Navigation Links (span 2) */}
-        <div className="lg:col-span-2 space-y-4">
+        {/* Column 2: Navigation Links (span 3) */}
+        <div className="lg:col-span-3 space-y-4">
           <h3 className="text-xs font-serif font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">
             The Academy
           </h3>
-          <ul className="space-y-2.5 text-sm font-sans font-medium text-[#f0e9d9]/80">
+          <ul className="space-y-2 text-xs font-sans font-medium text-[#f0e9d9]/80">
+            <li>
+              <Link href="/academy" className="hover:text-accent transition-colors block py-0.5 font-semibold text-white">
+                Academy System Overview
+              </Link>
+            </li>
             <li>
               <Link href="/about" className="hover:text-accent transition-colors block py-0.5">
                 Academy Profile
@@ -49,36 +54,51 @@ const Footer = () => {
             </li>
             <li>
               <Link href="/about/partners" className="hover:text-accent transition-colors block py-0.5">
-                Vetted Bowyers
+                Vetted Bowyers &amp; Partners
               </Link>
             </li>
             <li>
               <Link href="/contact" className="hover:text-accent transition-colors block py-0.5 font-semibold text-accent">
-                Admission Contact
+                Admission Inquiries
               </Link>
             </li>
           </ul>
         </div>
 
-        {/* Column 3: Resources (span 2) */}
-        <div className="lg:col-span-2 space-y-4">
+        {/* Column 3: Curriculum & Governance (span 3) */}
+        <div className="lg:col-span-3 space-y-4">
           <h3 className="text-xs font-serif font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">
-            Resources
+            Curriculum &amp; Governance
           </h3>
-          <ul className="space-y-2.5 text-sm font-sans font-medium text-[#f0e9d9]/80">
+          <ul className="space-y-2 text-xs font-sans font-medium text-[#f0e9d9]/80">
             <li>
-              <Link href="/programs" className="hover:text-accent transition-colors block py-0.5">
-                Training Programs
+              <Link href="/academy/certification" className="hover:text-accent transition-colors block py-0.5">
+                Certification &amp; Audit
               </Link>
             </li>
             <li>
-              <Link href="/equipment" className="hover:text-accent transition-colors block py-0.5">
-                Academy Armory
+              <Link href="/academy/explorer-rank-system" className="hover:text-accent transition-colors block py-0.5">
+                Explorer Rank System
               </Link>
             </li>
             <li>
-              <Link href="/knowledge" className="hover:text-accent transition-colors block py-0.5">
-                Knowledge &amp; Field Editorials
+              <Link href="/academy/summit-protocol" className="hover:text-accent transition-colors block py-0.5">
+                Summit Protocol (Tier III)
+              </Link>
+            </li>
+            <li>
+              <Link href="/academy/environmental-stress-index-esi" className="hover:text-accent transition-colors block py-0.5">
+                Environmental Stress Index (ESI)
+              </Link>
+            </li>
+            <li>
+              <Link href="/academy/code-of-conduct" className="hover:text-accent transition-colors block py-0.5">
+                Code of Conduct &amp; Neutrality
+              </Link>
+            </li>
+            <li>
+              <Link href="/archery-games" className="hover:text-accent transition-colors block py-0.5 font-semibold text-accent">
+                Archery Games &amp; Events
               </Link>
             </li>
           </ul>
