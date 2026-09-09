@@ -10,10 +10,10 @@ const Footer = () => {
       {/* Premium radial decorative gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(197,168,128,0.06),transparent_60%)] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-20 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 md:gap-12 lg:gap-16">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-20 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8 lg:gap-10">
         
-        {/* Column 1: Brand & Philosophy (span 4) */}
-        <div className="lg:col-span-4 space-y-5">
+        {/* Column 1: Brand & Philosophy */}
+        <div className="space-y-5">
           <div className="space-y-2">
             <span className="text-[10px] font-serif uppercase tracking-[0.25em] text-accent font-bold block">
               Instinctive Discipline
@@ -31,8 +31,8 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Column 2: Navigation Links (span 3) */}
-        <div className="lg:col-span-3 space-y-4">
+        {/* Column 2: The Academy Navigation */}
+        <div className="space-y-4">
           <h3 className="text-xs font-serif font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">
             The Academy
           </h3>
@@ -65,8 +65,8 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Column 3: Curriculum & Governance (span 3) */}
-        <div className="lg:col-span-3 space-y-4">
+        {/* Column 3: Curriculum & Governance */}
+        <div className="space-y-4">
           <h3 className="text-xs font-serif font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">
             Curriculum &amp; Governance
           </h3>
@@ -104,8 +104,8 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Column 4: Contact & Socials (span 4) */}
-        <div className="lg:col-span-4 space-y-5">
+        {/* Column 4: Contact & Location */}
+        <div className="space-y-5">
           <h3 className="text-xs font-serif font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">
             Contact &amp; Location
           </h3>
