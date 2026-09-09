@@ -181,10 +181,23 @@ const Footer = () => {
 
       {/* Bottom Bar Details */}
       <div className="w-full border-t border-white/5 py-6 px-6 text-center text-xs text-[#f0e9d9]/50 font-sans tracking-wide">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <p>
             &copy; {new Date().getFullYear()} Traditional Archery Academy. All rights reserved.
           </p>
+          <div className="flex items-center gap-4 text-[11px] text-[#f0e9d9]/70 font-medium">
+            <Link href="/impressum" className="hover:text-accent transition-colors">
+              Impressum
+            </Link>
+            <span>•</span>
+            <Link href="/privacy-policy" className="hover:text-accent transition-colors">
+              Privacy Policy
+            </Link>
+            <span>•</span>
+            <Link href="/terms" className="hover:text-accent transition-colors">
+              Terms &amp; Conditions
+            </Link>
+          </div>
           <p className="flex items-center gap-1.5 font-semibold">
             <span>Preserving Craft &amp; Field Mastery</span>
             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
