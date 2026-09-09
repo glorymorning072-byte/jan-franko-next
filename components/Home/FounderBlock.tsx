@@ -15,8 +15,8 @@ const FOUNDER_DATA = {
   role: "Founder & Head Instructor",
   name: "Jan Franko",
   biography: [
-    "Training and expeditions are led by Jan Franko, founder of the academy. He unites more than 25 years of international professional experience in therapeutic bodywork, Traditional Chinese Medicine (TCM), and Qigong with traditional archery mastery.",
-    "This deep synthesis of physical biomechanics, breath regulation, and instinctive focus ensures practitioners develop enduring stamina and natural alignment in any terrain."
+    "Training and expeditions are led by Jan Franko, founder of the academy. His archery journey originated in 1985, evolving into deep specialization across Asiatic and Korean traditional bow disciplines starting in 2011.",
+    "Uniting his 1985 archery origin and 2011 Asiatic bow discipline with formal 1st School of TCM therapeutic training in Prague (since 2000), Jan is certified in field instructor disciplines under Henry Bodnik and Chris Mozolowski. This synthesis ensures archers develop kinetic alignment, breath regulation, and instinctive mastery in any terrain."
   ],
   quote: "Archery is not only about the bow and the arrow. It is about the relationship between the body, breath, movement, attention and intention.",
   image: {

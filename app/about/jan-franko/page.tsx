@@ -36,9 +36,24 @@ export const metadata: Metadata = {
 export default function JanFrankoProfilePage() {
   const tcmTimeline = [
     {
+      period: "1985 – Ongoing",
+      title: "Archery Origins & Initial Practice",
+      desc: "First discovery and initial practice of traditional bow mechanics, establishing an enduring lifelong foundation in instinctive shooting and traditional field craft."
+    },
+    {
       period: "2000 – 2003",
       title: "1st School of Traditional Chinese Medicine, Prague",
-      desc: "Formal education in Traditional Chinese Medicine philosophy, meridian theory, TCM diagnostics, Tuina, acupressure, cupping, moxibustion, TCM nutrition, and the foundations of acupuncture."
+      desc: "Formal education in Prague covering Traditional Chinese Medicine philosophy, meridian theory, TCM diagnostics, Tuina, acupressure, cupping, moxibustion, TCM nutrition, and the foundations of acupuncture."
+    },
+    {
+      period: "2011 – Ongoing",
+      title: "Asiatic & Korean Traditional Bow Discipline",
+      desc: "Deep specialization in Asiatic composite archery, traditional thumb-draw mechanics, dynamic horse archery, and Korean bow traditions across mountain and field terrain."
+    },
+    {
+      period: "Field Certifications",
+      title: "Henry Bodnik & Chris Mozolowski Certifications",
+      desc: "Formal field instructor certifications and traditional archery methodology training completed under master bowyer Henry Bodnik and field archery specialist Chris Mozolowski."
     },
     {
       period: "2000 – 2020",
@@ -49,11 +64,6 @@ export default function JanFrankoProfilePage() {
       period: "2020 – 2026",
       title: "Alpine Regeneration & International Luxury Wellness",
       desc: "Senior spa therapist and ritual guide across premier resorts in Tyrol (Alpinhotel Berghaus, Zugspitz Resort, POST Hotel, Der Böglerhof, A-ROSA Kitzbühel) and international luxury charter voyages (M/Y PALOMA luxury yacht in the Caribbean & Mediterranean)."
-    },
-    {
-      period: "2026 – Ongoing",
-      title: "Continuing TCM Education in Prague",
-      desc: "Continuous study of classical diagnostics, meridian therapies, and the synthesis between internal martial arts and restorative movement."
     },
     {
       period: "January 2027",
