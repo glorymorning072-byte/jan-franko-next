@@ -29,8 +29,10 @@ export default async function ArcheryGamesPage() {
     console.error("Failed to fetch Archery Games WP page:", err);
   }
 
-  // Clean HTML relative links
+  // Clean HTML & replace remote images with local assets
   wpPageContent = wpPageContent
+    .replace(/https:\/\/janfranko\.com\/wp-content\/uploads\/[0-9]{4}\/[0-9]{2}\//gi, "/images/wp-assets/")
+    .replace(/\/wp-content\/uploads\/[0-9]{4}\/[0-9]{2}\//gi, "/images/wp-assets/")
     .replace(/https:\/\/janfranko\.com\/the-academy\//g, "/academy/")
     .replace(/https:\/\/janfranko\.com\/archery-games\//g, "/archery-games/")
     .replace(/https:\/\/janfranko\.com\//g, "/");
@@ -40,7 +42,7 @@ export default async function ArcheryGamesPage() {
       {/* Hero Banner */}
       <section className="relative border-b border-accent/20 bg-gradient-to-b from-[#0e3b2e] via-[#092b21] to-[#0e3b2e] py-16 md:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.1),transparent_70%)] pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 text-center space-y-6">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 relative z-10 text-center space-y-6">
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-accent/15 border border-accent/30 rounded-full text-xs font-serif font-semibold tracking-widest uppercase text-accent">
             <Award className="w-4 h-4" />
             Historical Gatherings &amp; Precision Competitions
@@ -55,9 +57,9 @@ export default async function ArcheryGamesPage() {
       </section>
 
       {/* Main Content & Rendered WP Body */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 space-y-12">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 py-16 space-y-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="bg-[#0b3126] border border-accent/20 rounded-3xl p-8 space-y-4">
+          <div className="bg-[#0b3126] border border-accent/20 rounded-3xl p-8 space-y-4 shadow-xl">
             <div className="w-12 h-12 rounded-2xl bg-accent/15 border border-accent/30 flex items-center justify-center text-accent">
               <Shield className="w-6 h-6" />
             </div>
@@ -67,7 +69,7 @@ export default async function ArcheryGamesPage() {
             </p>
           </div>
 
-          <div className="bg-[#0b3126] border border-accent/20 rounded-3xl p-8 space-y-4">
+          <div className="bg-[#0b3126] border border-accent/20 rounded-3xl p-8 space-y-4 shadow-xl">
             <div className="w-12 h-12 rounded-2xl bg-accent/15 border border-accent/30 flex items-center justify-center text-accent">
               <Compass className="w-6 h-6" />
             </div>
@@ -77,7 +79,7 @@ export default async function ArcheryGamesPage() {
             </p>
           </div>
 
-          <div className="bg-[#0b3126] border border-accent/20 rounded-3xl p-8 space-y-4">
+          <div className="bg-[#0b3126] border border-accent/20 rounded-3xl p-8 space-y-4 shadow-xl">
             <div className="w-12 h-12 rounded-2xl bg-accent/15 border border-accent/30 flex items-center justify-center text-accent">
               <Award className="w-6 h-6" />
             </div>
@@ -98,6 +100,7 @@ export default async function ArcheryGamesPage() {
                 prose-h3:text-lg prose-h3:text-accent prose-h3:mt-6 prose-h3:mb-3
                 prose-p:text-sm prose-p:sm:text-base prose-p:text-[#f0e9d9]/85 prose-p:leading-relaxed prose-p:font-sans
                 prose-ul:space-y-2 prose-li:text-sm prose-li:text-[#f0e9d9]/85
+                prose-img:rounded-2xl prose-img:border prose-img:border-accent/20 prose-img:shadow-xl prose-img:mx-auto prose-img:my-6
                 prose-blockquote:border-l-2 prose-blockquote:border-accent prose-blockquote:bg-white/5 prose-blockquote:p-4 prose-blockquote:rounded-r-2xl prose-blockquote:italic prose-blockquote:text-accent"
               dangerouslySetInnerHTML={{ __html: wpPageContent }}
             />
