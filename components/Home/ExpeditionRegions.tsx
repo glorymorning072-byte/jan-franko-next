@@ -221,11 +221,12 @@ const RegionRow = ({ volume, index }: { volume: EditorialItem; index: number }) 
 
           {/* Unordered List of Key Bullets */}
           {bullets.length > 0 && (
-            <ul ref={bulletsRef} className="space-y-2.5 pt-2 flex flex-col items-center md:items-start text-left">
+            <ul ref={bulletsRef} className="space-y-2.5 pt-2 flex flex-col items-center md:items-start text-center md:text-left">
               {bullets.map((bullet, bIdx) => (
-                <li key={bIdx} className="flex items-center gap-2.5 text-xs md:text-sm font-medium font-sans w-full max-w-xs md:max-w-none">
+                <li key={bIdx} className="flex items-center justify-center md:justify-start gap-2.5 text-xs md:text-sm font-medium font-sans w-full">
                   <span className={`w-1.5 h-1.5 rotate-45 shrink-0 ${isOdd ? "bg-accent" : "bg-[#0e3b2e]"}`} />
-                  <span>{bullet}</span>
+                  <span className="text-center md:text-left">{bullet}</span>
+                  <span className={`w-1.5 h-1.5 rotate-45 shrink-0 md:hidden ${isOdd ? "bg-accent" : "bg-[#0e3b2e]"}`} />
                 </li>
               ))}
             </ul>
