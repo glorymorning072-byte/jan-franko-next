@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Award, Compass, Sparkles, CheckCircle2, ArrowRight, Calendar, MapPin, Shield } from "lucide-react";
+import { Award, Compass, Sparkles, CheckCircle2, ArrowRight, Calendar, MapPin, Shield, Target } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,124 +13,182 @@ export const metadata: Metadata = {
   }
 };
 
-export default async function ArcheryGamesPage() {
-  let wpPageContent = "";
-  try {
-    const res = await fetch("https://janfranko.com/wp-json/wp/v2/pages?slug=archery-games", {
-      next: { revalidate: 3600 }
-    });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        wpPageContent = data[0].content?.rendered || "";
-      }
-    }
-  } catch (err) {
-    console.error("Failed to fetch Archery Games WP page:", err);
+const GAME_CATEGORIES = [
+  {
+    title: "1. Distance Flight Archery",
+    badge: "Flight Discipline",
+    desc: "Testing maximum parabolic arrow flight distance using traditional composite reflex bows and lightweight flight arrows.",
+    rules: "Archers release at a 45° elevation angle across open steppe or mountain pasture fields. Only un-assisted natural wooden or composite bows without mechanical releases are permitted."
+  },
+  {
+    title: "2. Speed Release Discipline",
+    badge: "Timed Precision",
+    desc: "Testing arrow reload rhythm and fluid drawing mechanics under strict time constraints (e.g. 5 arrows in 15 seconds).",
+    rules: "Arrows are held in the draw hand or quiver using traditional thumb-ring or Mediterranean loading methods. Focus is maintained on smooth nocking without breaking eye target contact."
+  },
+  {
+    title: "3. Dynamic Slope Target Course",
+    badge: "Terrain Course",
+    desc: "A field target course laid out across steep alpine slopes, woodland gullies, and timber glades.",
+    rules: "Target distances range from 15m to 70m with unknown distances and variable slope angles (+30°/-30°). Archers must adjust posture from the waist while maintaining footing."
+  },
+  {
+    title: "4. Moving Target Tracking",
+    badge: "Dynamic Tracking",
+    desc: "Tracking moving pendulum targets or rolling ground discs to simulate historical mounted hunting and tactical reflex shooting.",
+    rules: "Releasing on moving target targets requires precise lead timing, smooth drawing arm extension, and instinctive release rhythm."
   }
+];
 
-  // Clean HTML & replace remote images with local assets
-  wpPageContent = wpPageContent
-    .replace(/https:\/\/janfranko\.com\/wp-content\/uploads\/[0-9]{4}\/[0-9]{2}\//gi, "/images/wp-assets/")
-    .replace(/\/wp-content\/uploads\/[0-9]{4}\/[0-9]{2}\//gi, "/images/wp-assets/")
-    .replace(/https:\/\/janfranko\.com\/the-academy\//g, "/academy/")
-    .replace(/https:\/\/janfranko\.com\/archery-games\//g, "/archery-games/")
-    .replace(/https:\/\/janfranko\.com\//g, "/");
+const BOW_CLASSES = [
+  {
+    name: "Composite Reflex Class",
+    desc: "Natural horn, sinew, and wood composite bows (Mongolian, Turkic, Ottoman, Korean, Hungarian) drawn with thumb rings or finger tabs."
+  },
+  {
+    name: "Historical Self-Bow & Longbow Class",
+    desc: "English Yew Longbows, European Flatbows, and single-wood self-bows drawn with classical Mediterranean three-finger draw."
+  },
+  {
+    name: "Mounted Archery Class",
+    desc: "Short composite reflex bows optimized for horseback archery and rapid quiver drawing."
+  }
+];
 
+export default function ArcheryGamesPage() {
   return (
-    <main className="min-h-screen bg-[#0e3b2e] text-[#f0e9d9] pt-24 pb-20 select-text">
-      {/* Hero Banner */}
-      <section className="relative border-b border-accent/20 bg-gradient-to-b from-[#0e3b2e] via-[#092b21] to-[#0e3b2e] py-16 md:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.1),transparent_70%)] pointer-events-none" />
+    <main className="min-h-screen bg-secondary text-primary pt-24 pb-20 select-text font-sans">
+      {/* 1. Dark Hero Banner */}
+      <section className="relative border-b border-primary/10 bg-[#0e3b2e] text-white py-16 md:py-24 overflow-hidden select-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,168,128,0.12),transparent_70%)] pointer-events-none" />
         <div className="max-w-6xl mx-auto px-6 md:px-12 relative z-10 text-center space-y-6">
-          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-accent/15 border border-accent/30 rounded-full text-xs font-serif font-semibold tracking-widest uppercase text-accent">
-            <Award className="w-4 h-4" />
+          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-[#c5a880]/15 border border-[#c5a880]/30 rounded-full text-xs font-serif font-semibold tracking-widest uppercase text-accent">
+            <Award className="w-4 h-4 text-accent" />
             Historical Gatherings &amp; Precision Competitions
           </span>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white tracking-tight leading-tight max-w-4xl mx-auto">
             Archery Games
           </h1>
-          <p className="text-base sm:text-lg text-[#f0e9d9]/85 font-sans leading-relaxed max-w-3xl mx-auto font-light">
-            Heritage, precision, and the open sky. The Games are a series of historical archery gatherings designed to test instinctive bowmanship in natural environments.
+          <p className="text-base sm:text-lg text-white/85 font-sans leading-relaxed max-w-3xl mx-auto font-light">
+            Heritage, precision, and the open sky. The Games are a series of historical archery gatherings designed to test instinctive bowmanship in natural field environments.
           </p>
         </div>
       </section>
 
-      {/* Main Content & Rendered WP Body */}
-      <div className="max-w-6xl mx-auto px-6 md:px-12 py-16 space-y-12">
+      {/* 2. Core Pillars of the Games */}
+      <section className="max-w-6xl mx-auto px-6 md:px-12 py-16 space-y-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="bg-[#0b3126] border border-accent/20 rounded-3xl p-8 space-y-4 shadow-xl">
-            <div className="w-12 h-12 rounded-2xl bg-accent/15 border border-accent/30 flex items-center justify-center text-accent">
+          <div className="bg-white border border-primary/10 rounded-3xl p-8 space-y-4 shadow-sm">
+            <div className="w-12 h-12 rounded-2xl bg-[#0e3b2e] flex items-center justify-center text-accent">
               <Shield className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-serif font-bold text-white">Historical Authenticity</h3>
-            <p className="text-xs sm:text-sm text-[#f0e9d9]/75 font-sans leading-relaxed">
-              Target geometries and rules rooted in traditional European and Eurasian nomadic traditions.
+            <h3 className="text-xl font-serif font-bold text-primary">Historical Authenticity</h3>
+            <p className="text-xs sm:text-sm text-primary/75 font-sans leading-relaxed">
+              Target geometries, scoring systems, and rules rooted in traditional European and Eurasian nomadic traditions.
             </p>
           </div>
 
-          <div className="bg-[#0b3126] border border-accent/20 rounded-3xl p-8 space-y-4 shadow-xl">
-            <div className="w-12 h-12 rounded-2xl bg-accent/15 border border-accent/30 flex items-center justify-center text-accent">
+          <div className="bg-white border border-primary/10 rounded-3xl p-8 space-y-4 shadow-sm">
+            <div className="w-12 h-12 rounded-2xl bg-[#0e3b2e] flex items-center justify-center text-accent">
               <Compass className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-serif font-bold text-white">Natural Terrain</h3>
-            <p className="text-xs sm:text-sm text-[#f0e9d9]/75 font-sans leading-relaxed">
-              No artificial indoor lanes. Events take place across dynamic alpine slopes, forest glades, and grassland fields.
+            <h3 className="text-xl font-serif font-bold text-primary">Natural Open Sky</h3>
+            <p className="text-xs sm:text-sm text-primary/75 font-sans leading-relaxed">
+              No artificial indoor lanes. Events take place across dynamic alpine slopes, forest glades, and grassland pasture fields.
             </p>
           </div>
 
-          <div className="bg-[#0b3126] border border-accent/20 rounded-3xl p-8 space-y-4 shadow-xl">
-            <div className="w-12 h-12 rounded-2xl bg-accent/15 border border-accent/30 flex items-center justify-center text-accent">
+          <div className="bg-white border border-primary/10 rounded-3xl p-8 space-y-4 shadow-sm">
+            <div className="w-12 h-12 rounded-2xl bg-[#0e3b2e] flex items-center justify-center text-accent">
               <Award className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-serif font-bold text-white">Lineage Verification</h3>
-            <p className="text-xs sm:text-sm text-[#f0e9d9]/75 font-sans leading-relaxed">
-              Earn recognized scores across distance flight, speed release, and terrain target modules.
+            <h3 className="text-xl font-serif font-bold text-primary">Lineage Recognition</h3>
+            <p className="text-xs sm:text-sm text-primary/75 font-sans leading-relaxed">
+              Earn recognized scores across distance flight, speed release, and dynamic slope target modules logged in the academy registry.
             </p>
           </div>
         </div>
 
-        {/* Rendered WordPress HTML */}
-        {wpPageContent && (
-          <div className="bg-[#0b3126]/70 border border-accent/20 rounded-3xl p-8 sm:p-12 shadow-2xl backdrop-blur-md">
-            <article
-              className="prose prose-invert prose-amber max-w-none
-                prose-headings:font-serif prose-headings:font-bold prose-headings:text-white prose-headings:tracking-tight
-                prose-h2:text-2xl prose-h2:sm:text-3xl prose-h2:border-b prose-h2:border-accent/20 prose-h2:pb-3 prose-h2:mt-8 prose-h2:mb-4
-                prose-h3:text-lg prose-h3:text-accent prose-h3:mt-6 prose-h3:mb-3
-                prose-p:text-sm prose-p:sm:text-base prose-p:text-[#f0e9d9]/85 prose-p:leading-relaxed prose-p:font-sans
-                prose-ul:space-y-2 prose-li:text-sm prose-li:text-[#f0e9d9]/85
-                prose-img:rounded-2xl prose-img:border prose-img:border-accent/20 prose-img:shadow-xl prose-img:mx-auto prose-img:my-6
-                prose-blockquote:border-l-2 prose-blockquote:border-accent prose-blockquote:bg-white/5 prose-blockquote:p-4 prose-blockquote:rounded-r-2xl prose-blockquote:italic prose-blockquote:text-accent"
-              dangerouslySetInnerHTML={{ __html: wpPageContent }}
-            />
+        {/* 3. Event Discipline Categories */}
+        <div className="space-y-10 pt-8 border-t border-primary/10">
+          <div className="space-y-2 text-center md:text-left">
+            <span className="text-xs font-serif uppercase tracking-[0.2em] text-[#7d603a] font-bold block">
+              Event Disciplines
+            </span>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-primary tracking-tight">
+              Gathering Competition Categories
+            </h2>
+            <div className="w-12 h-[1.5px] bg-accent/60 mt-2" />
           </div>
-        )}
 
-        {/* Navigation CTAs */}
-        <div className="pt-8 border-t border-accent/20 flex flex-wrap items-center justify-between gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {GAME_CATEGORIES.map((cat, idx) => (
+              <div
+                key={idx}
+                className="bg-white border border-primary/10 rounded-3xl p-8 space-y-4 shadow-sm hover:border-accent/40 transition-all"
+              >
+                <div className="flex items-center justify-between border-b border-primary/10 pb-3">
+                  <span className="text-[10px] font-mono uppercase tracking-widest px-3 py-1 rounded-full bg-[#0e3b2e] text-accent font-bold">
+                    {cat.badge}
+                  </span>
+                  <Target className="w-5 h-5 text-[#7d603a]" />
+                </div>
+                <h3 className="text-2xl font-serif font-bold text-primary">{cat.title}</h3>
+                <p className="text-sm text-primary/85 font-sans leading-relaxed">{cat.desc}</p>
+                <div className="bg-secondary p-4 rounded-2xl border border-primary/5 space-y-1">
+                  <span className="text-[10px] font-mono uppercase text-[#7d603a] font-bold block">Rules &amp; Standards:</span>
+                  <p className="text-xs text-primary/80 font-sans leading-relaxed">{cat.rules}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 4. Bow Classes */}
+        <div className="space-y-8 pt-8 border-t border-primary/10">
+          <div className="space-y-2 text-center md:text-left">
+            <span className="text-xs font-serif uppercase tracking-[0.2em] text-[#7d603a] font-bold block">
+              Equipment Categories
+            </span>
+            <h2 className="text-2xl md:text-3xl font-serif font-bold text-primary tracking-tight">
+              Recognized Bow Classes
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {BOW_CLASSES.map((bClass, idx) => (
+              <div key={idx} className="bg-white border border-primary/10 rounded-3xl p-6 space-y-3 shadow-sm">
+                <h4 className="text-lg font-serif font-bold text-primary">{bClass.name}</h4>
+                <p className="text-xs text-primary/75 font-sans leading-relaxed">{bClass.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 5. Navigation CTAs */}
+        <div className="pt-8 border-t border-primary/10 flex flex-wrap items-center justify-between gap-6">
           <div className="space-y-1">
-            <h4 className="text-lg font-serif font-bold text-white">Join the Lineage</h4>
-            <p className="text-xs text-[#f0e9d9]/70 font-sans">
+            <h4 className="text-xl font-serif font-bold text-primary">Join the Lineage</h4>
+            <p className="text-xs text-primary/75 font-sans">
               Register for upcoming events or inquire about participation requirements.
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
             <Link
               href="/contact"
-              className="px-6 py-3 bg-accent hover:bg-accent/90 text-[#0e3b2e] rounded-xl font-serif text-xs font-bold uppercase tracking-widest transition-all shadow-md"
+              className="px-8 py-3.5 bg-[#0e3b2e] hover:bg-accent hover:text-[#0e3b2e] text-white rounded-2xl font-serif text-xs font-bold uppercase tracking-widest transition-all shadow-md"
             >
               Inquire Event Entry
             </Link>
             <Link
               href="/academy"
-              className="px-6 py-3 border border-white/20 hover:border-accent text-white font-serif text-xs font-bold uppercase tracking-widest rounded-xl transition-all"
+              className="px-8 py-3.5 border border-primary/20 hover:border-primary text-primary font-serif text-xs font-bold uppercase tracking-widest rounded-2xl transition-all"
             >
               Back to The Academy
             </Link>
           </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
