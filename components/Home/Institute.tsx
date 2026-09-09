@@ -133,7 +133,7 @@ export default function Institute() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-20">
 
           {/* Left Text Column */}
-          <div className="lg:col-span-7 flex flex-col justify-center space-y-6">
+          <div className="lg:col-span-7 flex flex-col items-center md:items-start text-center md:text-left justify-center space-y-6">
             <div className="inline-flex items-center gap-3">
               <span ref={lineRef} className="h-[1px] w-12 bg-accent" />
               <span ref={labelRef} className="text-xs md:text-sm font-semibold tracking-[0.3em] text-accent uppercase">

@@ -155,7 +155,7 @@ const FounderBlock = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
 
           {/* Left Text Column */}
-          <div className="lg:col-span-7 flex flex-col justify-center space-y-6">
+          <div className="lg:col-span-7 flex flex-col items-center md:items-start text-center md:text-left justify-center space-y-6">
             <div className="inline-flex items-center gap-3">
               <span ref={lineRef} className="h-[1px] w-12 bg-primary" />
               <span ref={roleRef} className="text-xs md:text-sm font-semibold tracking-[0.3em] text-primary uppercase">
@@ -184,7 +184,7 @@ const FounderBlock = () => {
             {/* Blockquote section - clean layout, no quote overlapping */}
             <blockquote 
               ref={quoteRef}
-              className="relative pl-8 md:pl-10 border-l-2 border-accent/40 my-8 py-2 max-w-2xl"
+              className="relative pl-8 md:pl-10 border-l-2 border-accent/40 my-8 py-2 max-w-2xl text-left"
             >
               {/* Decorative Quotes Mark */}
               <span className="absolute -left-2 -top-4 text-accent/15 text-7xl font-serif select-none pointer-events-none">
@@ -198,7 +198,7 @@ const FounderBlock = () => {
               </cite>
             </blockquote>
 
-            <div className="pt-2 flex justify-start">
+            <div className="pt-2 flex justify-center md:justify-start w-full">
               <Link
                 href="/about/jan-franko"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-secondary hover:bg-accent hover:text-[#0e3b2e] rounded-full font-serif text-xs uppercase tracking-widest font-bold transition-all shadow-md hover:scale-105"
