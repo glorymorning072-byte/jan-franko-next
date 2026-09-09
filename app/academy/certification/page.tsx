@@ -69,12 +69,12 @@ export default function CertificationPage() {
       {/* SECTION A: TIER I BADGE */}
       <section className="max-w-6xl mx-auto px-6 md:px-12 py-12 border-t border-primary/10 space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-4 bg-white border border-primary/10 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-4 shadow-sm">
-            <div className="relative w-48 aspect-square overflow-hidden bg-secondary/50 rounded-2xl p-4 border border-primary/10">
+          <div className="lg:col-span-4 bg-white border border-primary/10 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-4 shadow-sm h-full">
+            <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black/5 border border-primary/10">
               <img
                 src="/images/wp-assets/Tier-1.webp"
                 alt="Tier I Badge - Foundational Mechanics"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div>
@@ -87,7 +87,7 @@ export default function CertificationPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-8 space-y-4 text-primary/85 leading-relaxed">
+          <div className="lg:col-span-8 space-y-4 text-primary/85 leading-relaxed flex flex-col justify-center">
             <h4 className="text-2xl font-serif font-bold text-primary">
               Tier I Verification: Range Safety &amp; Skeletal Stance
             </h4>
@@ -120,7 +120,7 @@ export default function CertificationPage() {
       {/* SECTION B: TIER II BADGE */}
       <section className="max-w-6xl mx-auto px-6 md:px-12 py-12 border-t border-primary/10 space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-8 space-y-4 text-primary/85 leading-relaxed order-2 lg:order-1">
+          <div className="lg:col-span-8 space-y-4 text-primary/85 leading-relaxed flex flex-col justify-center order-2 lg:order-1">
             <h4 className="text-2xl font-serif font-bold text-primary">
               Tier II Verification: Dynamic Field Exposure &amp; Slope Adaptation
             </h4>
@@ -148,12 +148,12 @@ export default function CertificationPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-4 bg-white border border-primary/10 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-4 shadow-sm order-1 lg:order-2">
-            <div className="relative w-48 aspect-square overflow-hidden bg-secondary/50 rounded-2xl p-4 border border-primary/10">
+          <div className="lg:col-span-4 bg-white border border-primary/10 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-4 shadow-sm h-full order-1 lg:order-2">
+            <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black/5 border border-primary/10">
               <img
                 src="/images/wp-assets/Tier-2.webp"
                 alt="Tier II Badge - Performance Verification"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div>
@@ -171,12 +171,12 @@ export default function CertificationPage() {
       {/* SECTION C: TIER III BADGE */}
       <section className="max-w-6xl mx-auto px-6 md:px-12 py-12 border-t border-primary/10 space-y-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-4 bg-white border border-accent/40 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-4 shadow-md bg-gradient-to-br from-white to-secondary">
-            <div className="relative w-48 aspect-square overflow-hidden bg-[#0e3b2e] rounded-2xl p-4 border border-accent/30">
+          <div className="lg:col-span-4 bg-white border border-accent/40 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-4 shadow-md bg-gradient-to-br from-white to-secondary h-full">
+            <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black/5 border border-accent/30">
               <img
                 src="/images/wp-assets/image-25-02-2026-15-41-34-1.webp"
                 alt="Tier III Badge - Summit Protocol Audit"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div>
@@ -189,7 +189,7 @@ export default function CertificationPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-8 space-y-4 text-primary/85 leading-relaxed">
+          <div className="lg:col-span-8 space-y-4 text-primary/85 leading-relaxed flex flex-col justify-center">
             <h4 className="text-2xl font-serif font-bold text-primary">
               Tier III Verification: Apex Summit Audit &amp; 145m Distance Standard
             </h4>

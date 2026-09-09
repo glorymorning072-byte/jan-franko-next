@@ -138,7 +138,7 @@ export default function ExplorerRankSystemPage() {
               className="bg-white border border-primary/10 rounded-3xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center shadow-sm hover:border-accent/40 transition-all"
             >
               <div className="lg:col-span-5 space-y-3">
-                <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black/30 border border-primary/10">
+                <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black/30 border border-primary/10">
                   <img
                     src={eco.image}
                     alt={eco.title}
@@ -150,7 +150,7 @@ export default function ExplorerRankSystemPage() {
                 </div>
               </div>
 
-              <div className="lg:col-span-7 space-y-4 text-primary/85">
+              <div className="lg:col-span-7 space-y-4 text-primary/85 flex flex-col justify-center">
                 <div className="space-y-1">
                   <span className="text-xs font-mono uppercase tracking-widest text-[#7d603a] font-bold">
                     {eco.badge}
