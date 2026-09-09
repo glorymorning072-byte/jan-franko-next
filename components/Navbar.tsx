@@ -658,7 +658,7 @@ const Navbar = () => {
                     </li>
                     <li>
                       <Link href="/knowledge/mongolia-expedition" className="hover:text-[#7d603a] hover:underline block py-0.5">
-                        Central Asian Steppe
+                        Mongolia Expedition
                       </Link>
                     </li>
                     <li>
@@ -1260,7 +1260,7 @@ const Navbar = () => {
                           </li>
                           <li>
                             <Link href="/knowledge/mongolia-expedition" className="hover:text-[#7d603a] block py-1 transition-colors">
-                              Central Asian Steppe
+                              Mongolia Expedition
                             </Link>
                           </li>
                           <li>
