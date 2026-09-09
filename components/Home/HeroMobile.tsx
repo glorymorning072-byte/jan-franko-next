@@ -6,11 +6,17 @@ import Link from "next/link";
 const HeroMobile = () => {
   return (
     <div
-      className="relative w-full flex flex-col items-center justify-center bg-secondary text-primary py-16 px-8 overflow-hidden border-b border-primary/10 select-none min-h-[calc(100vh-80px)] text-center"
+      className="relative w-full flex flex-col items-center justify-center text-secondary py-16 px-8 overflow-hidden border-b border-primary/10 select-none min-h-[calc(100vh-80px)] text-center bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: "url('/images/wp-assets/contact-bg.webp')",
+      }}
     >
+      {/* Rich Brand Color Overlay */}
+      <div className="absolute inset-0 bg-[#0e3b2e]/85 backdrop-blur-[1px] z-0 pointer-events-none" />
+
       {/* Premium Double Framed Borders */}
-      <div className="border-outer absolute inset-5 border border-primary/5 rounded-2xl pointer-events-none z-0" />
-      <div className="border-inner absolute inset-6.5 border border-dashed border-accent/15 rounded-2xl pointer-events-none z-0" />
+      <div className="border-outer absolute inset-5 border border-accent/20 rounded-2xl pointer-events-none z-0" />
+      <div className="border-inner absolute inset-6.5 border border-dashed border-accent/30 rounded-2xl pointer-events-none z-0" />
 
       {/* Stylized Archery Arrowhead Badge */}
       <div className="w-12 h-12 mb-6 text-accent z-10 flex items-center justify-center">
@@ -25,15 +31,15 @@ const HeroMobile = () => {
       </span>
 
       {/* Main Serif Heading */}
-      <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight leading-none mb-3 z-10">
+      <h1 className="text-4xl md:text-5xl font-bold text-secondary font-serif tracking-tight leading-none mb-3 z-10">
         Jan Franko
       </h1>
 
       {/* Classical Diamond Divider */}
       <div className="flex items-center gap-3 w-32 my-2 z-10">
-        <div className="h-[1px] bg-accent/35 flex-1" />
+        <div className="h-[1px] bg-accent/40 flex-1" />
         <div className="w-1.5 h-1.5 rotate-45 bg-accent" />
-        <div className="h-[1px] bg-accent/35 flex-1" />
+        <div className="h-[1px] bg-accent/40 flex-1" />
       </div>
 
       {/* Serif Subtitle */}
@@ -42,7 +48,7 @@ const HeroMobile = () => {
       </span>
 
       {/* Description Paragraph */}
-      <p className="text-sm text-primary/85 font-light leading-relaxed max-w-sm mb-8 z-10">
+      <p className="text-sm text-secondary/90 font-light leading-relaxed max-w-sm mb-8 z-10">
         A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.
         At The Global Academy for Traditional Archery, we offer a comprehensive approach to learning the art of traditional archery, designed to build instinct through rigorous, measurable structure.
       </p>
@@ -50,10 +56,10 @@ const HeroMobile = () => {
       {/* CTA Button */}
       <Link
         href="/programs"
-        className="relative overflow-hidden bg-primary text-secondary font-serif tracking-widest text-xs uppercase py-3.5 px-7 rounded-full shadow-md shadow-primary/10 active:scale-[0.98] flex items-center gap-2 cursor-pointer z-10"
+        className="relative overflow-hidden bg-accent hover:bg-accent/90 text-primary font-serif tracking-widest text-xs uppercase py-3.5 px-7 rounded-full shadow-lg active:scale-[0.98] flex items-center gap-2 cursor-pointer z-10 font-bold transition-all"
       >
         <span className="relative z-10">Explore Our Programs</span>
-        <svg className="w-3.5 h-3.5 text-accent z-10" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <svg className="w-3.5 h-3.5 text-primary z-10" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
         </svg>
       </Link>
