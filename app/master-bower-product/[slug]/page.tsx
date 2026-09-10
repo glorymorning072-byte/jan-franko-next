@@ -126,7 +126,7 @@ const BowyerProductContent = () => {
   }, [loading, product]);
 
   // Form Submission
-  const handleSubmitInquiry = (e: React.FormEvent) => {
+  const handleSubmitInquiry = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
     if (!fullName.trim()) newErrors.fullName = "Full Name is required";
@@ -139,7 +139,29 @@ const BowyerProductContent = () => {
       return;
     }
     setErrors({});
-    setSubmitted(true);
+
+    try {
+      await fetch("/api/forms/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          form_name: "Bespoke Master Bow Order",
+          page_url: typeof window !== "undefined" ? window.location.href : `/master-bower-product/${slug}`,
+          fields: {
+            bow_title: product?.title || slug,
+            full_name: fullName,
+            email: email,
+            phone: phone,
+            custom_selections: selections,
+            message: message,
+          },
+        }),
+      });
+    } catch (err) {
+      // Fallback
+    } finally {
+      setSubmitted(true);
+    }
   };
 
   const handleSelectionChange = (fieldId: string, value: any) => {

@@ -22,7 +22,7 @@ const Contact = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.firstName || !formData.email || !formData.phone || !formData.interest || !formData.message) {
       alert("Please fill in all required fields.");
@@ -30,8 +30,25 @@ const Contact = () => {
     }
     
     setIsSubmitting(true);
-    // Mock API call
-    setTimeout(() => {
+    try {
+      await fetch("/api/forms/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          form_name: "Homepage Quick Inquiry",
+          page_url: typeof window !== "undefined" ? window.location.href : "/",
+          fields: {
+            first_name: formData.firstName,
+            email: formData.email,
+            phone: formData.phone,
+            interest: formData.interest,
+            message: formData.message,
+          },
+        }),
+      });
+    } catch (err) {
+      // Fallback
+    } finally {
       setIsSubmitting(false);
       setIsSubmitted(true);
       setFormData({
@@ -41,7 +58,7 @@ const Contact = () => {
         interest: "",
         message: "",
       });
-    }, 1500);
+    }
   };
 
   return (

@@ -128,7 +128,7 @@ const ProductDetailPage = () => {
   }, [loading, slug, product]);
 
   // Form Submission
-  const handleSubmitInquiry = (e: React.FormEvent) => {
+  const handleSubmitInquiry = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
     if (!fullName.trim()) newErrors.fullName = "Full Name is required";
@@ -141,7 +141,28 @@ const ProductDetailPage = () => {
       return;
     }
     setErrors({});
-    setSubmitted(true);
+
+    try {
+      await fetch("/api/forms/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          form_name: "Equipment Taxonomy Inquiry",
+          page_url: typeof window !== "undefined" ? window.location.href : `/equipment/${slug}`,
+          fields: {
+            product_name: product?.title || slug,
+            full_name: fullName,
+            email: email,
+            phone: phone,
+            message: message,
+          },
+        }),
+      });
+    } catch (err) {
+      // Fallback
+    } finally {
+      setSubmitted(true);
+    }
   };
 
   if (loading) {

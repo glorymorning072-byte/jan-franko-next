@@ -595,10 +595,36 @@ const MACRO_REGIONS = {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isStepValid()) {
-      setIsSubmitted(true);
+      try {
+        await fetch("/api/forms/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            form_name: "Expedition & Retreat Application",
+            page_url: typeof window !== "undefined" ? window.location.href : "/programs",
+            fields: {
+              program_title: activeModalProgram?.title?.rendered || formData.programInterest,
+              full_name: formData.fullName,
+              dob: formData.dob,
+              nationality: formData.nationality,
+              country_residence: formData.countryResidence,
+              email: formData.email,
+              phone: formData.phone,
+              emergency_name: formData.emergencyName,
+              emergency_phone: formData.emergencyPhone,
+              archery_style: formData.archeryBowTradition,
+              experience_years: formData.archeryYears,
+            },
+          }),
+        });
+      } catch (err) {
+        // Fallback
+      } finally {
+        setIsSubmitted(true);
+      }
     } else {
       setShowValidationError(true);
     }

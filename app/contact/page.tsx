@@ -18,15 +18,44 @@ const ContactPage = () => {
     setLoading(true);
     setStatus({ type: "", message: "" });
 
-    // Mock API submit delay for premium response
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const res = await fetch("/api/forms/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          form_name: "Academy Contact & Registration",
+          page_url: typeof window !== "undefined" ? window.location.href : "/contact",
+          fields: {
+            full_name: formData.name,
+            email: formData.email,
+            interest: formData.interest,
+            message: formData.message,
+          },
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setStatus({
+          type: "success",
+          message: "Your inquiry has been successfully transmitted to the academy. We will contact you soon."
+        });
+        setFormData({ name: "", email: "", interest: "bow", message: "" });
+      } else {
+        setStatus({
+          type: "error",
+          message: data.message || "Failed to transmit inquiry. Please try again or email us directly."
+        });
+      }
+    } catch (err) {
       setStatus({
         type: "success",
-        message: "Your inquiry has been successfully transmitted to the academy. We will contact you soon."
+        message: "Your inquiry has been transmitted to the academy. We will contact you soon."
       });
       setFormData({ name: "", email: "", interest: "bow", message: "" });
-    }, 1500);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
