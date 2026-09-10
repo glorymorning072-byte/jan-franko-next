@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     const device_info = req.headers.get("user-agent") || "Unknown Device";
 
     const wpBaseUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL || "https://janfranko.com";
-    const formSecret = process.env.FORM_SECRET_KEY || "janfranko_form_sec_2026_x89a";
+    const formSecret = process.env.FORM_SECRET_KEY || "";
 
     const endpoint = `${wpBaseUrl.replace(/\/$/, "")}/wp-json/janfranko/v1/submit-form`;
 
