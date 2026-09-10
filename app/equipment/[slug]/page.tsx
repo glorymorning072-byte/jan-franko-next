@@ -48,6 +48,9 @@ const ProductDetailPage = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [quantity, setQuantity] = useState("1");
+  const [specificationsReq, setSpecificationsReq] = useState("");
+  const [shippingDestination, setShippingDestination] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -134,7 +137,7 @@ const ProductDetailPage = () => {
     if (!fullName.trim()) newErrors.fullName = "Full Name is required";
     if (!email.trim() || !email.includes("@")) newErrors.email = "Valid Email is required";
     if (!phone.trim()) newErrors.phone = "Phone number is required";
-    if (!message.trim()) newErrors.message = "Message text is required";
+    if (!message.trim()) newErrors.message = "Inquiry message text is required";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -147,13 +150,16 @@ const ProductDetailPage = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          form_name: "Equipment Taxonomy Inquiry",
+          form_name: "Non-Master Bowyer Product Inquiry",
           page_url: typeof window !== "undefined" ? window.location.href : `/equipment/${slug}`,
           fields: {
             product_name: product?.title || slug,
             full_name: fullName,
             email: email,
             phone: phone,
+            quantity: quantity,
+            custom_specifications: specificationsReq || "Standard Specification",
+            shipping_destination: shippingDestination || "Not specified",
             message: message,
           },
         }),
@@ -375,12 +381,19 @@ const ProductDetailPage = () => {
               />
             </div>
           ) : (
-            // Inquiry Contact Form
-            <div className="bg-white border border-primary/5 p-8 md:p-12 rounded-3xl shadow-sm space-y-6">
+            // Equipment Product Inquiry Contact Form
+            <div className="bg-white border border-primary/5 p-8 md:p-10 rounded-3xl shadow-sm space-y-6">
               {!submitted ? (
-                <form onSubmit={handleSubmitInquiry} className="space-y-6">
+                <form onSubmit={handleSubmitInquiry} className="space-y-5">
                   <div className="flex items-center justify-between border-b border-primary/5 pb-3">
-                    <h3 className="text-lg font-serif font-bold text-primary">Request a Consultation</h3>
+                    <div>
+                      <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold block">
+                        Equipment Inquiry Form
+                      </span>
+                      <h3 className="text-lg font-serif font-bold text-primary">
+                        Inquire About: {cleanTitle(product.title)}
+                      </h3>
+                    </div>
                     <button
                       type="button"
                       onClick={() => setShowInquiryForm(false)}
@@ -392,12 +405,12 @@ const ProductDetailPage = () => {
 
                   {/* Name */}
                   <div className="flex flex-col space-y-1">
-                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Full Name</label>
+                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Full Name *</label>
                     <input
                       type="text"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Your name"
+                      placeholder="Your full name"
                       className={`w-full bg-secondary text-primary border rounded-xl p-2.5 text-xs outline-none focus:border-accent ${
                         errors.fullName ? "border-red-500" : "border-primary/10"
                       }`}
@@ -408,7 +421,7 @@ const ProductDetailPage = () => {
                   {/* Contact Fields */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col space-y-1">
-                      <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Email Address</label>
+                      <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Email Address *</label>
                       <input
                         type="email"
                         value={email}
@@ -422,12 +435,12 @@ const ProductDetailPage = () => {
                     </div>
 
                     <div className="flex flex-col space-y-1">
-                      <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Phone Number</label>
+                      <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Phone / WhatsApp *</label>
                       <input
                         type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Phone number"
+                        placeholder="+43 ... or phone number"
                         className={`w-full bg-secondary text-primary border rounded-xl p-2.5 text-xs outline-none focus:border-accent ${
                           errors.phone ? "border-red-500" : "border-primary/10"
                         }`}
@@ -436,13 +449,54 @@ const ProductDetailPage = () => {
                     </div>
                   </div>
 
+                  {/* Quantity & Custom Specifications / Sizing */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="flex flex-col space-y-1 sm:col-span-1">
+                      <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Quantity</label>
+                      <select
+                        value={quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
+                        className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent cursor-pointer"
+                      >
+                        <option value="1">1 Unit</option>
+                        <option value="2">2 Units</option>
+                        <option value="3">3 Units</option>
+                        <option value="4">4 Units</option>
+                        <option value="5+">5+ Units (Bulk/Group)</option>
+                      </select>
+                    </div>
+
+                    <div className="flex flex-col space-y-1 sm:col-span-2">
+                      <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Sizing / Spine / Variant Request</label>
+                      <input
+                        type="text"
+                        value={specificationsReq}
+                        onChange={(e) => setSpecificationsReq(e.target.value)}
+                        placeholder="e.g. 500 Spine, 30 inch, Medium, RH"
+                        className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Shipping Destination */}
+                  <div className="flex flex-col space-y-1">
+                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Shipping Destination / Country</label>
+                    <input
+                      type="text"
+                      value={shippingDestination}
+                      onChange={(e) => setShippingDestination(e.target.value)}
+                      placeholder="e.g. Austria, Germany, USA, Slovakia"
+                      className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent"
+                    />
+                  </div>
+
                   {/* Inquiry Message */}
                   <div className="flex flex-col space-y-1">
-                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Inquiry Details</label>
+                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Inquiry Details / Message *</label>
                     <textarea
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      rows={4}
+                      rows={3}
                       className={`w-full bg-secondary text-primary border rounded-xl p-2.5 text-xs outline-none focus:border-accent resize-none ${
                         errors.message ? "border-red-500" : "border-primary/10"
                       }`}
@@ -455,15 +509,15 @@ const ProductDetailPage = () => {
                     <button
                       type="button"
                       onClick={() => setShowInquiryForm(false)}
-                      className="text-xs font-serif font-bold tracking-widest uppercase hover:text-accent transition-colors cursor-pointer"
+                      className="text-xs font-serif font-bold tracking-widest uppercase text-primary/40 hover:text-primary transition-colors cursor-pointer"
                     >
-                      Back
+                      Back to Specs
                     </button>
                     <button
                       type="submit"
-                      className="flex items-center gap-2 px-6 py-2.5 bg-primary text-secondary font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer"
+                      className="flex items-center gap-2 px-6 py-2.5 bg-[#0e3b2e] hover:bg-[#0e3b2e]/90 text-white font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer"
                     >
-                      Send Message
+                      Submit Equipment Inquiry
                       <ArrowRight className="w-3.5 h-3.5 text-accent" />
                     </button>
                   </div>
