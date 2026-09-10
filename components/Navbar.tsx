@@ -862,7 +862,7 @@ const Navbar = () => {
                         Facebook
                       </a>
                       <a
-                        href="https://www.linkedin.com/in/exploreradventures1978"
+                        href="https://www.linkedin.com/in/jan-franko/"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 bg-[#f4f1e8] hover:bg-[#ebd9bd]/25 px-3 py-2 rounded-xl text-[10px] font-sans font-medium text-primary hover:text-accent transition-colors group"
