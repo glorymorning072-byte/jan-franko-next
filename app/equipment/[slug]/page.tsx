@@ -360,37 +360,41 @@ const ProductDetailPage = () => {
                     setMessage(`I would like to inquire about ordering the "${cleanTitle(product.title)}" and would appreciate more details on availability and current lead times.`);
                   }
                 }}
-                className="group relative bg-[#0e3b2e] p-6 sm:p-8 rounded-3xl text-white border-2 border-accent/40 hover:border-accent shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer overflow-hidden"
+                className="group relative bg-[#0e3b2e] p-6 sm:p-8 rounded-3xl text-white border border-accent/30 hover:border-accent shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden space-y-4"
               >
                 {/* Background ambient radial glow */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(197,168,128,0.15),transparent_60%)] pointer-events-none" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(197,168,128,0.12),transparent_65%)] pointer-events-none" />
 
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                  <div className="space-y-2 text-left">
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-sans font-bold uppercase tracking-widest bg-accent/20 text-accent border border-accent/30">
-                        <Compass className="w-3 h-3" />
-                        Interactive Order Inquiry
-                      </span>
-                      <span className="text-[10px] text-white/50 font-sans italic">Click to Open Form</span>
-                    </div>
+                {/* Top Header Row: Badge & Click Indicator */}
+                <div className="relative z-10 flex items-center justify-between gap-2 border-b border-white/10 pb-3.5">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-widest bg-accent/20 text-accent border border-accent/30">
+                    <Compass className="w-3.5 h-3.5 text-accent" />
+                    Interactive Order Inquiry
+                  </span>
+                  <span className="text-[11px] text-accent/80 font-sans font-medium flex items-center gap-1 group-hover:text-accent transition-colors">
+                    Click to Open Form
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </div>
 
-                    <h4 className="font-serif text-xl font-bold text-white tracking-wide group-hover:text-accent transition-colors flex items-center gap-2">
-                      Inquire &amp; Order Spec Sheet
-                      <ArrowRight className="w-4 h-4 text-accent group-hover:translate-x-1 transition-transform" />
-                    </h4>
+                {/* Title & Description Content */}
+                <div className="relative z-10 space-y-2">
+                  <h4 className="font-serif text-xl font-bold text-white tracking-tight group-hover:text-accent transition-colors">
+                    Inquire &amp; Order Gear
+                  </h4>
+                  <p className="text-xs text-white/75 font-sans leading-relaxed">
+                    Contact our academy craft coordinators to discuss sizing, spine weights, lead times, or custom specifications.
+                  </p>
+                </div>
 
-                    <p className="text-xs text-white/80 font-sans leading-relaxed max-w-xl">
-                      Configure custom sizing, request spine weights/variants, or discuss build lead times directly with our academy craft coordinators.
-                    </p>
-                  </div>
-
+                {/* Prominent Action Button */}
+                <div className="relative z-10 pt-2">
                   <button
                     type="button"
-                    className="px-7 py-3 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all shadow-md shrink-0 flex items-center justify-center gap-2 group-hover:shadow-accent/20 cursor-pointer"
+                    className="w-full py-3 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-xs tracking-widest uppercase rounded-xl transition-all shadow-md flex items-center justify-center gap-2 group-hover:scale-[1.01] cursor-pointer"
                   >
-                    <span>Request Custom Quote</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>Request Details &amp; Custom Quote</span>
+                    <ArrowRight className="w-4 h-4 text-primary" />
                   </button>
                 </div>
               </div>
