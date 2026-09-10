@@ -146,11 +146,10 @@ const ProductDetailPage = () => {
     setErrors({});
 
     try {
-      await fetch("/api/forms/submit", {
+      await fetch("/api/forms/equipment-submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          form_name: "Non-Master Bowyer Product Inquiry",
           page_url: typeof window !== "undefined" ? window.location.href : `/equipment/${slug}`,
           fields: {
             product_name: product?.title || slug,
@@ -353,25 +352,47 @@ const ProductDetailPage = () => {
           {!showInquiryForm ? (
             <div className="bg-white border border-primary/5 p-8 md:p-12 rounded-3xl shadow-sm space-y-8">
               
-              {/* Inquiry Action Box */}
-              <div className="bg-[#0e3b2e] p-6 rounded-2xl text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-inner">
-                <div className="space-y-1 text-center sm:text-left">
-                  <h4 className="font-serif text-base font-bold text-white uppercase tracking-wider">
-                    Inquire &amp; Order
-                  </h4>
-                  <p className="text-xs text-white/70 font-sans leading-relaxed">
-                    Contact our academy craft coordinators to discuss sizing, lead times, or customized specifications.
-                  </p>
+              {/* Prominent Interactive Order & Inquiry CTA Card */}
+              <div 
+                onClick={() => {
+                  setShowInquiryForm(true);
+                  if (!message) {
+                    setMessage(`I would like to inquire about ordering the "${cleanTitle(product.title)}" and would appreciate more details on availability and current lead times.`);
+                  }
+                }}
+                className="group relative bg-[#0e3b2e] p-6 sm:p-8 rounded-3xl text-white border-2 border-accent/40 hover:border-accent shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer overflow-hidden"
+              >
+                {/* Background ambient radial glow */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(197,168,128,0.15),transparent_60%)] pointer-events-none" />
+
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  <div className="space-y-2 text-left">
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-sans font-bold uppercase tracking-widest bg-accent/20 text-accent border border-accent/30">
+                        <Compass className="w-3 h-3" />
+                        Interactive Order Inquiry
+                      </span>
+                      <span className="text-[10px] text-white/50 font-sans italic">Click to Open Form</span>
+                    </div>
+
+                    <h4 className="font-serif text-xl font-bold text-white tracking-wide group-hover:text-accent transition-colors flex items-center gap-2">
+                      Inquire &amp; Order Spec Sheet
+                      <ArrowRight className="w-4 h-4 text-accent group-hover:translate-x-1 transition-transform" />
+                    </h4>
+
+                    <p className="text-xs text-white/80 font-sans leading-relaxed max-w-xl">
+                      Configure custom sizing, request spine weights/variants, or discuss build lead times directly with our academy craft coordinators.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="px-7 py-3 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all shadow-md shrink-0 flex items-center justify-center gap-2 group-hover:shadow-accent/20 cursor-pointer"
+                  >
+                    <span>Request Custom Quote</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => {
-                    setShowInquiryForm(true);
-                    setMessage(`I would like to inquire about ordering the "${cleanTitle(product.title)}" and would appreciate more details on current lead times.`);
-                  }}
-                  className="px-6 py-2.5 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer shrink-0"
-                >
-                  Request Details
-                </button>
               </div>
 
               {/* Description Body */}
