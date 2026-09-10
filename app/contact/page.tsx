@@ -7,7 +7,7 @@ const ContactPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    interest: "bow",
+    interest: "Bespoke Custom Bow Build",
     message: ""
   });
   const [status, setStatus] = useState({ type: "", message: "" });
@@ -221,10 +221,11 @@ const ContactPage = () => {
                 onChange={(e) => setFormData({ ...formData, interest: e.target.value })}
                 className="w-full bg-[#0e3b2e] border border-white/10 rounded-xl p-3 text-xs outline-none focus:border-accent text-white font-sans cursor-pointer transition-colors"
               >
-                <option value="bow">Bespoke Custom Bow Build</option>
-                <option value="training">Field Archery Workshops &amp; Retreats</option>
-                <option value="expedition">Inner Mongolia Steppe Camp Expedition</option>
-                <option value="partnership">Professional Cooperation &amp; Media</option>
+                <option value="Bespoke Custom Bow Build">Bespoke Custom Bow Build</option>
+                <option value="Field Archery Workshops & Training">Field Archery Workshops &amp; Training</option>
+                <option value="Wilderness Archery Expeditions">Wilderness Archery Expeditions</option>
+                <option value="Corporate & Group Events">Corporate &amp; Group Events</option>
+                <option value="Professional Cooperation & Media">Professional Cooperation &amp; Media</option>
               </select>
             </div>
 

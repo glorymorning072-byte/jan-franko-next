@@ -251,11 +251,11 @@ const Contact = () => {
                       className="w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-gray-700 transition-all duration-300"
                     >
                       <option value="" disabled>Area of Interest</option>
-                      <option value="training">Training & Academy Programs</option>
-                      <option value="expeditions">Archery Expeditions</option>
-                      <option value="equipment">Flagship Bows & Equipment</option>
-                      <option value="corporate">Corporate Placements & Events</option>
-                      <option value="cultural">Cultural Heritage Studies</option>
+                      <option value="Bespoke Custom Bow Build">Bespoke Custom Bow Build</option>
+                      <option value="Field Archery Workshops & Training">Field Archery Workshops &amp; Training</option>
+                      <option value="Wilderness Archery Expeditions">Wilderness Archery Expeditions</option>
+                      <option value="Corporate & Group Events">Corporate &amp; Group Events</option>
+                      <option value="Professional Cooperation & Media">Professional Cooperation &amp; Media</option>
                     </select>
                   </div>
 
