@@ -365,18 +365,6 @@ const ProductDetailPage = () => {
                 {/* Background ambient radial glow */}
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(197,168,128,0.12),transparent_65%)] pointer-events-none" />
 
-                {/* Top Header Row: Badge & Click Indicator */}
-                <div className="relative z-10 flex items-center justify-between gap-2 border-b border-white/10 pb-3.5">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-widest bg-accent/20 text-accent border border-accent/30">
-                    <Compass className="w-3.5 h-3.5 text-accent" />
-                    Interactive Order Inquiry
-                  </span>
-                  <span className="text-[11px] text-accent/80 font-sans font-medium flex items-center gap-1 group-hover:text-accent transition-colors">
-                    Click to Open Form
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </div>
-
                 {/* Title & Description Content */}
                 <div className="relative z-10 space-y-2">
                   <h4 className="font-serif text-xl font-bold text-white tracking-tight group-hover:text-accent transition-colors">
