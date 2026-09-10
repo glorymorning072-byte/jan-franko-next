@@ -24,6 +24,14 @@ export async function POST(req: NextRequest) {
 
     const endpoint = `${wpBaseUrl.replace(/\/$/, "")}/wp-json/janfranko/v1/submit-form`;
 
+    const referer = req.headers.get("referer");
+    const origin = req.headers.get("origin") || (referer ? new URL(referer).origin : "http://localhost:3000");
+
+    let fullPageUrl = page_url || referer || origin;
+    if (fullPageUrl && !fullPageUrl.startsWith("http")) {
+      fullPageUrl = `${origin.replace(/\/$/, "")}${fullPageUrl.startsWith("/") ? "" : "/"}${fullPageUrl}`;
+    }
+
     // Forward to WordPress REST API
     const wpRes = await fetch(endpoint, {
       method: "POST",
@@ -34,7 +42,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         form_name: form_name || "General Inquiry",
         fields: fields,
-        page_url: page_url || req.headers.get("referer") || wpBaseUrl,
+        page_url: fullPageUrl,
         ip_address: ip_address,
         device_info: device_info,
       }),

@@ -741,7 +741,9 @@ class JF_Form_Submissions_Handler {
                                         $preview_text = esc_html(mb_strimwidth($sub->fields, 0, 80, '...'));
                                     }
 
-                                    $parsed_path = parse_url($sub->page_url, PHP_URL_PATH) ?: '/';
+                                    $raw_url = $sub->page_url;
+                                    $parsed_path = parse_url($raw_url, PHP_URL_PATH) ?: '/';
+                                    $display_label = ($parsed_path === '/' || empty($parsed_path)) ? 'Home (/)' : esc_html($parsed_path);
                                     ?>
                                     <tr class="<?php echo $row_class; ?>">
                                         <td>#<?php echo $sub->id; ?></td>
@@ -755,8 +757,8 @@ class JF_Form_Submissions_Handler {
                                         <td><strong><?php echo esc_html($sub->form_name); ?></strong></td>
                                         <td><?php echo $preview_text; ?></td>
                                         <td>
-                                            <a href="<?php echo esc_url($sub->page_url); ?>" target="_blank" style="color:#0e3b2e;font-weight:600;text-decoration:underline;">
-                                                <?php echo esc_html($parsed_path); ?>
+                                            <a href="<?php echo esc_url($raw_url); ?>" target="_blank" style="color:#0e3b2e;font-weight:600;text-decoration:underline;" title="<?php echo esc_attr($raw_url); ?>">
+                                                <?php echo $display_label; ?>
                                             </a>
                                         </td>
                                         <td style="font-family:monospace;font-size:12px;color:#64748b;"><?php echo esc_html($sub->created_at); ?></td>

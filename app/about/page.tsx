@@ -1,16 +1,22 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import { Compass, Shield, Target, BookOpen, MapPin, Award } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About the Academy | Traditional Archery - Jan Franko",
+  description:
+    "Learn about our structured traditional archery training, wilderness expeditions, and cultural studies exploring historic global archery heritages.",
+  openGraph: {
+    title: "About the Academy | Traditional Archery - Jan Franko",
+    description:
+      "Learn about our structured traditional archery training, wilderness expeditions, and cultural studies exploring historic global archery heritages.",
+  }
+};
 
 const AboutPage = () => {
   return (
     <div className="w-full min-h-screen bg-secondary text-primary select-text relative">
-      <title>About the Academy | Traditional Archery - Jan Franko</title>
-      <meta name="description" content="Learn about our structured traditional archery training, wilderness expeditions, and cultural studies exploring historic global archery heritages." />
-      <meta property="og:title" content="About the Academy | Traditional Archery - Jan Franko" />
-      <meta property="og:description" content="Learn about our structured traditional archery training, wilderness expeditions, and cultural studies exploring historic global archery heritages." />
       
       {/* Hero Header Section */}
       <div className="relative w-full bg-[#0e3b2e] text-white py-20 md:py-28 px-6 overflow-hidden flex flex-col items-center justify-center border-b border-primary/10">
