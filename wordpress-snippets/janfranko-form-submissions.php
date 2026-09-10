@@ -2,7 +2,7 @@
 /**
  * Snippet Name: Jan Franko Next.js Form Submissions Storage & WP Admin Handler
  * Description: Custom database table, REST API POST endpoint, unread badge counter, dynamic form tabs, and email alerts for Next.js forms.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Jan Franko Traditional Archery Academy
  */
 
@@ -31,6 +31,7 @@ class JF_Form_Submissions_Handler {
         add_action('init', array($this, 'maybe_create_table'));
         add_action('rest_api_init', array($this, 'register_rest_routes'));
         add_action('admin_menu', array($this, 'register_admin_menu'));
+        add_action('admin_head', array($this, 'inject_admin_styles'));
         add_action('admin_post_jf_toggle_submission_status', array($this, 'handle_status_toggle'));
         add_action('admin_post_jf_delete_submission', array($this, 'handle_delete_submission'));
         add_action('admin_post_jf_export_submissions_csv', array($this, 'handle_csv_export'));
@@ -41,7 +42,7 @@ class JF_Form_Submissions_Handler {
      * Create Custom DB Table if not exists
      */
     public function maybe_create_table() {
-        if (get_option('jf_form_db_version') === '1.0.0') {
+        if (get_option('jf_form_db_version') === '1.1.0') {
             return;
         }
 
@@ -65,14 +66,12 @@ class JF_Form_Submissions_Handler {
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
 
-        update_option('jf_form_db_version', '1.0.0');
+        update_option('jf_form_db_version', '1.1.0');
 
-        // Set default secret key if not set
         if (!get_option($this->option_secret_key)) {
             update_option($this->option_secret_key, 'janfranko_form_sec_2026_x89a');
         }
 
-        // Set default email notification if not set
         if (!get_option($this->option_emails)) {
             update_option($this->option_emails, 'janfranko@tutanota.com');
         }
@@ -85,7 +84,7 @@ class JF_Form_Submissions_Handler {
         register_rest_route('janfranko/v1', '/submit-form', array(
             'methods'  => 'POST',
             'callback' => array($this, 'handle_rest_submission'),
-            'permission_callback' => '__return_true', // Validated manually via secret header
+            'permission_callback' => '__return_true',
         ));
     }
 
@@ -142,7 +141,6 @@ class JF_Form_Submissions_Handler {
             ), 500);
         }
 
-        // Send Email Alert
         $this->send_email_notification($wpdb->insert_id, $form_name, $fields, $page_url, $ip_address);
 
         return new WP_REST_Response(array(
@@ -165,13 +163,14 @@ class JF_Form_Submissions_Handler {
 
         $subject = sprintf('[%s] New Form Submission (#%d)', $form_name, $entry_id);
 
-        $body = "<h2>New Form Submission Recorded</h2>";
+        $body = "<div style='font-family:Helvetica,Arial,sans-serif;line-height:1.6;color:#333;'>";
+        $body .= "<h2 style='color:#0e3b2e;'>New Academy Form Submission</h2>";
         $body .= "<p><strong>Form Name:</strong> " . esc_html($form_name) . "</p>";
         $body .= "<p><strong>Page URL:</strong> <a href='" . esc_url($page_url) . "'>" . esc_html($page_url) . "</a></p>";
         $body .= "<p><strong>IP Address:</strong> " . esc_html($ip_address) . "</p>";
         $body .= "<p><strong>Submitted At:</strong> " . esc_html(current_time('Y-m-d H:i:s')) . "</p>";
 
-        $body .= "<h3>Submitted Fields:</h3><ul>";
+        $body .= "<h3 style='color:#7d603a;'>Submitted Fields:</h3><ul>";
         if (is_array($fields) || is_object($fields)) {
             foreach ($fields as $key => $val) {
                 $formatted_key = esc_html(ucwords(str_replace('_', ' ', $key)));
@@ -182,7 +181,8 @@ class JF_Form_Submissions_Handler {
         $body .= "</ul>";
 
         $admin_url = admin_url('admin.php?page=jf-form-submissions');
-        $body .= "<p><a href='" . esc_url($admin_url) . "' style='display:inline-block;padding:10px 18px;background:#0e3b2e;color:#fff;text-decoration:none;border-radius:6px;font-weight:bold;'>View Submission in WP Admin</a></p>";
+        $body .= "<p style='margin-top:20px;'><a href='" . esc_url($admin_url) . "' style='display:inline-block;padding:12px 22px;background:#0e3b2e;color:#fff;text-decoration:none;border-radius:6px;font-weight:bold;'>View Submission in WP Admin</a></p>";
+        $body .= "</div>";
 
         $headers = array('Content-Type: text/html; charset=UTF-8');
 
@@ -220,6 +220,243 @@ class JF_Form_Submissions_Handler {
             'dashicons-feedback',
             30
         );
+    }
+
+    /**
+     * Inject Custom CSS Styles into WP Admin
+     */
+    public function inject_admin_styles() {
+        $screen = get_current_screen();
+        if (!$screen || $screen->id !== 'toplevel_page_jf-form-submissions') return;
+        ?>
+        <style type="text/css">
+            .jf-wrap {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+                margin-top: 20px;
+                margin-right: 20px;
+            }
+            .jf-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: #0e3b2e;
+                color: #ffffff;
+                padding: 24px 30px;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                margin-bottom: 24px;
+            }
+            .jf-header h1 {
+                font-family: Georgia, "Times New Roman", serif;
+                font-size: 26px;
+                font-weight: 700;
+                color: #ffffff !important;
+                margin: 0 0 6px 0;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .jf-header p {
+                margin: 0;
+                font-size: 13px;
+                color: rgba(255,255,255,0.75);
+            }
+            .jf-btn-export {
+                background: #c5a880 !important;
+                color: #0e3b2e !important;
+                font-weight: 700 !important;
+                font-size: 12px !important;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                padding: 10px 18px !important;
+                border-radius: 8px !important;
+                text-decoration: none !important;
+                transition: all 0.2s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            }
+            .jf-btn-export:hover {
+                background: #e2c9a3 !important;
+                color: #0e3b2e !important;
+                transform: translateY(-1px);
+            }
+            .jf-tabs {
+                border-bottom: 2px solid #0e3b2e;
+                margin-bottom: 20px;
+                display: flex;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+            .jf-tab {
+                background: #e4e8e6;
+                color: #0e3b2e;
+                font-weight: 600;
+                font-size: 13px;
+                padding: 10px 18px;
+                border-radius: 8px 8px 0 0;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                border: 1px solid transparent;
+                border-bottom: none;
+            }
+            .jf-tab:hover {
+                background: #d4ded9;
+                color: #0e3b2e;
+            }
+            .jf-tab.active {
+                background: #0e3b2e;
+                color: #ffffff;
+                border-color: #0e3b2e;
+            }
+            .jf-tab-settings {
+                margin-left: auto;
+                background: #2c3338;
+                color: #fff;
+            }
+            .jf-tab-settings:hover {
+                background: #40464d;
+                color: #fff;
+            }
+            .jf-table-card {
+                background: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+                border: 1px solid #e2e8f0;
+                overflow: hidden;
+            }
+            .jf-table {
+                width: 100%;
+                border-collapse: collapse;
+                text-align: left;
+            }
+            .jf-table th {
+                background: #0e3b2e;
+                color: #ffffff;
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                padding: 14px 16px;
+                border: none;
+            }
+            .jf-table td {
+                padding: 14px 16px;
+                border-bottom: 1px solid #f1f5f9;
+                font-size: 13px;
+                color: #334155;
+                vertical-align: middle;
+            }
+            .jf-row-unread {
+                background: #fffdf5;
+                border-left: 4px solid #d63638;
+                font-weight: 600;
+            }
+            .jf-badge-unread {
+                background: #d63638;
+                color: #ffffff;
+                font-size: 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                padding: 3px 9px;
+                border-radius: 12px;
+                letter-spacing: 0.05em;
+            }
+            .jf-badge-read {
+                background: #e2e8f0;
+                color: #64748b;
+                font-size: 10px;
+                font-weight: 600;
+                text-transform: uppercase;
+                padding: 3px 9px;
+                border-radius: 12px;
+                letter-spacing: 0.05em;
+            }
+            .jf-action-btn {
+                display: inline-block;
+                padding: 6px 12px;
+                font-size: 12px;
+                font-weight: 600;
+                border-radius: 6px;
+                text-decoration: none !important;
+                transition: all 0.15s ease;
+                margin-right: 4px;
+            }
+            .jf-btn-view {
+                background: #0e3b2e;
+                color: #ffffff !important;
+            }
+            .jf-btn-view:hover {
+                background: #145241;
+            }
+            .jf-btn-toggle {
+                background: #f1f5f9;
+                color: #475569 !important;
+                border: 1px solid #cbd5e1;
+            }
+            .jf-btn-toggle:hover {
+                background: #e2e8f0;
+            }
+            .jf-btn-delete {
+                background: #fef2f2;
+                color: #dc2626 !important;
+                border: 1px solid #fecaca;
+            }
+            .jf-btn-delete:hover {
+                background: #fee2e2;
+            }
+            .jf-detail-card {
+                background: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+                border: 1px solid #e2e8f0;
+                padding: 30px;
+                max-width: 850px;
+            }
+            .jf-detail-header {
+                border-bottom: 2px solid #f1f5f9;
+                padding-bottom: 16px;
+                margin-bottom: 20px;
+            }
+            .jf-detail-title {
+                font-family: Georgia, serif;
+                font-size: 24px;
+                color: #0e3b2e;
+                margin: 0 0 8px 0;
+            }
+            .jf-detail-meta {
+                font-size: 12px;
+                color: #64748b;
+                display: flex;
+                gap: 16px;
+                flex-wrap: wrap;
+            }
+            .jf-detail-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 15px;
+            }
+            .jf-detail-table th {
+                background: #f8fafc;
+                color: #0e3b2e;
+                font-size: 12px;
+                font-weight: 700;
+                text-transform: uppercase;
+                padding: 10px 14px;
+                width: 30%;
+                text-align: left;
+                border: 1px solid #e2e8f0;
+            }
+            .jf-detail-table td {
+                padding: 10px 14px;
+                border: 1px solid #e2e8f0;
+                font-size: 13px;
+                color: #1e293b;
+            }
+        </style>
+        <?php
     }
 
     /**
@@ -343,87 +580,97 @@ class JF_Form_Submissions_Handler {
         }
 
         ?>
-        <div class="wrap">
-            <h1 class="wp-heading-inline" style="font-family:Georgia, serif;font-weight:bold;color:#0e3b2e;">
-                Traditional Archery Academy — Form Submissions
-            </h1>
-
-            <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=jf_export_submissions_csv&tab=' . urlencode($active_tab)), 'jf_export_csv_nonce')); ?>" className="page-title-action" style="background:#0e3b2e;color:#fff;border:none;">
-                Export Submissions to CSV
-            </a>
-
-            <hr className="wp-header-end" />
+        <div class="jf-wrap">
+            
+            <!-- Academy Styled Header Banner -->
+            <div class="jf-header">
+                <div>
+                    <h1>
+                        <span>🏹</span> Traditional Archery Academy — Form Submissions
+                    </h1>
+                    <p>Live submission records, dynamic form taxonomy filters, and email notification settings.</p>
+                </div>
+                <div>
+                    <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=jf_export_submissions_csv&tab=' . urlencode($active_tab)), 'jf_export_csv_nonce')); ?>" class="jf-btn-export">
+                        📥 Export to CSV
+                    </a>
+                </div>
+            </div>
 
             <?php if (isset($_GET['updated'])): ?>
-                <div className="notice notice-success is-dismissible"><p>Settings saved successfully.</p></div>
+                <div class="notice notice-success is-dismissible" style="margin-bottom:20px;border-radius:8px;"><p>Settings saved successfully.</p></div>
             <?php endif; ?>
 
             <!-- Navigation Tabs (Dynamic per Form Name) -->
-            <h2 className="nav-tab-wrapper" style="margin-top:15px;">
-                <a href="<?php echo admin_url('admin.php?page=jf-form-submissions&tab=all'); ?>" class="nav-tab <?php echo ($active_tab === 'all') ? 'nav-tab-active' : ''; ?>">
+            <div class="jf-tabs">
+                <a href="<?php echo admin_url('admin.php?page=jf-form-submissions&tab=all'); ?>" class="jf-tab <?php echo ($active_tab === 'all') ? 'active' : ''; ?>">
                     All Submissions
                 </a>
                 <?php foreach ($distinct_forms as $fname): ?>
-                    <a href="<?php echo admin_url('admin.php?page=jf-form-submissions&tab=' . urlencode($fname)); ?>" class="nav-tab <?php echo ($active_tab === $fname) ? 'nav-tab-active' : ''; ?>">
+                    <a href="<?php echo admin_url('admin.php?page=jf-form-submissions&tab=' . urlencode($fname)); ?>" class="jf-tab <?php echo ($active_tab === $fname) ? 'active' : ''; ?>">
                         <?php echo esc_html($fname); ?>
                     </a>
                 <?php endforeach; ?>
-                <a href="<?php echo admin_url('admin.php?page=jf-form-submissions&tab=settings'); ?>" class="nav-tab <?php echo ($active_tab === 'settings') ? 'nav-tab-active' : ''; ?>" style="margin-left:auto;background:#f0f0f1;">
+                <a href="<?php echo admin_url('admin.php?page=jf-form-submissions&tab=settings'); ?>" class="jf-tab jf-tab-settings <?php echo ($active_tab === 'settings') ? 'active' : ''; ?>">
                     ⚙️ Settings &amp; API Key
                 </a>
-            </h2>
+            </div>
 
             <?php if ($active_tab === 'settings'): ?>
                 <!-- Settings Panel -->
-                <div className="card" style="max-width:700px;margin-top:20px;padding:20px;border-radius:8px;">
-                    <h3>Form Integration Settings</h3>
+                <div class="jf-detail-card">
+                    <h2 class="jf-detail-title">Form Integration Settings</h2>
+                    <p style="color:#64748b;font-size:13px;margin-bottom:20px;">Configure REST API security keys and email alert notifications.</p>
+
                     <form method="post" action="<?php echo admin_url('admin-post.php'); ?>">
                         <input type="hidden" name="action" value="jf_save_settings" />
                         <?php wp_nonce_field('jf_save_settings_nonce'); ?>
 
-                        <table className="form-table">
+                        <table class="form-table">
                             <tr>
-                                <th scope="row"><label for="jf_secret_key">API Secret Authorization Password</label></th>
+                                <th scope="row"><label for="jf_secret_key" style="font-weight:700;">API Secret Authorization Key</label></th>
                                 <td>
-                                    <input type="text" id="jf_secret_key" name="jf_secret_key" value="<?php echo esc_attr(get_option($this->option_secret_key, 'janfranko_form_sec_2026_x89a')); ?>" class="regular-text" required />
-                                    <p className="description">Must match <code>FORM_SECRET_KEY</code> in Next.js <code>.env.local</code>.</p>
+                                    <input type="text" id="jf_secret_key" name="jf_secret_key" value="<?php echo esc_attr(get_option($this->option_secret_key, 'janfranko_form_sec_2026_x89a')); ?>" class="regular-text" style="font-family:monospace;font-size:13px;padding:8px;" required />
+                                    <p class="description">Must match <code>FORM_SECRET_KEY</code> in Next.js <code>.env.local</code>.</p>
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><label for="jf_notification_emails">Email Notification Recipients</label></th>
+                                <th scope="row"><label for="jf_notification_emails" style="font-weight:700;">Email Notification Recipients</label></th>
                                 <td>
-                                    <textarea id="jf_notification_emails" name="jf_notification_emails" rows="3" class="large-text" placeholder="janfranko@tutanota.com, info@janfranko.com"><?php echo esc_textarea(get_option($this->option_emails, 'janfranko@tutanota.com')); ?></textarea>
-                                    <p className="description">Separate multiple email addresses with commas. Instant alerts will be sent here upon submission.</p>
+                                    <textarea id="jf_notification_emails" name="jf_notification_emails" rows="3" class="large-text" style="padding:10px;font-family:monospace;" placeholder="janfranko@tutanota.com, info@janfranko.com"><?php echo esc_textarea(get_option($this->option_emails, 'janfranko@tutanota.com')); ?></textarea>
+                                    <p class="description">Separate multiple recipient emails with commas. Instant alerts will be sent here upon submission.</p>
                                 </td>
                             </tr>
                         </table>
 
-                        <?php submit_button('Save Settings'); ?>
+                        <p style="margin-top:20px;">
+                            <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Settings" style="background:#0e3b2e;border-color:#0e3b2e;padding:6px 20px;font-weight:700;" />
+                        </p>
                     </form>
                 </div>
 
             <?php elseif ($view_id > 0 && !empty($single_entry)): ?>
                 <!-- Single Entry Detail View -->
-                <div style="margin-top:20px;">
-                    <a href="<?php echo admin_url('admin.php?page=jf-form-submissions&tab=' . urlencode($active_tab)); ?>" class="button">← Back to List</a>
-                    <div className="card" style="margin-top:15px;padding:25px;max-width:800px;border-radius:10px;">
-                        <h2 style="font-family:Georgia, serif;color:#0e3b2e;">
-                            <?php echo esc_html($single_entry->form_name); ?> (#<?php echo $single_entry->id; ?>)
-                        </h2>
-                        <p style="color:#666;font-size:12px;">
-                            Submitted at: <strong><?php echo esc_html($single_entry->created_at); ?></strong> | IP: <code><?php echo esc_html($single_entry->ip_address); ?></code>
-                        </p>
-                        <p style="color:#666;font-size:12px;">
-                            Source Location: <a href="<?php echo esc_url($single_entry->page_url); ?>" target="_blank"><?php echo esc_html($single_entry->page_url); ?></a>
-                        </p>
+                <div>
+                    <a href="<?php echo admin_url('admin.php?page=jf-form-submissions&tab=' . urlencode($active_tab)); ?>" class="jf-action-btn jf-btn-toggle" style="margin-bottom:15px;display:inline-block;">← Back to List</a>
+                    
+                    <div class="jf-detail-card">
+                        <div class="jf-detail-header">
+                            <h2 class="jf-detail-title">
+                                <?php echo esc_html($single_entry->form_name); ?> (#<?php echo $single_entry->id; ?>)
+                            </h2>
+                            <div class="jf-detail-meta">
+                                <span>📅 Submitted At: <strong><?php echo esc_html($single_entry->created_at); ?></strong></span>
+                                <span>🌐 IP Address: <code><?php echo esc_html($single_entry->ip_address); ?></code></span>
+                                <span>🔗 Source Page: <a href="<?php echo esc_url($single_entry->page_url); ?>" target="_blank"><?php echo esc_html($single_entry->page_url); ?></a></span>
+                            </div>
+                        </div>
 
-                        <hr />
-
-                        <h3>Submitted Field Data</h3>
-                        <table className="widefat striped" style="margin-top:10px;">
+                        <h3 style="font-size:16px;color:#0e3b2e;margin-bottom:10px;">Submitted Field Data</h3>
+                        <table class="jf-detail-table">
                             <thead>
                                 <tr>
-                                    <th style="width:30%;">Field Name</th>
+                                    <th>Field Name</th>
                                     <th>Field Value</th>
                                 </tr>
                             </thead>
@@ -434,10 +681,10 @@ class JF_Form_Submissions_Handler {
                                     foreach ($field_data as $k => $v) {
                                         $label = esc_html(ucwords(str_replace('_', ' ', $k)));
                                         $val = is_array($v) ? esc_html(implode(', ', $v)) : esc_html($v);
-                                        echo "<tr><td><strong>{$label}</strong></td><td>" . nl2br($val) . "</td></tr>";
+                                        echo "<tr><th>{$label}</th><td>" . nl2br($val) . "</td></tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='2'>" . esc_html($single_entry->fields) . "</td></tr>";
+                                    echo "<tr><th>Raw Payload</th><td>" . esc_html($single_entry->fields) . "</td></tr>";
                                 }
                                 ?>
                             </tbody>
@@ -455,71 +702,81 @@ class JF_Form_Submissions_Handler {
                 }
                 ?>
 
-                <table className="wp-list-table widefat fixed striped table-view-list" style="margin-top:20px;">
-                    <thead>
-                        <tr>
-                            <th style="width:60px;">ID</th>
-                            <th style="width:100px;">Status</th>
-                            <th style="width:180px;">Form Type</th>
-                            <th>Field Data Preview</th>
-                            <th style="width:180px;">Page Source</th>
-                            <th style="width:140px;">Date &amp; Time</th>
-                            <th style="width:180px;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (empty($submissions)): ?>
+                <div class="jf-table-card">
+                    <table class="jf-table">
+                        <thead>
                             <tr>
-                                <td colspan="7">No submissions recorded yet for this view.</td>
+                                <th style="width:60px;">ID</th>
+                                <th style="width:100px;">Status</th>
+                                <th style="width:180px;">Form Type</th>
+                                <th>Field Data Preview</th>
+                                <th style="width:180px;">Page Source</th>
+                                <th style="width:160px;">Date &amp; Time</th>
+                                <th style="width:200px;">Actions</th>
                             </tr>
-                        <?php else: ?>
-                            <?php foreach ($submissions as $sub): ?>
-                                <?php
-                                $is_unread = ($sub->status === 'unread');
-                                $row_style = $is_unread ? 'font-weight:bold;background:#fff8e5;' : '';
-                                $fields_obj = json_decode($sub->fields, true);
-                                $preview_text = '';
-
-                                if (is_array($fields_obj)) {
-                                    $parts = array();
-                                    foreach (array_slice($fields_obj, 0, 3) as $k => $v) {
-                                        $v_str = is_array($v) ? implode(', ', $v) : $v;
-                                        $parts[] = ucwords(str_replace('_', ' ', $k)) . ': ' . esc_html(mb_strimwidth($v_str, 0, 30, '...'));
-                                    }
-                                    $preview_text = implode(' | ', $parts);
-                                } else {
-                                    $preview_text = esc_html(mb_strimwidth($sub->fields, 0, 80, '...'));
-                                }
-                                ?>
-                                <tr style="<?php echo $row_style; ?>">
-                                    <td>#<?php echo $sub->id; ?></td>
-                                    <td>
-                                        <?php if ($is_unread): ?>
-                                            <span style="background:#d63638;color:#fff;padding:3px 8px;border-radius:12px;font-size:10px;text-transform:uppercase;">Unread</span>
-                                        <?php else: ?>
-                                            <span style="background:#2c3338;color:#eee;padding:3px 8px;border-radius:12px;font-size:10px;text-transform:uppercase;">Read</span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td><strong><?php echo esc_html($sub->form_name); ?></strong></td>
-                                    <td><?php echo $preview_text; ?></td>
-                                    <td><a href="<?php echo esc_url($sub->page_url); ?>" target="_blank" style="font-size:11px;"><?php echo esc_html(parse_url($sub->page_url, PHP_URL_PATH) ?: $sub->page_url); ?></a></td>
-                                    <td style="font-size:11px;"><?php echo esc_html($sub->created_at); ?></td>
-                                    <td>
-                                        <a href="<?php echo admin_url('admin.php?page=jf-form-submissions&tab=' . urlencode($active_tab) . '&view_id=' . $sub->id); ?>" class="button button-small button-primary">View</a>
-                                        
-                                        <?php if ($is_unread): ?>
-                                            <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=jf_toggle_submission_status&id=' . $sub->id . '&status=read'), 'jf_toggle_status_nonce')); ?>" class="button button-small">Mark Read</a>
-                                        <?php else: ?>
-                                            <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=jf_toggle_submission_status&id=' . $sub->id . '&status=unread'), 'jf_toggle_status_nonce')); ?>" class="button button-small">Mark Unread</a>
-                                        <?php endif; ?>
-
-                                        <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=jf_delete_submission&id=' . $sub->id), 'jf_delete_submission_nonce')); ?>" class="button button-small" onclick="return confirm('Delete this submission entry?');" style="color:#b32d2e;">Delete</a>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($submissions)): ?>
+                                <tr>
+                                    <td colspan="7" style="text-align:center;padding:30px;color:#64748b;">
+                                        No form submissions recorded yet for this view.
                                     </td>
                                 </tr>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+                            <?php else: ?>
+                                <?php foreach ($submissions as $sub): ?>
+                                    <?php
+                                    $is_unread = ($sub->status === 'unread');
+                                    $row_class = $is_unread ? 'jf-row-unread' : '';
+                                    $fields_obj = json_decode($sub->fields, true);
+                                    $preview_text = '';
+
+                                    if (is_array($fields_obj)) {
+                                        $parts = array();
+                                        foreach (array_slice($fields_obj, 0, 3) as $k => $v) {
+                                            $v_str = is_array($v) ? implode(', ', $v) : $v;
+                                            $parts[] = '<strong>' . esc_html(ucwords(str_replace('_', ' ', $k))) . ':</strong> ' . esc_html(mb_strimwidth($v_str, 0, 30, '...'));
+                                        }
+                                        $preview_text = implode(' <span style="color:#cbd5e1;">|</span> ', $parts);
+                                    } else {
+                                        $preview_text = esc_html(mb_strimwidth($sub->fields, 0, 80, '...'));
+                                    }
+
+                                    $parsed_path = parse_url($sub->page_url, PHP_URL_PATH) ?: '/';
+                                    ?>
+                                    <tr class="<?php echo $row_class; ?>">
+                                        <td>#<?php echo $sub->id; ?></td>
+                                        <td>
+                                            <?php if ($is_unread): ?>
+                                                <span class="jf-badge-unread">Unread</span>
+                                            <?php else: ?>
+                                                <span class="jf-badge-read">Read</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><strong><?php echo esc_html($sub->form_name); ?></strong></td>
+                                        <td><?php echo $preview_text; ?></td>
+                                        <td>
+                                            <a href="<?php echo esc_url($sub->page_url); ?>" target="_blank" style="color:#0e3b2e;font-weight:600;text-decoration:underline;">
+                                                <?php echo esc_html($parsed_path); ?>
+                                            </a>
+                                        </td>
+                                        <td style="font-family:monospace;font-size:12px;color:#64748b;"><?php echo esc_html($sub->created_at); ?></td>
+                                        <td>
+                                            <a href="<?php echo admin_url('admin.php?page=jf-form-submissions&tab=' . urlencode($active_tab) . '&view_id=' . $sub->id); ?>" class="jf-action-btn jf-btn-view">View</a>
+                                            
+                                            <?php if ($is_unread): ?>
+                                                <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=jf_toggle_submission_status&id=' . $sub->id . '&status=read'), 'jf_toggle_status_nonce')); ?>" class="jf-action-btn jf-btn-toggle">Mark Read</a>
+                                            <?php else: ?>
+                                                <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=jf_toggle_submission_status&id=' . $sub->id . '&status=unread'), 'jf_toggle_status_nonce')); ?>" class="jf-action-btn jf-btn-toggle">Mark Unread</a>
+                                            <?php endif; ?>
+
+                                            <a href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=jf_delete_submission&id=' . $sub->id), 'jf_delete_submission_nonce')); ?>" class="jf-action-btn jf-btn-delete" onclick="return confirm('Delete this submission entry?');">Delete</a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
             <?php endif; ?>
         </div>
         <?php
