@@ -27,6 +27,11 @@ export function generateOgImageResponse({
   const bgBuffer = fs.readFileSync(bgFilePath);
   const bgDataUrl = `data:image/jpeg;base64,${bgBuffer.toString("base64")}`;
 
+  // Load white logo as base64 data URL
+  const logoFilePath = path.join(process.cwd(), "public", "LogoWhite.png");
+  const logoBuffer = fs.readFileSync(logoFilePath);
+  const logoDataUrl = `data:image/png;base64,${logoBuffer.toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -87,28 +92,46 @@ export function generateOgImageResponse({
             flexDirection: "column",
             alignItems: "flex-start",
             justifyContent: "flex-start",
-            paddingTop: "60px",
+            paddingTop: "50px",
             paddingLeft: "70px",
             maxWidth: "680px",
           }}
         >
-          {/* Badge */}
+          {/* Header Row with Logo & Badge */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              padding: "6px 16px",
-              backgroundColor: "rgba(197, 168, 128, 0.15)",
-              border: "1px solid rgba(197, 168, 128, 0.5)",
-              borderRadius: "4px",
-              color: "#c5a880",
-              fontSize: "13px",
-              fontWeight: 600,
-              letterSpacing: "3px",
-              marginBottom: "16px",
+              gap: "14px",
+              marginBottom: "14px",
             }}
           >
-            {badge.toUpperCase()}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={logoDataUrl}
+              alt="Jan Franko Logo"
+              style={{
+                width: "56px",
+                height: "52px",
+                objectFit: "contain",
+              }}
+            />
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "6px 16px",
+                backgroundColor: "rgba(197, 168, 128, 0.15)",
+                border: "1px solid rgba(197, 168, 128, 0.5)",
+                borderRadius: "4px",
+                color: "#c5a880",
+                fontSize: "13px",
+                fontWeight: 600,
+                letterSpacing: "3px",
+              }}
+            >
+              {badge.toUpperCase()}
+            </div>
           </div>
 
           {/* Golden Title */}
