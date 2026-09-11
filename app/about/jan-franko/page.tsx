@@ -29,8 +29,18 @@ export const metadata: Metadata = {
     title: "Jan Franko | Traditional Archery Instructor & Holistic Bodywork Specialist",
     description:
       "Bridging traditional archery, biomechanics, Qigong, and 25+ years of Traditional Chinese Medicine and therapeutic bodywork.",
-    images: [{ url: "/images/wp-assets/jan-franko-profile.jpeg" }]
-  }
+    images: [
+      { url: "/images/wp-assets/jan-franko-profile.jpeg", width: 1024, height: 682, alt: "Jan Franko" },
+      { url: "/og-image.png", width: 1200, height: 630, alt: "Jan Franko - Traditional Archery" }
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jan Franko | Traditional Archery Instructor & Holistic Bodywork Specialist",
+    description:
+      "Bridging traditional archery, biomechanics, Qigong, and 25+ years of Traditional Chinese Medicine and therapeutic bodywork.",
+    images: ["/images/wp-assets/jan-franko-profile.jpeg"],
+  },
 };
 
 export default function JanFrankoProfilePage() {

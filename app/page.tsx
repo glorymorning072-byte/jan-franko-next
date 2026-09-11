@@ -14,7 +14,28 @@ export const metadata: Metadata = {
     title: "Jan Franko | Traditional Archery Academy & Global Expeditions",
     description:
       "A traditional archery academy focused on structured training, cultural study, biomechanical precision, and global wilderness expeditions.",
-  }
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Jan Franko - Traditional Archery",
+      },
+      {
+        url: "/og-square.png",
+        width: 512,
+        height: 512,
+        alt: "Jan Franko Emblem",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jan Franko | Traditional Archery Academy & Global Expeditions",
+    description:
+      "A traditional archery academy focused on structured training, cultural study, biomechanical precision, and global wilderness expeditions.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function Home() {

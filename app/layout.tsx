@@ -46,12 +46,26 @@ export const metadata: Metadata = {
     siteName: "Jan Franko - Traditional Archery",
     images: [
       {
-        url: "/Jan.png",
-        width: 1024,
-        height: 682,
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
         alt: "Jan Franko - Traditional Archery",
+        type: "image/png",
+      },
+      {
+        url: "/og-square.png",
+        width: 512,
+        height: 512,
+        alt: "Jan Franko Emblem",
+        type: "image/png",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jan Franko - Traditional Archery",
+    description: "A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.",
+    images: ["/og-image.png"],
   },
 };
 

@@ -25,8 +25,16 @@ export const metadata: Metadata = {
   openGraph: {
     title: "The Academy | Curriculum, Certification & Governance",
     description:
-      "Structured environmental framework from foundational mechanics to apex summit protocols."
-  }
+      "Structured environmental framework from foundational mechanics to apex summit protocols.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Jan Franko - Traditional Archery" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Academy | Curriculum, Certification & Governance",
+    description:
+      "Structured environmental framework from foundational mechanics to apex summit protocols.",
+    images: ["/og-image.png"],
+  },
 };
 
 const ACADEMY_SYSTEMS = [

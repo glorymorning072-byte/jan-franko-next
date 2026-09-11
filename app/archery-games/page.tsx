@@ -9,8 +9,15 @@ export const metadata: Metadata = {
     "Heritage, precision, and the open sky: explore Archery Games historical gatherings, participation standards, and competition rules with Jan Franko Traditional Archery Academy.",
   openGraph: {
     title: "Archery Games | Historical Gatherings & Precision Events",
-    description: "Heritage archery gatherings testing skill, posture, and accuracy under natural open skies."
-  }
+    description: "Heritage archery gatherings testing skill, posture, and accuracy under natural open skies.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Jan Franko - Traditional Archery" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Archery Games | Historical Gatherings & Precision Events",
+    description: "Heritage archery gatherings testing skill, posture, and accuracy under natural open skies.",
+    images: ["/og-image.png"],
+  },
 };
 
 const GAME_CATEGORIES = [

@@ -8,7 +8,15 @@ export const metadata: Metadata = {
     title: "Contact & Admissions | Jan Franko Traditional Archery Academy",
     description:
       "Inquire about custom bow builds, training cohorts, steppe camp registrations, or academy partnerships.",
-  }
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Jan Franko - Traditional Archery" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact & Admissions | Jan Franko Traditional Archery Academy",
+    description:
+      "Inquire about custom bow builds, training cohorts, steppe camp registrations, or academy partnerships.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function ContactLayout({ children }: { children: React.ReactNode }) {
