@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { ArcheryTransition } from "@/components/ArcheryTransition";
 import GoogleTranslate from "@/components/GoogleTranslate";
 import CookieConsent from "@/components/CookieConsent";
+import { constructMetadata } from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +26,10 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://jan-franko-next.vercel.app"),
-  title: "Jan Franko - Traditional Archery",
-  description: "A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.",
+  ...constructMetadata({
+    title: "Jan Franko - Traditional Archery Academy",
+    description: "Traditional archery academy focused on structured training, cultural study, biomechanical precision, and global wilderness expeditions.",
+  }),
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
@@ -36,36 +38,6 @@ export const metadata: Metadata = {
     ],
     shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://jan-franko-next.vercel.app",
-    title: "Jan Franko - Traditional Archery",
-    description: "A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.",
-    siteName: "Jan Franko - Traditional Archery",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Jan Franko - Traditional Archery",
-        type: "image/png",
-      },
-      {
-        url: "/og-square.png",
-        width: 512,
-        height: 512,
-        alt: "Jan Franko Emblem",
-        type: "image/png",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Jan Franko - Traditional Archery",
-    description: "A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.",
-    images: ["/og-image.png"],
   },
 };
 

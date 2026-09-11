@@ -2,25 +2,12 @@ import React from "react";
 import { EditorialItem } from "@/types/editorial";
 import KnowledgeClientDirectory from "@/components/Editorial/KnowledgeClientDirectory";
 import type { Metadata } from "next";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Knowledge & Field Lineages | Traditional Archery - Jan Franko",
-  description:
-    "Authoritative field volumes, biomechanical orientation guides, and historical martial lineages preserving the global tradition of the bow.",
-  openGraph: {
-    title: "Knowledge & Field Lineages | Traditional Archery - Jan Franko",
-    description:
-      "Authoritative field volumes, biomechanical orientation guides, and historical martial lineages preserving the global tradition of the bow.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Jan Franko - Traditional Archery" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Knowledge & Field Lineages | Traditional Archery - Jan Franko",
-    description:
-      "Authoritative field volumes, biomechanical orientation guides, and historical martial lineages preserving the global tradition of the bow.",
-    images: ["/og-image.png"],
-  },
-};
+export const metadata: Metadata = constructMetadata({
+  title: "Knowledge & Field Lineages | Traditional Archery",
+  description: "Authoritative field volumes, biomechanical orientation guides, and historical martial lineages preserving the global tradition of the bow.",
+});
 
 async function getEditorials(): Promise<EditorialItem[]> {
   try {

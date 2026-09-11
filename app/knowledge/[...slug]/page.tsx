@@ -6,6 +6,7 @@ import { ArrowLeft, Compass, ArrowRight } from "lucide-react";
 import { EditorialItem } from "@/types/editorial";
 import { EditorialSectionRenderer } from "@/components/Editorial/EditorialSectionRenderer";
 import type { Metadata } from "next";
+import { constructMetadata } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ slug: string[] }>;
@@ -129,15 +130,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description =
     article.acf?.card_description || article.acf?.hero?.description?.replace(/<[^>]*>/g, "") || "Field monograph and archery lore.";
 
-  return {
-    title: `${title} | Knowledge - Jan Franko`,
+  const slugPath = Array.isArray(slug) ? slug.join("/") : slug;
+  return constructMetadata({
+    title: `${title} | Knowledge Monograph`,
     description,
-    openGraph: {
-      title: `${title} | Knowledge - Jan Franko`,
-      description,
-      images: article.acf?.hero?.image_external_url ? [{ url: article.acf.hero.image_external_url }] : [],
-    }
-  };
+    ogImage: article.acf?.hero?.image_external_url || "/knowledge/opengraph-image",
+    canonicalUrl: `https://jan-franko-next.vercel.app/knowledge/${slugPath}`,
+  });
 }
 
 export default async function KnowledgeHierarchicalPage({ params }: PageProps) {

@@ -16,6 +16,7 @@ import {
   Sparkles
 } from "lucide-react";
 import type { Metadata } from "next";
+import { constructMetadata } from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -80,17 +81,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const rawTitle = page.title?.rendered || "Academy Section";
   const cleanTitle = rawTitle.replace(/&#8211;/g, "–").replace(/&amp;/g, "&");
-  const excerpt = page.excerpt?.rendered?.replace(/<[^>]+>/g, "").trim().substring(0, 160) || 
+  const excerpt = page.excerpt?.rendered?.replace(/<[^>]+>/g, "").trim() || 
     "Verified curriculum standards, certification audit frameworks, and environmental stress protocols.";
 
-  return {
-    title: `${cleanTitle} | Traditional Archery Academy`,
+  return constructMetadata({
+    title: `${cleanTitle} | Archery Academy`,
     description: excerpt,
-    openGraph: {
-      title: `${cleanTitle} | Traditional Archery Academy`,
-      description: excerpt
-    }
-  };
+    ogImage: `/academy/${slug}/opengraph-image`,
+    canonicalUrl: `https://jan-franko-next.vercel.app/academy/${slug}`,
+  });
 }
 
 export default async function AcademyPage({ params }: PageProps) {

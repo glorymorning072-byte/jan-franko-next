@@ -5,38 +5,13 @@ import Hero from "@/components/Home/Hero";
 import HeroMobile from "@/components/Home/HeroMobile";
 import Contact from "@/components/Home/Contact";
 import type { Metadata } from "next";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Jan Franko | Traditional Archery Academy & Global Expeditions",
-  description:
-    "A traditional archery academy focused on structured training, cultural study, biomechanical precision, and global wilderness expeditions.",
-  openGraph: {
-    title: "Jan Franko | Traditional Archery Academy & Global Expeditions",
-    description:
-      "A traditional archery academy focused on structured training, cultural study, biomechanical precision, and global wilderness expeditions.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Jan Franko - Traditional Archery",
-      },
-      {
-        url: "/og-square.png",
-        width: 512,
-        height: 512,
-        alt: "Jan Franko Emblem",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Jan Franko | Traditional Archery Academy & Global Expeditions",
-    description:
-      "A traditional archery academy focused on structured training, cultural study, biomechanical precision, and global wilderness expeditions.",
-    images: ["/og-image.png"],
-  },
-};
+export const metadata: Metadata = constructMetadata({
+  title: "Jan Franko | Traditional Archery Academy & Expeditions",
+  description: "Traditional archery academy focused on structured training, cultural study, biomechanical precision, and global wilderness expeditions.",
+  ogImage: "/opengraph-image",
+});
 
 export default function Home() {
   return (

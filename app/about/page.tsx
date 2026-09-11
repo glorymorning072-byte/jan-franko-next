@@ -2,25 +2,12 @@ import React from "react";
 import Link from "next/link";
 import { Compass, Shield, Target, BookOpen, MapPin, Award } from "lucide-react";
 import type { Metadata } from "next";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = constructMetadata({
   title: "About the Academy | Traditional Archery - Jan Franko",
-  description:
-    "Learn about our structured traditional archery training, wilderness expeditions, and cultural studies exploring historic global archery heritages.",
-  openGraph: {
-    title: "About the Academy | Traditional Archery - Jan Franko",
-    description:
-      "Learn about our structured traditional archery training, wilderness expeditions, and cultural studies exploring historic global archery heritages.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Jan Franko - Traditional Archery" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "About the Academy | Traditional Archery - Jan Franko",
-    description:
-      "Learn about our structured traditional archery training, wilderness expeditions, and cultural studies exploring historic global archery heritages.",
-    images: ["/og-image.png"],
-  },
-};
+  description: "Learn about our structured traditional archery training, wilderness expeditions, and cultural studies exploring historic global archery heritages.",
+});
 
 const AboutPage = () => {
   return (

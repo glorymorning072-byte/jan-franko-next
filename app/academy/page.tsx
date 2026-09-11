@@ -17,25 +17,12 @@ import {
   FileText
 } from "lucide-react";
 import type { Metadata } from "next";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = constructMetadata({
   title: "The Academy | Curriculum, Certification & Governance",
-  description:
-    "Discover the structured curriculum of the Jan Franko Traditional Archery Academy: Certification audit, Explorer Rank System, Summit Protocols, ESI metric, and Code of Conduct.",
-  openGraph: {
-    title: "The Academy | Curriculum, Certification & Governance",
-    description:
-      "Structured environmental framework from foundational mechanics to apex summit protocols.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Jan Franko - Traditional Archery" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "The Academy | Curriculum, Certification & Governance",
-    description:
-      "Structured environmental framework from foundational mechanics to apex summit protocols.",
-    images: ["/og-image.png"],
-  },
-};
+  description: "Structured environmental framework from foundational mechanics to apex summit protocols.",
+});
 
 const ACADEMY_SYSTEMS = [
   {

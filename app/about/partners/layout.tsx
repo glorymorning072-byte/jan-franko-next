@@ -1,23 +1,10 @@
 import type { Metadata } from "next";
+import { constructMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Vetted Bowyers & Master Craftsmen | Jan Franko Archery",
-  description:
-    "Discover our international network of master bowyers and traditional archery craftsmen specializing in horn, sinew, and laminated wood bows.",
-  openGraph: {
-    title: "Vetted Bowyers & Master Craftsmen | Jan Franko Archery",
-    description:
-      "Discover our international network of master bowyers and traditional archery craftsmen specializing in horn, sinew, and laminated wood bows.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Jan Franko - Traditional Archery" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Vetted Bowyers & Master Craftsmen | Jan Franko Archery",
-    description:
-      "Discover our international network of master bowyers and traditional archery craftsmen specializing in horn, sinew, and laminated wood bows.",
-    images: ["/og-image.png"],
-  },
-};
+export const metadata: Metadata = constructMetadata({
+  title: "Vetted Bowyers & Master Craftsmen",
+  description: "Discover our international network of master bowyers and traditional archery craftsmen specializing in horn, sinew, and laminated wood bows.",
+});
 
 export default function PartnersLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
