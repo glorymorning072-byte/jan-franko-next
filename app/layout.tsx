@@ -25,24 +25,28 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://janfranko.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://jan-franko-next.vercel.app"),
   title: "Jan Franko - Traditional Archery",
   description: "A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.",
   icons: {
-    icon: "/images/wp-assets/favicon-icon.svg",
-    shortcut: "/images/wp-assets/favicon-icon.svg",
-    apple: "/images/wp-assets/favicon-icon.svg",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/images/wp-assets/favicon-icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://janfranko.com",
+    url: "https://jan-franko-next.vercel.app",
     title: "Jan Franko - Traditional Archery",
     description: "A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.",
     siteName: "Jan Franko - Traditional Archery",
     images: [
       {
-        url: "https://janfranko.com/Jan.png",
+        url: "/Jan.png",
         width: 1024,
         height: 682,
         alt: "Jan Franko - Traditional Archery",
