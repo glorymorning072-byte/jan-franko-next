@@ -1,6 +1,6 @@
 import { generateOgImageResponse } from "@/lib/og-template";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export const alt = "Jan Franko Academy";
 export const size = {
@@ -46,5 +46,7 @@ export default async function AcademyOgImage({ params }: Props) {
     badge: "ACADEMY CURRICULUM",
     title,
     description,
+    ctaText: "VIEW CURRICULUM →",
+    bgType: "expedition",
   });
 }

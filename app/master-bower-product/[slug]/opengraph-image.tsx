@@ -1,6 +1,6 @@
 import { generateOgImageResponse } from "@/lib/og-template";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export const alt = "Master Bowyer Product";
 export const size = {
@@ -46,5 +46,7 @@ export default async function MasterBowyerProductOgImage({ params }: Props) {
     badge: "MASTER BOWYER PRODUCT",
     title,
     description,
+    ctaText: "DISCOVER PRODUCT →",
+    bgType: "workshop",
   });
 }

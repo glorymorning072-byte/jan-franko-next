@@ -1,6 +1,6 @@
 import { generateOgImageResponse } from "@/lib/og-template";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export const alt = "Knowledge & Field Lineages";
 export const size = {
@@ -14,5 +14,7 @@ export default async function KnowledgeOgImage() {
     badge: "FIELD KNOWLEDGE",
     title: "Knowledge & Field Lineages | Traditional Archery",
     description: "Authoritative field volumes, biomechanical orientation guides, and historical martial lineages preserving the global tradition of the bow.",
+    ctaText: "READ MONOGRAPH →",
+    bgType: "expedition",
   });
 }

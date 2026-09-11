@@ -1,19 +1,31 @@
 import { ImageResponse } from "next/og";
+import fs from "fs";
+import path from "path";
 import { truncateTitle, truncateDescription } from "./seo";
 
 export interface OgImageOptions {
   badge?: string;
   title: string;
   description?: string;
+  ctaText?: string;
+  bgType?: "expedition" | "workshop";
 }
 
 export function generateOgImageResponse({
-  badge = "TRADITIONAL ARCHERY ACADEMY",
+  badge = "TRADITIONAL ARCHERY",
   title,
-  description = "A traditional archery academy focused on structured training, cultural study, and wilderness expeditions.",
+  description = "Structured traditional archery training, wilderness expeditions, and cultural study.",
+  ctaText = "LEARN MORE →",
+  bgType = "expedition",
 }: OgImageOptions) {
   const safeTitle = truncateTitle(title, 57);
-  const safeDesc = truncateDescription(description, 152);
+  const safeDesc = truncateDescription(description, 140);
+
+  // Load background image as base64 data URL
+  const bgFileName = bgType === "workshop" ? "og-bg-workshop.jpg" : "og-bg-expedition.jpg";
+  const bgFilePath = path.join(process.cwd(), "public/images", bgFileName);
+  const bgBuffer = fs.readFileSync(bgFilePath);
+  const bgDataUrl = `data:image/jpeg;base64,${bgBuffer.toString("base64")}`;
 
   return new ImageResponse(
     (
@@ -22,17 +34,39 @@ export function generateOgImageResponse({
           height: "100%",
           width: "100%",
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#051713",
-          backgroundImage:
-            "linear-gradient(135deg, #051713 0%, #0e3b2e 50%, #051713 100%)",
-          padding: "40px",
           position: "relative",
+          backgroundColor: "#051713",
         }}
       >
-        {/* Outer Gold Border */}
+        {/* Background Image */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={bgDataUrl}
+          alt="Background"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "1200px",
+            height: "630px",
+            objectFit: "cover",
+          }}
+        />
+
+        {/* Top-Left Dark Gradient Overlay for text contrast */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "820px",
+            height: "630px",
+            background: "linear-gradient(to right, rgba(5,23,19,0.92) 0%, rgba(5,23,19,0.75) 60%, rgba(5,23,19,0) 100%)",
+            display: "flex",
+          }}
+        />
+
+        {/* Outer Frame Border */}
         <div
           style={{
             position: "absolute",
@@ -40,133 +74,91 @@ export function generateOgImageResponse({
             left: "24px",
             right: "24px",
             bottom: "24px",
-            border: "1.5px solid rgba(197, 168, 128, 0.35)",
-            borderRadius: "12px",
+            border: "1.5px solid rgba(197, 168, 128, 0.4)",
+            borderRadius: "10px",
             display: "flex",
           }}
         />
 
-        {/* Center 80% Safe Zone (1080 x 550) */}
+        {/* Top-Left Content Area (Safe Zone) */}
         <div
           style={{
-            width: "1080px",
-            height: "550px",
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "24px 30px",
-            textAlign: "center",
+            alignItems: "flex-start",
+            justifyContent: "flex-start",
+            paddingTop: "60px",
+            paddingLeft: "70px",
+            maxWidth: "680px",
           }}
         >
-          {/* Header Badge */}
+          {/* Badge */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              padding: "6px 18px",
-              backgroundColor: "rgba(197, 168, 128, 0.12)",
-              border: "1px solid rgba(197, 168, 128, 0.4)",
-              borderRadius: "20px",
+              padding: "6px 16px",
+              backgroundColor: "rgba(197, 168, 128, 0.15)",
+              border: "1px solid rgba(197, 168, 128, 0.5)",
+              borderRadius: "4px",
               color: "#c5a880",
-              fontSize: "14px",
+              fontSize: "13px",
               fontWeight: 600,
               letterSpacing: "3px",
+              marginBottom: "16px",
             }}
           >
             {badge.toUpperCase()}
           </div>
 
-          {/* Center Brand Icon Emblem */}
+          {/* Golden Title */}
           <div
             style={{
+              fontSize: "44px",
+              fontWeight: 700,
+              color: "#c5a880",
+              lineHeight: 1.2,
+              fontFamily: "Georgia, serif",
+              marginBottom: "14px",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "86px",
-              height: "86px",
-              borderRadius: "43px",
-              backgroundColor: "#ffffff",
-              margin: "6px 0",
+              textShadow: "0 2px 8px rgba(0,0,0,0.8)",
             }}
           >
-            <svg width="58" height="58" viewBox="0 0 512 512" fill="none">
-              <path
-                d="M354.536 225.378C341.7 193.608 309.464 197.957 275.322 202.562C270.085 203.265 264.68 204.001 259.276 204.614C244.712 206.264 233.458 201.603 225.859 190.764C219.908 182.289 218.382 173.033 218.371 172.933C212.966 173.78 209.679 179.4 211.652 184.508C213.011 188.009 214.95 192.057 217.691 196.027C224.432 205.796 237.314 216.892 260.379 214.271C265.895 213.647 271.355 212.911 276.637 212.197C313.152 207.279 336.017 205.45 345.533 229.014L349.812 239.686L184.285 296.692C186.034 301.777 191.561 304.476 196.642 302.736L205.958 299.547L197.69 317.802C202.581 320.021 208.342 317.858 210.548 312.962L218.594 295.187L230.617 291.038L221.435 311.312C226.327 313.531 232.088 311.368 234.294 306.472L243.253 286.689L371.496 242.496C373.056 246.109 374.85 249.633 376.922 253.045L380.41 258.788L411.153 222.657L364.52 214.082L365.434 220.739C366.025 225.044 366.938 229.248 368.164 233.363L358.994 236.519L354.525 225.389L354.536 225.378ZM392.857 229.17L381.948 241.983C379.463 236.92 377.58 231.612 376.31 226.125L392.857 229.17Z"
-                fill="black"
-              />
-              <path
-                d="M297.518 332.132C302.321 329.578 307.19 327.113 311.904 324.738C338.268 311.423 363.35 298.733 365.334 274.3L354.726 278.37C350.469 293.514 332.863 303.26 307.525 316.062C302.767 318.46 297.853 320.947 292.95 323.556C272.447 334.462 268.101 350.9 268.068 362.765C268.057 367.593 268.736 372.021 269.605 375.678C270.865 381.009 276.748 383.785 281.695 381.421C281.06 380.083 266.586 348.591 297.529 332.132H297.518Z"
-                fill="black"
-              />
-              <path
-                d="M100.256 309.873C100.312 310.163 106.329 338.354 140.448 332.075C154.355 329.522 164.439 331.495 171.258 338.119C179.772 346.383 184.128 362.285 184.374 386.227H194.057H240.756H250.607C254.473 357.936 254.696 335.042 254.707 331.908C256.758 315.014 264.19 304.52 278.765 297.896L358.068 267.252C363.072 265.322 365.568 259.691 363.64 254.673L275.143 288.863L274.898 288.964C256.947 297.071 247.464 310.441 245.035 331.027L245.002 331.596C245.002 331.908 244.935 351.2 242.004 376.481H193.722C192.363 354.813 187.159 339.971 178.033 331.116C168.796 322.151 155.926 319.329 138.71 322.496C120.893 325.764 113.85 317.333 111.221 311.925L202.336 280.511C208.063 278.793 211.986 277.176 212.253 277.065L216.186 275.426L215.072 271.311C214.794 270.285 208.008 246.142 182.446 236.607C172.362 232.849 161.297 235.771 154.266 244.068C147.413 252.152 146.343 263.237 151.547 272.303C151.792 272.738 152.059 273.173 152.338 273.619C155.458 278.515 160.015 281.436 165.152 283.042L99.4316 305.691L100.256 309.85V309.873ZM187.003 274.166C177.576 275.704 165.342 275.961 160.517 268.4C160.327 268.099 160.138 267.787 159.96 267.486C156.149 260.839 158.344 254.282 161.664 250.368C164.238 247.335 168.428 244.692 173.498 244.692C175.248 244.692 177.108 245.004 179.036 245.729C194.213 251.394 201.311 263.371 204.13 269.727C203.105 270.084 201.924 270.474 200.62 270.876V270.831L199.483 271.222C195.895 272.303 191.55 273.418 186.992 274.166H187.003Z"
-                fill="black"
-              />
-              <path
-                d="M407.353 113.372C377.925 85.7053 331.638 76.3157 280.369 87.6233C232.165 98.2507 184.195 125.55 145.285 164.48C106.296 203.499 81.0014 249.621 74.0371 294.361C67.4071 336.96 78.2825 374.061 104.647 398.851C122.152 415.311 145.619 425.269 172.551 428.28C172.963 424.466 170.367 420.931 166.59 420.284C146.789 416.894 129.395 409.11 115.711 397.111C90.9631 375.422 79.9428 341.677 84.7008 302.089C95.398 212.944 181.699 120.442 277.071 95.8866C290.554 92.4185 303.691 90.4781 316.238 90.0432C348.151 88.9281 376.22 97.5036 396.3 115.101C421.048 136.79 432.068 170.535 427.31 210.123C417.025 295.822 336.875 384.61 245.96 413.158C247.119 407.683 248.133 402.23 249.002 396.911H244.077H185.956H184.24C183.906 406.523 183.025 417.229 181.577 429.049C181.61 429.049 181.633 429.049 181.666 429.049C187.104 429.35 191.828 425.291 192.363 419.872C192.82 415.288 193.177 410.872 193.455 406.624H237.358C236.221 412.456 234.929 418.333 233.413 424.154C234.283 423.953 235.163 423.719 236.032 423.507C236.032 423.529 236.01 423.552 236.01 423.585C282.732 412.311 328.997 385.491 366.727 347.732C405.715 308.713 431.01 262.591 437.974 217.851C444.604 175.252 433.729 138.151 407.365 113.361L407.353 113.372Z"
-                fill="black"
-              />
-            </svg>
+            {safeTitle}
           </div>
 
-          {/* Title & Description Area */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              maxWidth: "960px",
-              margin: "6px 0",
-            }}
-          >
+          {/* Description */}
+          {safeDesc && (
             <div
               style={{
-                fontSize: "42px",
-                fontWeight: 700,
+                fontSize: "18px",
                 color: "#f0e9d9",
-                lineHeight: 1.2,
-                margin: 0,
-                textAlign: "center",
+                lineHeight: 1.45,
+                marginBottom: "24px",
                 display: "flex",
+                opacity: 0.9,
               }}
             >
-              {safeTitle}
+              {safeDesc}
             </div>
-            {safeDesc && (
-              <div
-                style={{
-                  fontSize: "18px",
-                  color: "#c5a880",
-                  lineHeight: 1.4,
-                  marginTop: "12px",
-                  textAlign: "center",
-                  maxWidth: "900px",
-                  display: "flex",
-                }}
-              >
-                {safeDesc}
-              </div>
-            )}
-          </div>
+          )}
 
-          {/* Footer Brand Line */}
+          {/* Golden CTA Button */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "10px",
-              color: "#c5a880",
-              fontSize: "15px",
-              fontWeight: 500,
-              letterSpacing: "3px",
-              marginTop: "6px",
+              padding: "10px 22px",
+              backgroundColor: "#c5a880",
+              borderRadius: "4px",
+              color: "#051713",
+              fontSize: "14px",
+              fontWeight: 700,
+              letterSpacing: "2px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
             }}
           >
-            <span>JAN FRANKO</span>
-            <span>•</span>
-            <span>TRADITIONAL ARCHERY</span>
+            {ctaText.toUpperCase()}
           </div>
         </div>
       </div>

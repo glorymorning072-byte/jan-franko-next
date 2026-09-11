@@ -1,6 +1,6 @@
 import { generateOgImageResponse } from "@/lib/og-template";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export const alt = "Equipment & Bowyer Craftsmanship";
 export const size = {
@@ -46,5 +46,7 @@ export default async function EquipmentOgImage({ params }: Props) {
     badge: "EQUIPMENT TAXONOMY",
     title,
     description,
+    ctaText: "VIEW EQUIPMENT →",
+    bgType: "workshop",
   });
 }

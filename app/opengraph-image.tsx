@@ -1,6 +1,6 @@
 import { generateOgImageResponse } from "@/lib/og-template";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export const alt = "Jan Franko - Traditional Archery";
 export const size = {
@@ -12,7 +12,9 @@ export const contentType = "image/png";
 export default async function OgImage() {
   return generateOgImageResponse({
     badge: "TRADITIONAL ARCHERY ACADEMY",
-    title: "Jan Franko - Traditional Archery Academy & Expeditions",
-    description: "A traditional archery academy focused on structured training, cultural study, biomechanical precision, and global wilderness expeditions.",
+    title: "Jan Franko - Archery Academy & Expeditions",
+    description: "Structured traditional archery training, cultural study, biomechanical precision, and global wilderness expeditions.",
+    ctaText: "EXPLORE ACADEMY →",
+    bgType: "expedition",
   });
 }
