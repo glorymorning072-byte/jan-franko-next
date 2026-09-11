@@ -166,22 +166,20 @@ export function generateOgImageResponse({
             </div>
           )}
 
-          {/* Golden CTA Button */}
+          {/* Golden CTA Text (Editorial line, no button box) */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              padding: "10px 22px",
-              backgroundColor: "#c5a880",
-              borderRadius: "4px",
-              color: "#051713",
-              fontSize: "14px",
-              fontWeight: 700,
-              letterSpacing: "2px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+              gap: "8px",
+              color: "#c5a880",
+              fontSize: "15px",
+              fontWeight: 600,
+              letterSpacing: "3px",
+              marginTop: "4px",
             }}
           >
-            {ctaText.toUpperCase()}
+            <span>{ctaText.toUpperCase()}</span>
           </div>
         </div>
       </div>
