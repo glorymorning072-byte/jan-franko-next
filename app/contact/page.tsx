@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
 
 const ContactPage = () => {
@@ -240,6 +241,23 @@ const ContactPage = () => {
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs outline-none focus:border-accent text-white font-sans placeholder-white/40 resize-none transition-colors"
               />
+            </div>
+
+            {/* Privacy Policy Consent Checkbox */}
+            <div className="flex items-start gap-2.5 pt-1">
+              <input
+                type="checkbox"
+                id="contact-privacy-consent"
+                required
+                className="mt-0.5 w-4 h-4 rounded border-white/20 bg-white/5 accent-accent cursor-pointer shrink-0"
+              />
+              <label htmlFor="contact-privacy-consent" className="text-[11px] text-white/75 font-sans leading-snug cursor-pointer select-none">
+                I agree to the processing of my personal data in accordance with the{" "}
+                <Link href="/privacy-policy" target="_blank" className="text-accent underline hover:text-white transition-colors">
+                  Privacy Policy
+                </Link>
+                . *
+              </label>
             </div>
 
             {/* Status alerts */}

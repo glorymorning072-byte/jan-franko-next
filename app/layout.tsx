@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ArcheryTransition } from "@/components/ArcheryTransition";
 import GoogleTranslate from "@/components/GoogleTranslate";
+import CookieConsent from "@/components/CookieConsent";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -69,6 +70,7 @@ export default function RootLayout({
           </ArcheryTransition>
         </main>
         <Footer />
+        <CookieConsent />
       </body>
     </html>
   );

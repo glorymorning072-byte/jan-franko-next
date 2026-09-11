@@ -730,6 +730,23 @@ const BowyerProductContent = () => {
                     {errors.message && <p className="text-[10px] text-red-500 font-sans">{errors.message}</p>}
                   </div>
 
+                  {/* Privacy Policy Consent Checkbox */}
+                  <div className="flex items-start gap-2.5 pt-1">
+                    <input
+                      type="checkbox"
+                      id="master-bowyer-privacy-consent"
+                      required
+                      className="mt-0.5 w-4 h-4 rounded border-primary/10 bg-secondary/40 text-[#0e3b2e] focus:ring-1 focus:ring-accent cursor-pointer shrink-0"
+                    />
+                    <label htmlFor="master-bowyer-privacy-consent" className="text-[11px] text-primary/75 font-sans leading-snug cursor-pointer select-none">
+                      I agree to the processing of my personal data in accordance with the{" "}
+                      <Link href="/privacy-policy" target="_blank" className="text-[#5c4629] font-bold underline hover:text-accent transition-colors">
+                        Privacy Policy
+                      </Link>
+                      . *
+                    </label>
+                  </div>
+
                   <div className="pt-2 flex justify-between items-center">
                     <button
                       type="button"

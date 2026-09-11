@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -279,6 +280,23 @@ const Contact = () => {
                       className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary h-32 resize-none text-gray-800 transition-all duration-300"
                       placeholder="Tell us briefly about your interest, experience level, or expedition inquiry."
                     />
+                  </div>
+
+                  {/* Privacy Policy Consent Checkbox */}
+                  <div className="flex items-start gap-2 pt-1">
+                    <input
+                      type="checkbox"
+                      id="home-privacy-consent"
+                      required
+                      className="mt-0.5 w-4 h-4 rounded border-gray-300 text-[#0e3b2e] focus:ring-1 focus:ring-[#0e3b2e] cursor-pointer shrink-0"
+                    />
+                    <label htmlFor="home-privacy-consent" className="text-[11px] text-gray-600 font-light leading-snug cursor-pointer select-none">
+                      I agree to the processing of my personal data in accordance with the{" "}
+                      <Link href="/privacy-policy" target="_blank" className="text-[#0e3b2e] underline font-semibold hover:text-accent transition-colors">
+                        Privacy Policy
+                      </Link>
+                      . *
+                    </label>
                   </div>
 
                   {/* Helper Text */}

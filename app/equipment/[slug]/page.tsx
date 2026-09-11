@@ -517,6 +517,23 @@ const ProductDetailPage = () => {
                     {errors.message && <span className="text-[10px] text-red-500 font-sans">{errors.message}</span>}
                   </div>
 
+                  {/* Privacy Policy Consent Checkbox */}
+                  <div className="flex items-start gap-2.5 pt-1">
+                    <input
+                      type="checkbox"
+                      id="eq-privacy-consent"
+                      required
+                      className="mt-0.5 w-4 h-4 rounded border-primary/20 bg-secondary text-primary focus:ring-1 focus:ring-accent cursor-pointer shrink-0"
+                    />
+                    <label htmlFor="eq-privacy-consent" className="text-[11px] text-primary/75 font-sans leading-snug cursor-pointer select-none">
+                      I agree to the processing of my personal data in accordance with the{" "}
+                      <Link href="/privacy-policy" target="_blank" className="text-accent underline font-semibold hover:text-primary transition-colors">
+                        Privacy Policy
+                      </Link>
+                      . *
+                    </label>
+                  </div>
+
                   {/* Submit Controls */}
                   <div className="flex justify-between items-center pt-4 border-t border-primary/5">
                     <button
