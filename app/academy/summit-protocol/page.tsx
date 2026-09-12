@@ -89,7 +89,7 @@ export default function SummitProtocolPage() {
               The Summit Protocol
             </h1>
             <p className="text-base md:text-xl text-white/85 font-sans max-w-3xl leading-relaxed font-light">
-              This is the apex of the Academy's structural verification. The Summit Protocol is an audit of total environmental dominance, requiring the archer to maintain elite technical standards at the extreme limits of human endurance.
+              This is the apex of the Academy&apos;s structural verification. The Summit Protocol is an audit of total environmental dominance, requiring the archer to maintain elite technical standards at the extreme limits of human endurance.
             </p>
           </div>
         </div>

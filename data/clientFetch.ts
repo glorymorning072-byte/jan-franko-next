@@ -1,6 +1,6 @@
 // Simple client-side cache to prevent duplicate concurrent or consecutive API fetches on the client
-let promiseCache: Record<string, Promise<any> | undefined> = {};
-let responseCache: Record<string, any | undefined> = {};
+const promiseCache: Record<string, Promise<unknown> | undefined> = {};
+const responseCache: Record<string, unknown> = {};
 
 export async function clientFetch<T>(url: string): Promise<T> {
   if (typeof window === "undefined") {
@@ -13,13 +13,13 @@ export async function clientFetch<T>(url: string): Promise<T> {
   // If we already have the resolved data, return it immediately
   const cachedResponse = responseCache[url];
   if (cachedResponse !== undefined) {
-    return cachedResponse;
+    return cachedResponse as T;
   }
 
   // If a fetch is already in progress, return the existing promise
   const cachedPromise = promiseCache[url];
   if (cachedPromise !== undefined) {
-    return cachedPromise;
+    return cachedPromise as Promise<T>;
   }
 
   const promise = fetch(url)
@@ -39,5 +39,5 @@ export async function clientFetch<T>(url: string): Promise<T> {
     });
 
   promiseCache[url] = promise;
-  return promise;
+  return promise as Promise<T>;
 }

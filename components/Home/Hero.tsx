@@ -12,7 +12,7 @@ const Hero = () => {
   const titleFrankoRef = useRef<HTMLSpanElement>(null);
   const subtitleRef = useRef<HTMLSpanElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
-  const btnRef = useRef<HTMLButtonElement>(null);
+  const btnRef = useRef<HTMLAnchorElement>(null);
   const textWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -56,10 +56,19 @@ const Hero = () => {
 
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduceMotion) window.addEventListener("mousemove", handleMouseMove);
 
     // 2. Cinematic Entrance Animations
     const ctx = gsap.context(() => {
+      if (reduceMotion) {
+        gsap.set(
+          [imgWrapperRef.current, titleJanRef.current, titleFrankoRef.current, subtitleRef.current, descRef.current, btnRef.current],
+          { opacity: 1, x: 0, y: 0, scale: 1 },
+        );
+        return;
+      }
+
       const tl = gsap.timeline();
 
       // Portrait Image Reveal
@@ -95,7 +104,7 @@ const Hero = () => {
     }, containerRef);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      if (!reduceMotion) window.removeEventListener("mousemove", handleMouseMove);
       ctx.revert();
     };
   }, []);
@@ -148,7 +157,7 @@ const Hero = () => {
             alt="Jan Franko"
             fill
             priority
-            sizes="(max-w-768px) 100vw, 40vw"
+            sizes="(max-width: 768px) 100vw, 40vw"
             className="object-contain object-bottom p-2 z-10 drop-shadow-[0_15px_40px_rgba(14,59,46,0.12)] hover:scale-[1.01] transition-transform duration-500 ease-out select-none"
           />
         </div>
@@ -184,13 +193,12 @@ const Hero = () => {
           ref={descRef}
           className="text-base md:text-lg text-primary/80 font-light leading-relaxed max-w-2xl mb-8 opacity-0"
         >
-          A traditional archery academy focused on structured training, cultural study, and expeditions exploring historic archery traditions.
-          At The Global Academy for Traditional Archery, we offer a comprehensive approach to learning the art of traditional archery. Our programs are designed to provide students with the skills, knowledge, and experience needed to excel in this ancient practice.
+          The Jan Franko Academy combines structured training, cultural study, and field expeditions rooted in traditional archery practice.
         </p>
         
         <Link
           href="/programs"
-          ref={btnRef as any}
+          ref={btnRef}
           className="relative overflow-hidden group bg-primary text-secondary font-serif tracking-widest text-sm uppercase py-4 px-8 rounded-full shadow-lg shadow-primary/10 hover:shadow-primary/20 hover:scale-[1.02] transition-all duration-300 active:scale-[0.98] flex items-center gap-3 cursor-pointer opacity-0"
         >
           <span className="relative z-10">Explore Our Programs</span>

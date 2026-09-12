@@ -56,7 +56,7 @@ export default function TermsPage() {
           </p>
           <ul className="list-disc list-inside space-y-1.5 text-sm text-primary/80">
             <li>Arrows may only be nocked when straddling the active firing line upon instructor command.</li>
-            <li>Participants must immediately stop drawing/shooting upon hearing <em>"STOP"</em> or <em>"CEASE FIRE"</em>.</li>
+            <li>Participants must immediately stop drawing/shooting upon hearing <em>“STOP”</em> or <em>“CEASE FIRE”</em>.</li>
             <li>Equipment (bow limbs, string, arrow shafts) must be inspected for safety prior to shooting.</li>
           </ul>
         </section>

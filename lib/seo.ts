@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const SITE_NAME = "Jan Franko - Traditional Archery";
-export const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://jan-franko-next.vercel.app";
+export const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://janfranko.com";
 
 /**
  * Truncate title under 60 characters (max 57 chars + '...')
@@ -52,7 +52,7 @@ export function constructMetadata({
       siteName: SITE_NAME,
       title: formattedTitle,
       description: formattedDescription,
-      url: canonicalUrl || BASE_URL,
+      url: canonicalUrl ? new URL(canonicalUrl, BASE_URL).toString() : BASE_URL,
       type,
       locale: "en_US",
       images: [

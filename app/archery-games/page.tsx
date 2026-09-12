@@ -66,8 +66,11 @@ export default function ArcheryGamesPage() {
             Archery Games
           </h1>
           <p className="text-base sm:text-lg text-white/85 font-sans leading-relaxed max-w-3xl mx-auto font-light">
-            Heritage, precision, and the open sky. The Games are a series of historical archery gatherings designed to test instinctive bowmanship in natural field environments.
+            Heritage, precision, and the open sky. The Games are a planned series of traditional archery gatherings in natural field environments.
           </p>
+          <div className="mx-auto max-w-2xl rounded-2xl border border-accent/30 bg-black/15 p-4 text-sm leading-relaxed text-white/85">
+            <strong className="text-accent">Current status:</strong> no event date, venue, registration window, or final rulebook has been announced. This page describes the proposed format only; it is not an open event listing.
+          </div>
         </div>
       </section>
 
@@ -100,7 +103,7 @@ export default function ArcheryGamesPage() {
             </div>
             <h3 className="text-xl font-serif font-bold text-primary">Lineage Recognition</h3>
             <p className="text-xs sm:text-sm text-primary/75 font-sans leading-relaxed">
-              Earn recognized scores across distance flight, speed release, and dynamic slope target modules logged in the academy registry.
+              Compare practice across distance flight, speed release, and dynamic slope target modules when a final event format is confirmed.
             </p>
           </div>
         </div>
@@ -114,6 +117,7 @@ export default function ArcheryGamesPage() {
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-primary tracking-tight">
               Gathering Competition Categories
             </h2>
+            <p className="max-w-3xl text-sm leading-relaxed text-primary/70">The disciplines and parameters below are draft concepts. Final distances, timing, equipment classes, scoring, and safety rules will be published only with a confirmed event.</p>
             <div className="w-12 h-[1.5px] bg-accent/60 mt-2" />
           </div>
 
@@ -166,7 +170,7 @@ export default function ArcheryGamesPage() {
           <div className="space-y-1">
             <h4 className="text-xl font-serif font-bold text-primary">Join the Lineage</h4>
             <p className="text-xs text-primary/75 font-sans">
-              Register for upcoming events or inquire about participation requirements.
+              Ask to be notified after dates, venue, capacity, and final rules are confirmed.
             </p>
           </div>
           <div className="flex flex-wrap gap-4">
@@ -174,7 +178,7 @@ export default function ArcheryGamesPage() {
               href="/contact"
               className="px-8 py-3.5 bg-[#0e3b2e] hover:bg-accent hover:text-[#0e3b2e] text-white rounded-2xl font-serif text-xs font-bold uppercase tracking-widest transition-all shadow-md"
             >
-              Inquire Event Entry
+              Request an event update
             </Link>
             <Link
               href="/academy"

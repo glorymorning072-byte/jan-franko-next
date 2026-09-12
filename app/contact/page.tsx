@@ -8,7 +8,7 @@ const ContactPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    interest: "Bespoke Custom Bow Build",
+    interest: "Academy Training",
     message: ""
   });
   const [status, setStatus] = useState({ type: "", message: "" });
@@ -41,19 +41,18 @@ const ContactPage = () => {
           type: "success",
           message: "Your inquiry has been successfully transmitted to the academy. We will contact you soon."
         });
-        setFormData({ name: "", email: "", interest: "bow", message: "" });
+        setFormData({ name: "", email: "", interest: "Academy Training", message: "" });
       } else {
         setStatus({
           type: "error",
           message: data.message || "Failed to transmit inquiry. Please try again or email us directly."
         });
       }
-    } catch (err) {
+    } catch {
       setStatus({
-        type: "success",
-        message: "Your inquiry has been transmitted to the academy. We will contact you soon."
+        type: "error",
+        message: "We could not confirm delivery. Please retry or email contact@janfranko.com directly."
       });
-      setFormData({ name: "", email: "", interest: "bow", message: "" });
     } finally {
       setLoading(false);
     }
@@ -110,8 +109,8 @@ const ContactPage = () => {
                 </div>
                 <div className="space-y-0.5">
                   <span className="text-[9px] uppercase tracking-widest text-primary/45 font-bold font-sans">Email Address</span>
-                  <a href="mailto:janfranko@tutanota.com" className="text-xs font-sans font-medium text-primary hover:text-accent transition-colors block">
-                    janfranko@tutanota.com
+                  <a href="mailto:contact@janfranko.com" className="text-xs font-sans font-medium text-primary hover:text-accent transition-colors block">
+                    contact@janfranko.com
                   </a>
                 </div>
               </li>
@@ -222,11 +221,11 @@ const ContactPage = () => {
                 onChange={(e) => setFormData({ ...formData, interest: e.target.value })}
                 className="w-full bg-[#0e3b2e] border border-white/10 rounded-xl p-3 text-xs outline-none focus:border-accent text-white font-sans cursor-pointer transition-colors"
               >
-                <option value="Bespoke Custom Bow Build">Bespoke Custom Bow Build</option>
-                <option value="Field Archery Workshops & Training">Field Archery Workshops &amp; Training</option>
-                <option value="Wilderness Archery Expeditions">Wilderness Archery Expeditions</option>
-                <option value="Corporate & Group Events">Corporate &amp; Group Events</option>
-                <option value="Professional Cooperation & Media">Professional Cooperation &amp; Media</option>
+                <option value="Academy Training">Academy Training</option>
+                <option value="Archery Expeditions">Archery Expeditions</option>
+                <option value="Equipment/Shop">Equipment/Shop</option>
+                <option value="Partnership/Media">Partnership/Media</option>
+                <option value="Other">Other</option>
               </select>
             </div>
 

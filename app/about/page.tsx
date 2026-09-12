@@ -167,7 +167,7 @@ const AboutPage = () => {
                 Traditional archery is often misunderstood as either target sport shooting or historical reenactment. We approach it differently. It demands more than mechanical accuracy—it requires attention, stability, and the ability to remain composed under changing conditions.
               </p>
               <blockquote className="border-l-2 border-accent pl-4 py-1.5 text-accent font-serif italic text-lg md:text-xl leading-relaxed">
-                "Archery is not only about the bow and the arrow. It is about the relationship between the body, breath, movement, attention and intention."
+                “Archery is not only about the bow and the arrow. It is about the relationship between the body, breath, movement, attention and intention.”
               </blockquote>
               <p>
                 Jan Franko unites his 1985 archery origin and 2011 Asiatic bow discipline with formal 1st School of TCM therapeutic training in Prague (since 2000) and field instructor certifications under Henry Bodnik and Chris Mozolowski to guide archers to instinctive mastery.

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { fetchWpJson } from "@/lib/wp";
 
 export async function POST(req: NextRequest) {
   try {
@@ -32,8 +33,7 @@ export async function POST(req: NextRequest) {
       fullPageUrl = `${origin.replace(/\/$/, "")}${fullPageUrl.startsWith("/") ? "" : "/"}${fullPageUrl}`;
     }
 
-    // Forward to WordPress REST API for Equipment Product Inquiries
-    const wpRes = await fetch(endpoint, {
+    const data = await fetchWpJson<{ message?: string }>(endpoint.replace(wpBaseUrl.replace(/\/$/, ""), ""), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,18 +46,8 @@ export async function POST(req: NextRequest) {
         device_info: device_info,
       }),
       cache: "no-store",
+      timeoutMs: 10_000,
     });
-
-    if (!wpRes.ok) {
-      const errText = await wpRes.text();
-      console.error("WordPress Equipment API error:", wpRes.status, errText);
-      return NextResponse.json(
-        { success: true, message: "Equipment order inquiry submitted successfully." },
-        { status: 200 } // Graceful fallback so user experiences uninterrupted success UI
-      );
-    }
-
-    const data = await wpRes.json();
     return NextResponse.json({
       success: true,
       message: data.message || "Equipment order inquiry submitted successfully.",
@@ -65,8 +55,8 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Next.js Equipment Form Proxy error:", error);
     return NextResponse.json(
-      { success: true, message: "Equipment order inquiry recorded." },
-      { status: 200 }
+      { success: false, message: "Delivery could not be confirmed. Please retry or email contact@janfranko.com." },
+      { status: 502 },
     );
   }
 }

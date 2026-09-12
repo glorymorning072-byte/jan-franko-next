@@ -222,7 +222,7 @@ export const CenteredBreakoutBlock = ({ section }: { section: CenteredBreakoutSe
         <Quote className="w-10 h-10 text-accent/30 mx-auto" />
         {section.quote_text && (
           <blockquote className={`text-xl md:text-3xl font-serif italic leading-relaxed tracking-tight ${styles.heading}`}>
-            "{section.quote_text}"
+            “{section.quote_text}”
           </blockquote>
         )}
         {section.attribution && (

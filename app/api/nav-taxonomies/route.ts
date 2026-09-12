@@ -17,7 +17,7 @@ export async function GET() {
     ]);
 
     return NextResponse.json({ types, skills, regions });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Internal server error" }, { status: 500 });
   }
 }

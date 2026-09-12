@@ -14,6 +14,7 @@ const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -31,8 +32,9 @@ const Contact = () => {
     }
     
     setIsSubmitting(true);
+    setSubmissionError("");
     try {
-      await fetch("/api/forms/submit", {
+      const response = await fetch("/api/forms/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -47,10 +49,10 @@ const Contact = () => {
           },
         }),
       });
-    } catch (err) {
-      // Fallback
-    } finally {
-      setIsSubmitting(false);
+      const payload = await response.json().catch(() => null) as { success?: boolean; error?: string } | null;
+      if (!response.ok || !payload?.success) {
+        throw new Error(payload?.error || "The inquiry could not be delivered.");
+      }
       setIsSubmitted(true);
       setFormData({
         firstName: "",
@@ -59,6 +61,10 @@ const Contact = () => {
         interest: "",
         message: "",
       });
+    } catch (error) {
+      setSubmissionError(error instanceof Error ? error.message : "The inquiry could not be delivered. Please email contact@janfranko.com.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -153,10 +159,10 @@ const Contact = () => {
                   />
                 </svg>
                 <a
-                  href="mailto:janfranko@tutanota.com"
+                  href="mailto:contact@janfranko.com"
                   className="text-base md:text-lg text-white hover:text-accent font-serif tracking-wide transition-colors duration-300"
                 >
-                  Email: janfranko@tutanota.com
+                  Email: contact@janfranko.com
                 </a>
               </div>
 
@@ -252,11 +258,11 @@ const Contact = () => {
                       className="w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-sm bg-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-gray-700 transition-all duration-300"
                     >
                       <option value="" disabled>Area of Interest</option>
-                      <option value="Bespoke Custom Bow Build">Bespoke Custom Bow Build</option>
-                      <option value="Field Archery Workshops & Training">Field Archery Workshops &amp; Training</option>
-                      <option value="Wilderness Archery Expeditions">Wilderness Archery Expeditions</option>
-                      <option value="Corporate & Group Events">Corporate &amp; Group Events</option>
-                      <option value="Professional Cooperation & Media">Professional Cooperation &amp; Media</option>
+                      <option value="Academy Training">Academy Training</option>
+                      <option value="Archery Expeditions">Archery Expeditions</option>
+                      <option value="Equipment/Shop">Equipment/Shop</option>
+                      <option value="Partnership/Media">Partnership/Media</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
 
@@ -303,6 +309,12 @@ const Contact = () => {
                   <p className="text-[11px] text-gray-500 leading-normal font-light">
                     We usually respond within 24–48 hours. Please briefly describe your experience level or expedition interest.
                   </p>
+
+                  {submissionError && (
+                    <p role="alert" className="rounded-lg border border-red-200 bg-red-50 p-3 text-xs leading-relaxed text-red-800">
+                      {submissionError} If the problem continues, email <a className="font-semibold underline" href="mailto:contact@janfranko.com">contact@janfranko.com</a>.
+                    </p>
+                  )}
 
                   {/* Submit Button */}
                   <button

@@ -9,44 +9,12 @@ export const size = {
 };
 export const contentType = "image/png";
 
-interface Props {
-  params: Promise<{ slug: string }>;
-}
-
-function formatTitle(slug: string): string {
-  return slug
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-}
-
-export default async function MasterBowyerProductOgImage({ params }: Props) {
-  const { slug } = await params;
-  let title = formatTitle(slug);
-  let description = "Handcrafted master bowyer product, traditional composite bow, and custom archery gear.";
-
-  try {
-    const res = await fetch(`https://janfranko.com/wp-json/wp/v2/master-bowyer-products?slug=${encodeURIComponent(slug)}`, {
-      next: { revalidate: 3600 },
-    });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        if (data[0].title?.rendered) title = data[0].title.rendered;
-        if (data[0].excerpt?.rendered) {
-          description = data[0].excerpt.rendered.replace(/<[^>]*>/g, "").trim();
-        }
-      }
-    }
-  } catch {
-    // Safe fallback
-  }
-
+export default function MasterBowyerProductOgImage() {
   return generateOgImageResponse({
-    badge: "MASTER BOWYER PRODUCT",
-    title,
-    description,
-    ctaText: "DISCOVER PRODUCT →",
+    badge: "MASTER BOWYERS",
+    title: "Individual Bow Commissions",
+    description: "Sourced profiles for Warrick Harvey, MR Bows, and Kadys Bows with a direct consultation pathway.",
+    ctaText: "REQUEST A CONSULTATION →",
     bgType: "workshop",
   });
 }

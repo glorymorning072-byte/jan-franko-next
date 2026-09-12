@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { constructMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = constructMetadata({
-  title: "Equipment Taxonomy & Bowyer Workshop",
-  description: "Explore master bowyer products, composite reflex designs, traditional archery equipment, and vetted bowyer partnerships.",
+  title: "Traditional Archery Equipment | Jan Franko",
+  description: "Browse verified archery equipment, Master Bowyers, targets, arrows, accessories, and training kits.",
+  canonicalUrl: "/equipment",
 });
 
 export default function EquipmentLayout({ children }: { children: React.ReactNode }) {
