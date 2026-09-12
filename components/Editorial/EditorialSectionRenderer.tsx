@@ -7,12 +7,7 @@ import {
   Compass,
   ChevronDown,
   Quote,
-  Clock,
-  Sparkles,
-  ArrowRight,
-  Shield,
-  Layers,
-  Award
+  ArrowRight
 } from "lucide-react";
 import {
   EditorialBodySection,
@@ -80,7 +75,7 @@ const renderButtonGroup = (buttonGroup?: ButtonGroupItem[] | null) => {
             const urlObj = new URL(targetHref);
             const pathParts = urlObj.pathname.split("/").filter(Boolean).filter((p) => p !== "editorial");
             targetHref = pathParts.length > 0 ? `/knowledge/${pathParts.join("/")}` : "/knowledge";
-          } catch (e) {
+          } catch {
             targetHref = "/knowledge";
           }
         }

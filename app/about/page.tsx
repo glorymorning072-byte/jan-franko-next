@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Compass, Shield, Target, BookOpen, MapPin, Award } from "lucide-react";
+import Image from "next/image";
+import { Compass, Shield, Target, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 import { constructMetadata } from "@/lib/seo";
 
@@ -149,10 +150,12 @@ const AboutPage = () => {
         {/* Philosophy Block */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
           <div className="lg:col-span-5 relative aspect-square rounded-3xl overflow-hidden bg-primary/10 border border-primary/10 shadow-lg">
-            <img
+            <Image
               src="/images/wp-assets/contact-bg.webp"
               alt="Archery Discipline"
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 1024px) 100vw, 42vw"
+              className="object-cover"
             />
           </div>
           <div className="lg:col-span-7 space-y-6">

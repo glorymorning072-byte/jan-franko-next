@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck, Award, CheckCircle2, ArrowRight, ChevronRight, AlertTriangle, Lock, FileText, Compass, Shield } from "lucide-react";
+import Image from "next/image";
+import { ShieldCheck, ArrowRight, ChevronRight, AlertTriangle } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -71,10 +72,12 @@ export default function CertificationPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-4 bg-white border border-primary/10 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-4 shadow-sm h-full">
             <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black/5 border border-primary/10">
-              <img
+              <Image
                 src="/images/wp-assets/Tier-1.webp"
                 alt="Tier I Badge - Foundational Mechanics"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                fill
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                className="object-cover hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div>
@@ -150,10 +153,12 @@ export default function CertificationPage() {
 
           <div className="lg:col-span-4 bg-white border border-primary/10 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-4 shadow-sm h-full order-1 lg:order-2">
             <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black/5 border border-primary/10">
-              <img
+              <Image
                 src="/images/wp-assets/Tier-2.webp"
                 alt="Tier II Badge - Performance Verification"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                fill
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                className="object-cover hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div>
@@ -173,10 +178,12 @@ export default function CertificationPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-4 bg-white border border-accent/40 rounded-3xl p-6 flex flex-col items-center justify-center text-center space-y-4 shadow-md bg-gradient-to-br from-white to-secondary h-full">
             <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black/5 border border-accent/30">
-              <img
+              <Image
                 src="/images/wp-assets/image-25-02-2026-15-41-34-1.webp"
                 alt="Tier III Badge - Summit Protocol Audit"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                fill
+                sizes="(max-width: 1024px) 100vw, 33vw"
+                className="object-cover hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div>

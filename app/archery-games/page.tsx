@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Award, Compass, Sparkles, CheckCircle2, ArrowRight, Calendar, MapPin, Shield, Target } from "lucide-react";
+import { Award, Compass, Shield, Target } from "lucide-react";
 import type { Metadata } from "next";
 import { constructMetadata } from "@/lib/seo";
 

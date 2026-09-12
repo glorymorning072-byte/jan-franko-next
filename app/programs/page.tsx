@@ -1865,10 +1865,12 @@ const MACRO_REGIONS = {
               <X className="w-6 h-6" />
             </button>
             <div className="relative max-w-5xl max-h-[90vh] w-full h-full flex items-center justify-center">
-              <img
+              <Image
                 src={lightboxImage}
                 alt="Gallery Preview"
-                className="object-contain max-w-full max-h-[90vh] rounded-2xl shadow-2xl border border-white/10"
+                fill
+                sizes="100vw"
+                className="object-contain rounded-2xl shadow-2xl border border-white/10"
               />
             </div>
           </div>

@@ -1,20 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  ShieldCheck,
-  Award,
-  BookOpen,
-  Compass,
-  Zap,
-  CheckCircle2,
-  ArrowRight,
-  ChevronRight,
-  FileText,
-  Lock,
-  Layers,
-  Sparkles
-} from "lucide-react";
+import { ChevronRight, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
 import { constructMetadata } from "@/lib/seo";
 

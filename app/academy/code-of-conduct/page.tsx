@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Lock, Shield, CheckCircle2, AlertOctagon, ArrowRight, ChevronRight, FileText } from "lucide-react";
+import { Lock, CheckCircle2, ArrowRight, ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

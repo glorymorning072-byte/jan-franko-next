@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         };
       }
     }
-  } catch (err) {
+  } catch {
     // Ignore
   }
 
@@ -80,7 +80,7 @@ export default async function RootSlugAliasPage({ params }: PageProps) {
         wordpressPageExists = true;
       }
     }
-  } catch (err) {
+  } catch {
     // Ignore
   }
 

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Zap, ShieldCheck, Award, ArrowRight, ChevronRight, CheckCircle2, AlertTriangle, Target, Compass } from "lucide-react";
+import { Zap, ShieldCheck, ArrowRight, ChevronRight, CheckCircle2, Target, Compass } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
