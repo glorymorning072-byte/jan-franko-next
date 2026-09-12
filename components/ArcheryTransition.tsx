@@ -4,6 +4,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import gsap from "gsap";
 
+declare global {
+  interface Window {
+    __MEGAMENU_READY?: boolean;
+  }
+}
 
 export const ArcheryTransition = ({ children }: { children: React.ReactNode }) => {
   const topPanelRef = useRef<HTMLDivElement>(null);
@@ -117,7 +122,7 @@ export const ArcheryTransition = ({ children }: { children: React.ReactNode }) =
   }, [pathname, router]);
 
   // Shared helper function to split panels open and reset transitions
-  const runEntranceAnimation = () => {
+  function runEntranceAnimation() {
     const tl = gsap.timeline({
       onComplete: () => {
         setIsTransitioning(false);
@@ -149,7 +154,7 @@ export const ArcheryTransition = ({ children }: { children: React.ReactNode }) =
       duration: 0.5,
       ease: "power2.inOut"
     }, 0.15);
-  };
+  }
 
   const isInitialLoadRef = useRef(true);
 
@@ -174,7 +179,7 @@ export const ArcheryTransition = ({ children }: { children: React.ReactNode }) =
       isInitialLoadRef.current = false;
 
       // On initial site load, check if mega menu data is already ready
-      if (typeof window !== "undefined" && (window as any).__MEGAMENU_READY) {
+      if (typeof window !== "undefined" && window.__MEGAMENU_READY) {
         triggerReveal();
       } else {
         // Keep shutters closed over the screen while mega menu data fetches

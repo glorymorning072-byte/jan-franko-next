@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { constructMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = constructMetadata({
-  title: "Vetted Bowyers & Master Craftsmen",
-  description: "Discover our international network of master bowyers and traditional archery craftsmen specializing in horn, sinew, and laminated wood bows.",
+  title: "Master Bowyers | Warrick Harvey, MR Bows & Kadys Bows",
+  description: "Sourced profiles and direct commission requests for Warrick Harvey, MR Bows by Miško Rovčanin, and Kadys Bows by Sergey Tolochko.",
 });
 
 export default function PartnersLayout({ children }: { children: React.ReactNode }) {

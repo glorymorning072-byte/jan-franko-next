@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { FALLBACK_PROGRAMS, FALLBACK_PROGRAM_TERMS } from "@/data/programs";
 import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
@@ -94,20 +95,15 @@ interface Term {
   slug: string;
 }
 
-interface MediaItem {
-  id: number;
-  source_url: string;
-}
-
 const ProgramsContent = () => {
-  const [programs, setPrograms] = useState<Program[]>([]);
-  const [types, setTypes] = useState<Term[]>([]);
-  const [statuses, setStatuses] = useState<Term[]>([]);
-  const [skills, setSkills] = useState<Term[]>([]);
-  const [regions, setRegions] = useState<Term[]>([]);
+  const [programs, setPrograms] = useState<Program[]>(FALLBACK_PROGRAMS as Program[]);
+  const [types, setTypes] = useState<Term[]>(FALLBACK_PROGRAM_TERMS.types);
+  const [statuses, setStatuses] = useState<Term[]>(FALLBACK_PROGRAM_TERMS.statuses);
+  const [skills, setSkills] = useState<Term[]>(FALLBACK_PROGRAM_TERMS.skills);
+  const [regions, setRegions] = useState<Term[]>(FALLBACK_PROGRAM_TERMS.regions);
   const [media, setMedia] = useState<Record<number, string>>({});
   
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Filter States
@@ -126,6 +122,7 @@ const ProgramsContent = () => {
   const [isApplying, setIsApplying] = useState(false);
   const [formStep, setFormStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
   const [showValidationError, setShowValidationError] = useState(false);
 
   // Multi-step Application Form Data
@@ -383,11 +380,13 @@ const MACRO_REGIONS = {
 
   // Reset sync check on search parameters change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- URL state is an external navigation source
     setHasInitializedParams(false);
   }, [searchParams]);
 
   // Sync URL slug parameters into local ID selectors once taxonomies load
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- synchronize external URL query parameters */
     if (hasInitializedParams) return;
     if (types.length === 0 && skills.length === 0 && regions.length === 0) return;
 
@@ -413,6 +412,7 @@ const MACRO_REGIONS = {
     }
 
     setHasInitializedParams(true);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [searchParams, types, statuses, skills, regions, hasInitializedParams]);
 
   // Listen to the 'open' query parameter to directly activate a program card modal
@@ -426,6 +426,7 @@ const MACRO_REGIONS = {
           p.title.rendered.toLowerCase().includes(openSlug.toLowerCase())
       );
       if (match) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- open the externally requested deep link
         setActiveModalProgram(match);
       }
     }
@@ -433,9 +434,11 @@ const MACRO_REGIONS = {
 
   // Reset apply wizard states on program transition
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- reset modal-local state for the selected external record */
     setIsApplying(false);
     setFormStep(1);
     setIsSubmitted(false);
+    setSubmissionError(null);
     setShowValidationError(false);
     if (activeModalProgram) {
       setFormData((prev) => ({
@@ -445,92 +448,40 @@ const MACRO_REGIONS = {
           : activeModalProgram.title.rendered
       }));
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [activeModalProgram]);
 
-  // Hook 1: Fetch static taxonomy terms for the filters on mount
+  // Fetch once through the same-origin, timeout-bounded API. Filtering then happens
+  // locally, so selecting a filter never starts another network request or loading loop.
   useEffect(() => {
-    const fetchTaxonomies = async () => {
+    const controller = new AbortController();
+
+    const fetchProgramDirectory = async () => {
       try {
-        const [typeRes, statusRes, skillRes, regionRes] = await Promise.all([
-          fetch("https://janfranko.com/wp-json/wp/v2/program_type?per_page=100"),
-          fetch("https://janfranko.com/wp-json/wp/v2/program_status?per_page=100"),
-          fetch("https://janfranko.com/wp-json/wp/v2/skill_level?per_page=100"),
-          fetch("https://janfranko.com/wp-json/wp/v2/region?per_page=100"),
-        ]);
-
-        if (!typeRes.ok || !statusRes.ok || !skillRes.ok || !regionRes.ok) {
-          throw new Error("Failed to fetch taxonomy filter options.");
-        }
-
-        const typeData: Term[] = await typeRes.json();
-        const statusData: Term[] = await statusRes.json();
-        const skillData: Term[] = await skillRes.json();
-        const regionData: Term[] = await regionRes.json();
-
-        setTypes(typeData);
-        setStatuses(statusData);
-        setSkills(skillData);
-        setRegions(regionData);
-      } catch (err: any) {
-        console.error("Taxonomy fetch error:", err);
-      }
-    };
-
-    fetchTaxonomies();
-  }, []);
-
-  // Hook 2: Fetch matching programs dynamically whenever selected filters change
-  useEffect(() => {
-    const fetchFilteredPrograms = async () => {
-      try {
-        setIsLoading(true);
         setError(null);
 
-        // Fetch all programs from WordPress for deterministic in-memory filtering
-        const progRes = await fetch("https://janfranko.com/wp-json/wp/v2/program?per_page=100");
-        if (!progRes.ok) {
-          throw new Error("Failed to load programs matching the selected filter options.");
-        }
+        const response = await fetch("/api/programs", { signal: controller.signal });
+        if (!response.ok) throw new Error("The program directory is temporarily unavailable.");
 
-        const progData: Program[] = await progRes.json();
-
-        // Gather unique media IDs to resolve URLs in a batch query
-        const mediaIdsToFetch = new Set<number>();
-        progData.forEach((prog) => {
-          if (prog.acf?.background_image) {
-            mediaIdsToFetch.add(prog.acf.background_image);
-          }
-          if (prog.acf?.supplementary_images && Array.isArray(prog.acf.supplementary_images)) {
-            prog.acf.supplementary_images.forEach((id) => mediaIdsToFetch.add(id));
-          }
-        });
-
-        const mediaMap: Record<number, string> = {};
-        if (mediaIdsToFetch.size > 0) {
-          const idsString = Array.from(mediaIdsToFetch).join(",");
-          const mediaRes = await fetch(
-            `https://janfranko.com/wp-json/wp/v2/media?include=${idsString}&per_page=100`
-          );
-          if (mediaRes.ok) {
-            const mediaData: MediaItem[] = await mediaRes.json();
-            mediaData.forEach((item) => {
-              mediaMap[item.id] = item.source_url;
-            });
-          }
-        }
-
-        setPrograms(progData);
-        setMedia(mediaMap);
-      } catch (err: any) {
-        console.error("Filter request error:", err);
-        setError(err.message || "An error occurred while fetching programs.");
+        const payload = await response.json();
+        setPrograms(Array.isArray(payload.programs) ? payload.programs : []);
+        setTypes(Array.isArray(payload.terms?.types) ? payload.terms.types : []);
+        setStatuses(Array.isArray(payload.terms?.statuses) ? payload.terms.statuses : []);
+        setSkills(Array.isArray(payload.terms?.skills) ? payload.terms.skills : []);
+        setRegions(Array.isArray(payload.terms?.regions) ? payload.terms.regions : []);
+        setMedia(payload.media && typeof payload.media === "object" ? payload.media : {});
+      } catch (err) {
+        if (controller.signal.aborted) return;
+        console.error("Program directory request error:", err);
+        setError(err instanceof Error ? err.message : "The program directory is temporarily unavailable.");
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) setIsLoading(false);
       }
     };
 
-    fetchFilteredPrograms();
-  }, [selectedType, selectedStatus, selectedSkill, selectedRegion]);
+    void fetchProgramDirectory();
+    return () => controller.abort();
+  }, []);
 
   const resetFilters = () => {
     setSelectedType("");
@@ -598,8 +549,9 @@ const MACRO_REGIONS = {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isStepValid()) {
+      setSubmissionError(null);
       try {
-        await fetch("/api/forms/submit", {
+        const response = await fetch("/api/forms/submit", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -620,10 +572,17 @@ const MACRO_REGIONS = {
             },
           }),
         });
-      } catch (err) {
-        // Fallback
-      } finally {
+        const result = await response.json().catch(() => null);
+        if (!response.ok || result?.success !== true) {
+          throw new Error(result?.message || "The application could not be delivered.");
+        }
         setIsSubmitted(true);
+      } catch (err) {
+        setSubmissionError(
+          err instanceof Error
+            ? err.message
+            : "We could not confirm delivery. Please try again or email contact@janfranko.com.",
+        );
       }
     } else {
       setShowValidationError(true);
@@ -812,7 +771,7 @@ const MACRO_REGIONS = {
             </span>
             {searchQuery && (
               <span className="flex items-center gap-1.5 bg-[#c5a880]/10 border border-[#c5a880]/30 text-[#5c4629] px-3 py-1 rounded-full text-xs font-sans font-medium">
-                Search: "{searchQuery}"
+                Search: “{searchQuery}”
                 <button onClick={() => setSearchQuery("")} className="hover:text-primary shrink-0 transition-colors cursor-pointer">
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -958,6 +917,11 @@ const MACRO_REGIONS = {
         </div>
 
         {/* Loading / Error States */}
+        {error && (
+          <div role="status" className="mb-5 rounded-2xl border border-amber-700/20 bg-amber-50 p-4 text-sm text-amber-900">
+            Live catalog refresh could not be confirmed. The verified continuity directory remains available below.
+          </div>
+        )}
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map((n) => (
@@ -979,11 +943,6 @@ const MACRO_REGIONS = {
                 </div>
               </div>
             ))}
-          </div>
-        ) : error ? (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-700 p-6 rounded-2xl">
-            <h3 className="font-serif font-bold text-lg mb-1">Database Request Failed</h3>
-            <p className="text-sm font-normal">{error}</p>
           </div>
         ) : programs.length === 0 ? (
           <div className="text-center py-24 bg-white border border-primary/5 rounded-3xl text-primary/80 font-normal">
@@ -1337,6 +1296,15 @@ const MACRO_REGIONS = {
                 ) : (
                   /* --- Multi-step Application Form Wizard --- */
                   <form onSubmit={handleSubmit} className="space-y-6">
+                    {submissionError && (
+                      <div role="alert" className="rounded-xl border border-red-300 bg-red-50 p-4 text-sm text-red-900">
+                        {submissionError} You can also email{" "}
+                        <a className="font-semibold underline" href="mailto:contact@janfranko.com">
+                          contact@janfranko.com
+                        </a>
+                        .
+                      </div>
+                    )}
                     {/* Header Spec */}
                     <div className="border-b border-primary/10 pb-4">
                       <h3 className="text-lg font-serif font-bold text-primary flex items-center gap-2">
@@ -1897,10 +1865,12 @@ const MACRO_REGIONS = {
               <X className="w-6 h-6" />
             </button>
             <div className="relative max-w-5xl max-h-[90vh] w-full h-full flex items-center justify-center">
-              <img
+              <Image
                 src={lightboxImage}
                 alt="Gallery Preview"
-                className="object-contain max-w-full max-h-[90vh] rounded-2xl shadow-2xl border border-white/10"
+                fill
+                sizes="100vw"
+                className="object-contain rounded-2xl shadow-2xl border border-white/10"
               />
             </div>
           </div>
@@ -1915,7 +1885,7 @@ const ProgramsPage = () => {
   return (
     <Suspense fallback={
       <div className="w-full min-h-screen bg-secondary flex items-center justify-center p-12 text-[#7d603a] font-serif uppercase tracking-widest text-xs">
-        Loading Academy Programs...
+        Preparing the program directory…
       </div>
     }>
       <ProgramsContent />

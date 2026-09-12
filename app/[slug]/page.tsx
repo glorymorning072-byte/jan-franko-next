@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         };
       }
     }
-  } catch (err) {
+  } catch {
     // Ignore
   }
 
@@ -69,6 +69,7 @@ export default async function RootSlugAliasPage({ params }: PageProps) {
   }
 
   // 3. General WordPress page query fallback
+  let wordpressPageExists = false;
   try {
     const res = await fetch(`https://janfranko.com/wp-json/wp/v2/pages?slug=${encodeURIComponent(slug)}`, {
       next: { revalidate: 3600 }
@@ -76,12 +77,14 @@ export default async function RootSlugAliasPage({ params }: PageProps) {
     if (res.ok) {
       const pages = await res.json();
       if (Array.isArray(pages) && pages.length > 0) {
-        return <AcademyPage params={Promise.resolve({ slug })} />;
+        wordpressPageExists = true;
       }
     }
-  } catch (err) {
+  } catch {
     // Ignore
   }
+
+  if (wordpressPageExists) return <AcademyPage params={Promise.resolve({ slug })} />;
 
   notFound();
 }

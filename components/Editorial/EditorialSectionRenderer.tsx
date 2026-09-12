@@ -7,12 +7,7 @@ import {
   Compass,
   ChevronDown,
   Quote,
-  Clock,
-  Sparkles,
-  ArrowRight,
-  Shield,
-  Layers,
-  Award
+  ArrowRight
 } from "lucide-react";
 import {
   EditorialBodySection,
@@ -80,7 +75,7 @@ const renderButtonGroup = (buttonGroup?: ButtonGroupItem[] | null) => {
             const urlObj = new URL(targetHref);
             const pathParts = urlObj.pathname.split("/").filter(Boolean).filter((p) => p !== "editorial");
             targetHref = pathParts.length > 0 ? `/knowledge/${pathParts.join("/")}` : "/knowledge";
-          } catch (e) {
+          } catch {
             targetHref = "/knowledge";
           }
         }
@@ -222,7 +217,7 @@ export const CenteredBreakoutBlock = ({ section }: { section: CenteredBreakoutSe
         <Quote className="w-10 h-10 text-accent/30 mx-auto" />
         {section.quote_text && (
           <blockquote className={`text-xl md:text-3xl font-serif italic leading-relaxed tracking-tight ${styles.heading}`}>
-            "{section.quote_text}"
+            “{section.quote_text}”
           </blockquote>
         )}
         {section.attribution && (

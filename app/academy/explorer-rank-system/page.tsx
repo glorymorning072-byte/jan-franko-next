@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Award, Compass, MapPin, CheckCircle2, ArrowRight, ChevronRight, Layers, Sparkles, Shield } from "lucide-react";
+import Image from "next/image";
+import { Award, CheckCircle2, ArrowRight, ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -139,10 +140,12 @@ export default function ExplorerRankSystemPage() {
             >
               <div className="lg:col-span-5 space-y-3">
                 <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black/30 border border-primary/10">
-                  <img
+                  <Image
                     src={eco.image}
                     alt={eco.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 42vw"
+                    className="object-cover"
                   />
                   <span className="absolute top-3 left-3 bg-[#0e3b2e] text-accent text-[10px] font-mono font-bold px-3 py-1 rounded-full uppercase border border-accent/30">
                     {eco.location}

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Layers, Wind, Droplets, Flame, Globe, ArrowRight, ChevronRight, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Layers, ArrowRight, ChevronRight, CheckCircle2 } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

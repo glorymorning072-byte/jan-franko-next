@@ -31,6 +31,8 @@ const nextConfig: NextConfig = {
       { source: "/environmental-stress-index-esi", destination: "/academy/environmental-stress-index-esi", permanent: true },
       { source: "/esi", destination: "/academy/environmental-stress-index-esi", permanent: true },
       { source: "/explorer-path", destination: "/academy/explorer-path", permanent: true },
+      { source: "/custom-arrow-builder", destination: "/equipment/arrow-configurator", permanent: true },
+      { source: "/custom-arrow-builder/", destination: "/equipment/arrow-configurator", permanent: true },
 
       // 2. Legacy Editorial & Scrolls Paths -> Canonical /knowledge/...
       { source: "/editorial", destination: "/knowledge", permanent: true },

@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Compass, Shield, Target, BookOpen, MapPin, Award } from "lucide-react";
+import Image from "next/image";
+import { Compass, Shield, Target, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 import { constructMetadata } from "@/lib/seo";
 
@@ -149,10 +150,12 @@ const AboutPage = () => {
         {/* Philosophy Block */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
           <div className="lg:col-span-5 relative aspect-square rounded-3xl overflow-hidden bg-primary/10 border border-primary/10 shadow-lg">
-            <img
+            <Image
               src="/images/wp-assets/contact-bg.webp"
               alt="Archery Discipline"
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 1024px) 100vw, 42vw"
+              className="object-cover"
             />
           </div>
           <div className="lg:col-span-7 space-y-6">
@@ -167,7 +170,7 @@ const AboutPage = () => {
                 Traditional archery is often misunderstood as either target sport shooting or historical reenactment. We approach it differently. It demands more than mechanical accuracy—it requires attention, stability, and the ability to remain composed under changing conditions.
               </p>
               <blockquote className="border-l-2 border-accent pl-4 py-1.5 text-accent font-serif italic text-lg md:text-xl leading-relaxed">
-                "Archery is not only about the bow and the arrow. It is about the relationship between the body, breath, movement, attention and intention."
+                “Archery is not only about the bow and the arrow. It is about the relationship between the body, breath, movement, attention and intention.”
               </blockquote>
               <p>
                 Jan Franko unites his 1985 archery origin and 2011 Asiatic bow discipline with formal 1st School of TCM therapeutic training in Prague (since 2000) and field instructor certifications under Henry Bodnik and Chris Mozolowski to guide archers to instinctive mastery.

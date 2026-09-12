@@ -116,7 +116,7 @@ async function getChildChapters(parentId: number): Promise<EditorialItem[]> {
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
-  } catch (err) {
+  } catch {
     return [];
   }
 }

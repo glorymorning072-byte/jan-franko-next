@@ -1,675 +1,134 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import gsap from "gsap";
-import { Compass, Shield, ChevronLeft, ArrowRight, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/Button";
+import { useParams } from "next/navigation";
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import { AlertTriangle, ArrowLeft, CheckCircle2, ExternalLink, ImageOff, Mail, ShieldCheck } from "lucide-react";
+import { BOW_REVIEW_BY_SLUG, FALLBACK_EQUIPMENT_PRODUCTS, type EquipmentProduct } from "@/data/equipment";
+import { SITE } from "@/data/site";
 
-interface Product {
-  id: number;
-  slug: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  date: string;
-  image: string;
-  categories: number[];
-  brands: number[];
+const cleanText = (value: string) => value.replace(/<[^>]*>/g, " ").replace(/&amp;/g, "&").replace(/&#8211;/g, "–").replace(/\s+/g, " ").trim();
+
+function ControlledBowPage({ slug }: { slug: string }) {
+  const review = BOW_REVIEW_BY_SLUG[slug];
+  if (!review) return null;
+
+  const isReference = review.publicationStatus === "reference-only";
+  return (
+    <main id="main-content" className="min-h-screen bg-[#f0e9d9] text-[#0e3b2e]">
+      <section className="bg-[#0e3b2e] px-6 py-14 text-white sm:py-20">
+        <div className="mx-auto max-w-5xl"><Link href="/equipment" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#c5a880]"><ArrowLeft className="h-4 w-4" />Back to equipment</Link><p className="mt-8 text-xs font-bold uppercase tracking-[0.2em] text-[#c5a880]">{isReference ? "Source-backed reference · not for sale" : review.publicationStatus === "design-in-development" ? "Design in development" : "Listing withdrawn pending verification"}</p><h1 className="notranslate mt-3 font-serif text-4xl font-bold sm:text-6xl" translate="no">{review.title}</h1><p className="mt-5 max-w-3xl text-sm leading-relaxed text-white/76 sm:text-base">{review.summary}</p></div>
+      </section>
+
+      <section className="mx-auto grid max-w-5xl gap-8 px-6 py-12 lg:grid-cols-[0.72fr_1.28fr]">
+        <div className="flex min-h-72 flex-col items-center justify-center rounded-3xl border border-dashed border-[#0e3b2e]/25 bg-white p-7 text-center">
+          <ImageOff className="h-10 w-10 text-[#7d603a]" aria-hidden="true" />
+          <h2 className="mt-4 font-serif text-2xl font-bold">No substitute image</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[#0e3b2e]/65">{review.imageDecision}</p>
+        </div>
+
+        <div className="space-y-6">
+          {review.facts ? (
+            <article className="rounded-3xl border border-[#0e3b2e]/10 bg-white p-6 sm:p-8">
+              <div className="flex items-center gap-2"><ShieldCheck className="h-5 w-5 text-[#7d603a]" /><h2 className="font-serif text-2xl font-bold">Identification standard</h2></div>
+              <ul className="mt-5 space-y-3">{review.facts.map((fact) => <li key={fact} className="flex gap-3 text-sm leading-relaxed text-[#0e3b2e]/75"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#7d603a]" />{fact}</li>)}</ul>
+            </article>
+          ) : (
+            <article className="rounded-3xl border border-amber-800/20 bg-amber-50 p-6 sm:p-8"><div className="flex items-center gap-2 text-amber-900"><AlertTriangle className="h-5 w-5" /><h2 className="font-serif text-2xl font-bold">Publication stopped</h2></div><p className="mt-4 text-sm leading-relaxed text-amber-950/75">No historical or performance description from the former listing is being carried forward. The page remains only as an explicit audit record so an old direct link cannot continue serving misleading content.</p></article>
+          )}
+
+          {review.sources && (
+            <article className="rounded-3xl border border-[#0e3b2e]/10 bg-white p-6 sm:p-8"><h2 className="font-serif text-2xl font-bold">Sources used for this correction</h2><div className="mt-4 space-y-2">{review.sources.map((source) => <a key={source.url} href={source.url} target="_blank" rel="noopener noreferrer" className="flex items-start justify-between gap-3 rounded-xl border border-[#0e3b2e]/10 p-3 text-sm font-semibold text-[#7d603a] hover:border-[#7d603a]"><span>{source.label}</span><ExternalLink className="mt-0.5 h-4 w-4 shrink-0" /></a>)}</div></article>
+          )}
+        </div>
+      </section>
+
+      <section className="px-6 pb-16"><div className="mx-auto flex max-w-5xl flex-col justify-between gap-5 rounded-3xl bg-[#0e3b2e] p-7 text-white sm:flex-row sm:items-center"><div><h2 className="font-serif text-2xl font-bold">Verification before publication</h2><p className="mt-2 max-w-2xl text-xs leading-relaxed text-white/70">Candidate photographs are reviewed by identity, construction, silhouette, source, and usage rights before this page can become a product listing.</p></div><Link href="/equipment/verification" className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-[#c5a880] px-6 text-xs font-bold uppercase text-[#0e3b2e]">View full bow audit</Link></div></section>
+    </main>
+  );
 }
 
-interface CategoryTerm {
-  id: number;
-  name: string;
-  slug: string;
-  parent: number;
-}
+export default function EquipmentProductPage() {
+  const params = useParams<{ slug: string }>();
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
+  const controlledReview = BOW_REVIEW_BY_SLUG[slug];
+  const fallback = useMemo(() => FALLBACK_EQUIPMENT_PRODUCTS.find((item) => item.slug === slug) || null, [slug]);
+  const [product, setProduct] = useState<EquipmentProduct | null>(fallback);
+  const [refreshing, setRefreshing] = useState(!controlledReview);
+  const [notFound, setNotFound] = useState(false);
+  const [form, setForm] = useState({ fullName: "", email: "", phone: "", destination: "", message: "" });
+  const [submitting, setSubmitting] = useState(false);
+  const [formStatus, setFormStatus] = useState<{ type: "success" | "error" | ""; message: string }>({ type: "", message: "" });
 
-interface SpecRow {
-  label: string;
-  value: string;
-}
-
-const ProductDetailPage = () => {
-  const { slug } = useParams();
-
-  // Detail States
-  const [product, setProduct] = useState<Product | null>(null);
-  const [categories, setCategories] = useState<CategoryTerm[]>([]);
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [parsedContent, setParsedContent] = useState("");
-  const [specifications, setSpecifications] = useState<SpecRow[]>([]);
-
-  // Inquiry Form States
-  const [showInquiryForm, setShowInquiryForm] = useState(false);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [quantity, setQuantity] = useState("1");
-  const [specificationsReq, setSpecificationsReq] = useState("");
-  const [shippingDestination, setShippingDestination] = useState("");
-  const [message, setMessage] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // Fetch product on mount
   useEffect(() => {
-    const fetchProductDetails = async () => {
+    if (controlledReview) return;
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 12_000);
+    const load = async () => {
       try {
-        const [prodRes, catRes] = await Promise.all([
-          fetch("/api/equipment/products"),
-          fetch("/api/equipment/categories")
-        ]);
-        if (prodRes.ok && catRes.ok) {
-          const prods: Product[] = await prodRes.json();
-          const cats: CategoryTerm[] = await catRes.json();
-          setCategories(cats);
-          setAllProducts(prods);
-
-          const found = prods.find((p) => p.slug === slug);
-          if (found) {
-            setProduct(found);
-            
-            // Parse content to extract specifications table
-            if (typeof window !== "undefined") {
-              const parser = new DOMParser();
-              const doc = parser.parseFromString(found.content, "text/html");
-              const table = doc.querySelector("table");
-              const specs: SpecRow[] = [];
-              
-              if (table) {
-                table.querySelectorAll("tbody tr").forEach((row) => {
-                  const cells = row.querySelectorAll("td");
-                  if (cells.length >= 2) {
-                    specs.push({
-                      label: cells[0].textContent?.trim() || "",
-                      value: cells[1].textContent?.trim() || ""
-                    });
-                  }
-                });
-                table.remove();
-                
-                // Also remove specification headers
-                const specHeader = Array.from(doc.querySelectorAll("h3, h4")).find(
-                  (h) => h.textContent?.includes("Specification")
-                );
-                if (specHeader) specHeader.remove();
-              }
-              
-              setSpecifications(specs);
-              setParsedContent(doc.body.innerHTML);
-            } else {
-              setParsedContent(found.content);
-            }
-          }
-        }
-      } catch (err) {
-        console.error("Failed to load product details:", err);
+        const response = await fetch("/api/equipment/products", { signal: controller.signal });
+        if (!response.ok) throw new Error("Catalog request failed.");
+        const payload = await response.json();
+        const found = Array.isArray(payload.products) ? payload.products.find((item: EquipmentProduct) => item.slug === slug && item.publicationStatus === "published") : null;
+        if (found) setProduct(found);
+        else if (!fallback) setNotFound(true);
+      } catch {
+        if (!fallback && !controller.signal.aborted) setNotFound(true);
       } finally {
-        setLoading(false);
+        window.clearTimeout(timeout);
+        setRefreshing(false);
       }
     };
-    fetchProductDetails();
-  }, [slug]);
+    void load();
+    return () => { window.clearTimeout(timeout); controller.abort(); };
+  }, [controlledReview, fallback, slug]);
 
-  // GSAP Entrance Stagger when product loads
-  useEffect(() => {
-    if (loading || !product) return;
+  if (controlledReview) return <ControlledBowPage slug={slug} />;
 
-    // Reset view states when slug changes
-    setShowInquiryForm(false);
-    setSubmitted(false);
-
-    gsap.fromTo(
-      ".detail-fade-in",
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: "power2.out", overwrite: "auto" }
-    );
-  }, [loading, slug, product]);
-
-  // Form Submission
-  const handleSubmitInquiry = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors: Record<string, string> = {};
-    if (!fullName.trim()) newErrors.fullName = "Full Name is required";
-    if (!email.trim() || !email.includes("@")) newErrors.email = "Valid Email is required";
-    if (!phone.trim()) newErrors.phone = "Phone number is required";
-    if (!message.trim()) newErrors.message = "Inquiry message text is required";
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    setErrors({});
-
+  const submitInquiry = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!product) return;
+    setSubmitting(true);
+    setFormStatus({ type: "", message: "" });
     try {
-      await fetch("/api/forms/equipment-submit", {
+      const response = await fetch("/api/forms/equipment-submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          page_url: typeof window !== "undefined" ? window.location.href : `/equipment/${slug}`,
-          fields: {
-            product_name: product?.title || slug,
-            full_name: fullName,
-            email: email,
-            phone: phone,
-            quantity: quantity,
-            custom_specifications: specificationsReq || "Standard Specification",
-            shipping_destination: shippingDestination || "Not specified",
-            message: message,
-          },
+          page_url: window.location.href,
+          fields: { product_name: product.title, full_name: form.fullName, email: form.email, phone: form.phone, shipping_destination: form.destination, message: form.message },
         }),
       });
-    } catch (err) {
-      // Fallback
+      const payload = await response.json();
+      if (!response.ok || !payload.success) throw new Error(payload.message || "Delivery could not be confirmed.");
+      setFormStatus({ type: "success", message: payload.message || "Your inquiry was delivered." });
+      setForm({ fullName: "", email: "", phone: "", destination: "", message: "" });
+    } catch (error) {
+      setFormStatus({ type: "error", message: error instanceof Error ? error.message : `Delivery could not be confirmed. Email ${SITE.email}.` });
     } finally {
-      setSubmitted(true);
+      setSubmitting(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="w-full min-h-screen bg-secondary flex items-center justify-center">
-        <span className="font-serif text-sm tracking-widest uppercase text-primary/50 animate-pulse">Loading Product...</span>
-      </div>
-    );
-  }
-
-  if (!product) {
-    return (
-      <div className="w-full min-h-screen bg-secondary flex flex-col items-center justify-center space-y-4">
-        <h2 className="text-xl font-serif font-bold text-primary">Gear Not Found</h2>
-        <Button href="/equipment" variant="accent">Back to Catalog</Button>
-      </div>
-    );
-  }
-
-  // Resolve taxonomy labels
-  const parentId = product.categories.find(
-    (id) => categories.find((c) => c.id === id)?.parent === 0
-  );
-  const parentLabel = parentId
-    ? categories.find((c) => c.id === parentId)?.name
-    : "Equipment";
-
-  const brandId = product.categories.find(
-    (id) => categories.find((c) => c.id === id)?.parent === 114
-  );
-  const brandLabel = brandId
-    ? categories.find((c) => c.id === brandId)?.name
-    : "Bespoke Bowyer";
-
-  // HTML entity cleanup helpers
-  const cleanTitle = (raw: string | undefined) => {
-    if (!raw) return "";
-    return raw
-      .replace(/&#8220;/g, "“")
-      .replace(/&#8221;/g, "”")
-      .replace(/&#8211;/g, "–")
-      .replace(/&amp;/g, "&");
-  };
-
-  // Helper to strip HTML tags for card excerpt
-  const cleanExcerpt = (rawHtml: string) => {
-    const textOnly = rawHtml.replace(/<[^>]*>/g, "");
-    return textOnly.length > 120 ? textOnly.slice(0, 120) + "..." : textOnly;
-  };
-
-  // Resolve Related Products (matching same category, up to 3 items)
-  const relatedProducts = allProducts
-    .filter(
-      (p) =>
-        p.id !== product.id &&
-        p.categories.some((catId) => product.categories.includes(catId))
-    )
-    .slice(0, 3);
+  if (!product && refreshing) return <main id="main-content" className="min-h-screen bg-[#f0e9d9] px-6 py-24"><div className="mx-auto h-96 max-w-5xl animate-pulse rounded-3xl bg-[#0e3b2e]/10" aria-label="Preparing product details" /></main>;
+  if (!product || notFound) return <main id="main-content" className="min-h-screen bg-[#f0e9d9] px-6 py-24 text-center text-[#0e3b2e]"><h1 className="font-serif text-4xl font-bold">This item is not published</h1><p className="mx-auto mt-4 max-w-xl text-sm text-[#0e3b2e]/65">The catalog has no verified, public record for this URL.</p><Link href="/equipment" className="mt-6 inline-flex rounded-full bg-[#0e3b2e] px-6 py-3 text-xs font-bold uppercase text-white">Return to equipment</Link></main>;
 
   return (
-    <div className="w-full min-h-screen bg-secondary text-primary select-text relative pb-24">
-      {/* CSS Overrides for WordPress Body Typography */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        .product-body-content h3 {
-          font-family: var(--font-serif), Georgia, serif;
-          font-size: 1.25rem;
-          font-weight: 700;
-          color: #0e3b2e;
-          margin-top: 1.5rem;
-          margin-bottom: 0.75rem;
-        }
-        .product-body-content h4 {
-          font-family: var(--font-serif), Georgia, serif;
-          font-size: 1.1rem;
-          font-weight: 700;
-          color: #7d603a;
-          margin-top: 1.25rem;
-          margin-bottom: 0.5rem;
-        }
-        .product-body-content p {
-          font-family: var(--font-sans), sans-serif;
-          font-size: 0.95rem;
-          color: rgba(15, 23, 42, 0.85);
-          line-height: 1.7;
-          margin-bottom: 1rem;
-        }
-        .product-body-content ul {
-          padding-left: 1.25rem;
-          margin-bottom: 1rem;
-          list-style-type: disc;
-        }
-        .product-body-content li {
-          font-family: var(--font-sans), sans-serif;
-          font-size: 0.9rem;
-          margin-bottom: 0.35rem;
-          color: rgba(15, 23, 42, 0.85);
-        }
-        .product-body-content blockquote {
-          font-family: var(--font-serif), Georgia, serif;
-          font-size: 1.05rem;
-          font-style: italic;
-          color: #7d603a;
-          border-left: 2px solid #c5a880;
-          padding-left: 1rem;
-          margin: 1.5rem 0;
-          line-height: 1.6;
-        }
-      ` }} />
-
-      {/* 1. Navigation Breadcrumb Banner */}
-      <div className="max-w-6xl mx-auto px-6 pt-8 pb-4 flex items-center justify-between text-xs font-serif uppercase tracking-widest text-[#7d603a] font-bold">
-        <Link href="/equipment" className="flex items-center gap-1.5 hover:text-[#0e3b2e] transition-colors">
-          <ChevronLeft className="w-4 h-4" />
-          Back to Catalog
-        </Link>
-        <span className="hidden sm:inline text-primary/40 font-sans normal-case">
-          Equipment / {cleanTitle(parentLabel)} / {cleanTitle(product.title)}
-        </span>
-      </div>
-
-      {/* 2. Main Detail Page Grid */}
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 mt-6">
-        
-        {/* Left Side (40%): Big Product Image & Specifications */}
-        <div className="lg:col-span-5 space-y-8 detail-fade-in">
-          {/* Main Product Image */}
-          <div className="relative aspect-square w-full bg-white border border-primary/5 rounded-3xl overflow-hidden shadow-sm">
-            <Image
-              src={product.image}
-              alt={product.title}
-              fill
-              priority
-              sizes="(max-w-768px) 100vw, 500px"
-              className="object-cover"
-            />
-          </div>
-
-          {/* Specifications Table Card */}
-          {specifications.length > 0 && (
-            <div className="bg-white border border-primary/5 p-6 rounded-3xl shadow-sm space-y-4">
-              <h4 className="text-xs uppercase tracking-widest text-[#7d603a] font-serif font-bold border-b border-primary/5 pb-2">
-                Technical Specifications
-              </h4>
-              <div className="divide-y divide-primary/5 text-xs">
-                {specifications.map((spec, i) => (
-                  <div key={i} className="flex justify-between py-2.5 font-sans">
-                    <span className="text-primary/50 font-medium">{spec.label}</span>
-                    <span className="text-primary font-semibold text-right">{spec.value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+    <main id="main-content" className="min-h-screen bg-[#f0e9d9] text-[#0e3b2e]">
+      <section className="mx-auto max-w-6xl px-6 py-10 sm:py-16">
+        <Link href="/equipment" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#7d603a]"><ArrowLeft className="h-4 w-4" />Back to equipment</Link>
+        <div className="mt-8 grid gap-10 lg:grid-cols-2">
+          <div className="relative min-h-80 overflow-hidden rounded-3xl border border-[#0e3b2e]/10 bg-white sm:min-h-[32rem]">{product.image ? <Image src={product.image} alt={product.imageAlt || product.title} fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" /> : <div className="flex h-full min-h-80 flex-col items-center justify-center p-8 text-center"><ImageOff className="h-10 w-10 text-[#7d603a]" /><p className="mt-3 text-sm text-[#0e3b2e]/60">No product image supplied; no generic substitute used.</p></div>}</div>
+          <div className="flex flex-col justify-center"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#7d603a]">{product.categoryLabel}</p><h1 className="mt-2 font-serif text-4xl font-bold sm:text-5xl">{cleanText(product.title)}</h1><p className="mt-5 text-sm leading-7 text-[#0e3b2e]/72 sm:text-base">{cleanText(product.excerpt)}</p><dl className="mt-7 divide-y divide-[#0e3b2e]/10 border-y border-[#0e3b2e]/10 text-sm"><div className="flex justify-between gap-4 py-3"><dt className="text-[#0e3b2e]/55">Availability</dt><dd className="font-bold">{product.stockStatus === "in-stock" ? "In stock" : product.stockStatus === "out-of-stock" ? "Sold out" : "Confirmed during consultation"}</dd></div><div className="flex justify-between gap-4 py-3"><dt className="text-[#0e3b2e]/55">Price</dt><dd className="font-bold">{product.price && product.currency ? new Intl.NumberFormat("en", { style: "currency", currency: product.currency }).format(Number(product.price)) : "Manual quote"}</dd></div><div className="flex justify-between gap-4 py-3"><dt className="text-[#0e3b2e]/55">Photo record</dt><dd className="max-w-xs text-right text-xs">{product.provenance}</dd></div></dl>{product.purchasable && product.purchaseUrl ? <a href={product.purchaseUrl} className="mt-6 flex min-h-12 items-center justify-center rounded-full bg-[#0e3b2e] px-6 text-xs font-bold uppercase tracking-wider text-white">Add to cart</a> : <a href="#inquiry" className="mt-6 flex min-h-12 items-center justify-center rounded-full bg-[#0e3b2e] px-6 text-xs font-bold uppercase tracking-wider text-white">Request price and availability</a>}</div>
         </div>
+      </section>
 
-        {/* Right Side (60%): Description & Consultation inquiry form */}
-        <div className="lg:col-span-7 space-y-8 detail-fade-in">
-          
-          {/* Title & Brand Header */}
-          <div className="bg-white border border-primary/5 p-8 rounded-3xl shadow-sm space-y-3">
-            <span className="text-[10px] uppercase tracking-widest text-[#7d603a] font-serif font-bold">
-              {cleanTitle(brandLabel)}
-            </span>
-            <h1 className="text-3xl md:text-4xl font-serif font-bold text-primary tracking-tight leading-tight">
-              {cleanTitle(product.title)}
-            </h1>
-            
-            <div className="flex flex-wrap items-center gap-3 pt-1 text-xs text-primary/50 font-sans">
-              <span className="flex items-center gap-1">
-                <Compass className="w-4 h-4 text-accent" />
-                Handcrafted Traditional Gear
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1">
-                <Shield className="w-4 h-4 text-accent" />
-                Consultation Request Only
-              </span>
-            </div>
-          </div>
-
-          {/* Inquiry Form or Details Panel */}
-          {!showInquiryForm ? (
-            <div className="bg-white border border-primary/5 p-8 md:p-12 rounded-3xl shadow-sm space-y-8">
-              
-              {/* Prominent Interactive Order & Inquiry CTA Card */}
-              <div 
-                onClick={() => {
-                  setShowInquiryForm(true);
-                  if (!message) {
-                    setMessage(`I would like to inquire about ordering the "${cleanTitle(product.title)}" and would appreciate more details on availability and current lead times.`);
-                  }
-                }}
-                className="group relative bg-[#0e3b2e] p-6 sm:p-8 rounded-3xl text-white border border-accent/30 hover:border-accent shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden space-y-4"
-              >
-                {/* Background ambient radial glow */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(197,168,128,0.12),transparent_65%)] pointer-events-none" />
-
-                {/* Title & Description Content */}
-                <div className="relative z-10 space-y-2">
-                  <h4 className="font-serif text-xl font-bold text-white tracking-tight group-hover:text-accent transition-colors">
-                    Inquire &amp; Order Gear
-                  </h4>
-                  <p className="text-xs text-white/75 font-sans leading-relaxed">
-                    Contact our academy craft coordinators to discuss sizing, spine weights, lead times, or custom specifications.
-                  </p>
-                </div>
-
-                {/* Prominent Action Button */}
-                <div className="relative z-10 pt-2">
-                  <button
-                    type="button"
-                    className="w-full py-3 bg-accent hover:bg-accent/90 text-primary font-serif font-bold text-xs tracking-widest uppercase rounded-xl transition-all shadow-md flex items-center justify-center gap-2 group-hover:scale-[1.01] cursor-pointer"
-                  >
-                    <span>Request Details &amp; Custom Quote</span>
-                    <ArrowRight className="w-4 h-4 text-primary" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Description Body */}
-              <div 
-                className="product-body-content text-slate-800 leading-relaxed font-sans text-sm md:text-base space-y-6"
-                dangerouslySetInnerHTML={{ __html: parsedContent }}
-              />
-            </div>
-          ) : (
-            // Equipment Product Inquiry Contact Form
-            <div className="bg-white border border-primary/5 p-8 md:p-10 rounded-3xl shadow-sm space-y-6">
-              {!submitted ? (
-                <form onSubmit={handleSubmitInquiry} className="space-y-5">
-                  <div className="flex items-center justify-between border-b border-primary/5 pb-3">
-                    <div>
-                      <span className="text-[10px] font-serif uppercase tracking-widest text-[#7d603a] font-bold block">
-                        Equipment Inquiry Form
-                      </span>
-                      <h3 className="text-lg font-serif font-bold text-primary">
-                        Inquire About: {cleanTitle(product.title)}
-                      </h3>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setShowInquiryForm(false)}
-                      className="text-xs font-serif font-bold tracking-widest uppercase text-primary/40 hover:text-primary transition-colors cursor-pointer"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-
-                  {/* Name */}
-                  <div className="flex flex-col space-y-1">
-                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Full Name *</label>
-                    <input
-                      type="text"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Your full name"
-                      className={`w-full bg-secondary text-primary border rounded-xl p-2.5 text-xs outline-none focus:border-accent ${
-                        errors.fullName ? "border-red-500" : "border-primary/10"
-                      }`}
-                    />
-                    {errors.fullName && <span className="text-[10px] text-red-500 font-sans">{errors.fullName}</span>}
-                  </div>
-
-                  {/* Contact Fields */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="flex flex-col space-y-1">
-                      <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Email Address *</label>
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="name@example.com"
-                        className={`w-full bg-secondary text-primary border rounded-xl p-2.5 text-xs outline-none focus:border-accent ${
-                          errors.email ? "border-red-500" : "border-primary/10"
-                        }`}
-                      />
-                      {errors.email && <span className="text-[10px] text-red-500 font-sans">{errors.email}</span>}
-                    </div>
-
-                    <div className="flex flex-col space-y-1">
-                      <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Phone / WhatsApp *</label>
-                      <input
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+43 ... or phone number"
-                        className={`w-full bg-secondary text-primary border rounded-xl p-2.5 text-xs outline-none focus:border-accent ${
-                          errors.phone ? "border-red-500" : "border-primary/10"
-                        }`}
-                      />
-                      {errors.phone && <span className="text-[10px] text-red-500 font-sans">{errors.phone}</span>}
-                    </div>
-                  </div>
-
-                  {/* Quantity & Custom Specifications / Sizing */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="flex flex-col space-y-1 sm:col-span-1">
-                      <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Quantity</label>
-                      <select
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
-                        className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent cursor-pointer"
-                      >
-                        <option value="1">1 Unit</option>
-                        <option value="2">2 Units</option>
-                        <option value="3">3 Units</option>
-                        <option value="4">4 Units</option>
-                        <option value="5+">5+ Units (Bulk/Group)</option>
-                      </select>
-                    </div>
-
-                    <div className="flex flex-col space-y-1 sm:col-span-2">
-                      <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Sizing / Spine / Variant Request</label>
-                      <input
-                        type="text"
-                        value={specificationsReq}
-                        onChange={(e) => setSpecificationsReq(e.target.value)}
-                        placeholder="e.g. 500 Spine, 30 inch, Medium, RH"
-                        className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Shipping Destination */}
-                  <div className="flex flex-col space-y-1">
-                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Shipping Destination / Country</label>
-                    <input
-                      type="text"
-                      value={shippingDestination}
-                      onChange={(e) => setShippingDestination(e.target.value)}
-                      placeholder="e.g. Austria, Germany, USA, Slovakia"
-                      className="w-full bg-secondary text-primary border border-primary/10 rounded-xl p-2.5 text-xs outline-none focus:border-accent"
-                    />
-                  </div>
-
-                  {/* Inquiry Message */}
-                  <div className="flex flex-col space-y-1">
-                    <label className="text-xs font-serif uppercase tracking-wider text-[#7d603a] font-bold">Inquiry Details / Message *</label>
-                    <textarea
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      rows={3}
-                      className={`w-full bg-secondary text-primary border rounded-xl p-2.5 text-xs outline-none focus:border-accent resize-none ${
-                        errors.message ? "border-red-500" : "border-primary/10"
-                      }`}
-                    />
-                    {errors.message && <span className="text-[10px] text-red-500 font-sans">{errors.message}</span>}
-                  </div>
-
-                  {/* Privacy Policy Consent Checkbox */}
-                  <div className="flex items-start gap-2.5 pt-1">
-                    <input
-                      type="checkbox"
-                      id="eq-privacy-consent"
-                      required
-                      className="mt-0.5 w-4 h-4 rounded border-primary/20 bg-secondary text-primary focus:ring-1 focus:ring-accent cursor-pointer shrink-0"
-                    />
-                    <label htmlFor="eq-privacy-consent" className="text-[11px] text-primary/75 font-sans leading-snug cursor-pointer select-none">
-                      I agree to the processing of my personal data in accordance with the{" "}
-                      <Link href="/privacy-policy" target="_blank" className="text-accent underline font-semibold hover:text-primary transition-colors">
-                        Privacy Policy
-                      </Link>
-                      . *
-                    </label>
-                  </div>
-
-                  {/* Submit Controls */}
-                  <div className="flex justify-between items-center pt-4 border-t border-primary/5">
-                    <button
-                      type="button"
-                      onClick={() => setShowInquiryForm(false)}
-                      className="text-xs font-serif font-bold tracking-widest uppercase text-primary/40 hover:text-primary transition-colors cursor-pointer"
-                    >
-                      Back to Specs
-                    </button>
-                    <button
-                      type="submit"
-                      className="flex items-center gap-2 px-6 py-2.5 bg-[#0e3b2e] hover:bg-[#0e3b2e]/90 text-white font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer"
-                    >
-                      Submit Equipment Inquiry
-                      <ArrowRight className="w-3.5 h-3.5 text-accent" />
-                    </button>
-                  </div>
-                </form>
-              ) : (
-                // Submit confirmation screen
-                <div className="text-center py-10 space-y-6">
-                  <div className="flex justify-center">
-                    <CheckCircle2 className="w-16 h-16 text-accent animate-bounce" />
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-serif font-bold text-primary">Inquiry Sent</h3>
-                    <p className="text-sm text-primary/80 font-sans max-w-md mx-auto leading-relaxed">
-                      Thank you, {fullName}. We have received your inquiry regarding the {cleanTitle(product.title)}. Our craft coordinators will reach out to you within 48 hours for consultation.
-                    </p>
-                  </div>
-                  <div className="pt-4 flex justify-center gap-4">
-                    <button
-                      onClick={() => {
-                        setShowInquiryForm(false);
-                        setSubmitted(false);
-                      }}
-                      className="px-6 py-2.5 bg-primary text-secondary font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all shadow-md cursor-pointer"
-                    >
-                      Return to Details
-                    </button>
-                    <Link
-                      href="/equipment"
-                      className="px-6 py-2.5 border border-primary/20 hover:border-primary text-primary font-serif font-bold text-xs tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-all cursor-pointer inline-block"
-                    >
-                      Armory Catalog
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
+      <section id="inquiry" className="bg-[#0e3b2e] px-6 py-14 text-white sm:py-16">
+        <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[0.75fr_1.25fr]"><div><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#c5a880]">Structured equipment inquiry</p><h2 className="mt-2 font-serif text-3xl font-bold">Request verified details</h2><p className="mt-4 text-sm leading-relaxed text-white/70">Price, stock, sizing, shipping, and suitability are confirmed before any payment. A submission is shown as successful only after the receiving server confirms delivery.</p><a href={`mailto:${SITE.email}`} className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#c5a880]"><Mail className="h-4 w-4" />{SITE.email}</a></div>
+          <form onSubmit={submitInquiry} className="grid gap-4 rounded-3xl bg-white/5 p-5 sm:grid-cols-2 sm:p-7"><label className="text-xs font-bold">Full name *<input required value={form.fullName} onChange={(event) => setForm({ ...form, fullName: event.target.value })} className="mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-white/10 px-3 font-normal text-white outline-none focus:border-[#c5a880]" /></label><label className="text-xs font-bold">Email *<input required type="email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} className="mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-white/10 px-3 font-normal text-white outline-none focus:border-[#c5a880]" /></label><label className="text-xs font-bold">Phone / WhatsApp<input value={form.phone} onChange={(event) => setForm({ ...form, phone: event.target.value })} className="mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-white/10 px-3 font-normal text-white outline-none focus:border-[#c5a880]" /></label><label className="text-xs font-bold">Shipping destination<input value={form.destination} onChange={(event) => setForm({ ...form, destination: event.target.value })} className="mt-2 min-h-11 w-full rounded-xl border border-white/15 bg-white/10 px-3 font-normal text-white outline-none focus:border-[#c5a880]" /></label><label className="text-xs font-bold sm:col-span-2">Request details *<textarea required rows={5} value={form.message} onChange={(event) => setForm({ ...form, message: event.target.value })} className="mt-2 w-full rounded-xl border border-white/15 bg-white/10 p-3 font-normal text-white outline-none focus:border-[#c5a880]" /></label><label className="flex items-start gap-2 text-[11px] font-normal leading-relaxed text-white/70 sm:col-span-2"><input required type="checkbox" className="mt-0.5 h-4 w-4 accent-[#c5a880]" />I agree to the processing of this inquiry under the <Link href="/privacy-policy" className="text-[#c5a880] underline">Privacy Policy</Link>.</label>{formStatus.message && <div role="status" className={`rounded-xl p-3 text-xs sm:col-span-2 ${formStatus.type === "success" ? "bg-emerald-400/15 text-emerald-100" : "bg-red-400/15 text-red-100"}`}>{formStatus.type === "success" && <CheckCircle2 className="mr-2 inline h-4 w-4" />}{formStatus.message}</div>}<button disabled={submitting} type="submit" className="min-h-12 rounded-xl bg-[#c5a880] px-5 text-xs font-bold uppercase tracking-wider text-[#0e3b2e] disabled:opacity-60 sm:col-span-2">{submitting ? "Confirming delivery…" : "Send equipment inquiry"}</button></form>
         </div>
-
-      </div>
-
-      {/* 3. Related Products Section (Bottom) */}
-      {relatedProducts.length > 0 && (
-        <div className="max-w-6xl mx-auto px-6 mt-20 border-t border-primary/10 pt-16 space-y-8 detail-fade-in">
-          <div className="space-y-2">
-            <span className="text-[10px] uppercase tracking-widest text-[#7d603a] font-serif font-bold">
-              Complete your Set
-            </span>
-            <h2 className="text-2xl md:text-3xl font-serif font-bold tracking-tight text-primary">
-              Related Equipment
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {relatedProducts.map((p) => {
-              // Resolve category labels
-              const relParentId = p.categories.find(
-                (id) => categories.find((c) => c.id === id)?.parent === 0
-              );
-              const relParentLabel = relParentId
-                ? categories.find((c) => c.id === relParentId)?.name
-                : "Equipment";
-
-              const relBrandId = p.categories.find(
-                (id) => categories.find((c) => c.id === id)?.parent === 114
-              );
-              const relBrandLabel = relBrandId
-                ? categories.find((c) => c.id === relBrandId)?.name
-                : null;
-
-              return (
-                <Link
-                  key={p.slug}
-                  href={`/equipment/${p.slug}`}
-                  className="group bg-white border border-primary/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:border-accent/40 transition-all duration-300 flex flex-col h-[380px] cursor-pointer"
-                >
-                  {/* Image Container */}
-                  <div className="relative w-full h-[180px] bg-primary/10 overflow-hidden">
-                    <Image
-                      src={p.image}
-                      alt={p.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover group-hover:scale-102 transition-transform duration-700 ease-out"
-                    />
-                  </div>
-
-                  {/* Body details */}
-                  <div className="p-5 flex-1 flex flex-col justify-between">
-                    <div className="space-y-1.5">
-                      <div className="flex flex-wrap items-center gap-1 text-[9px] text-[#7d603a] font-serif uppercase tracking-widest font-bold">
-                        <span>{cleanTitle(relParentLabel)}</span>
-                        {relBrandLabel && (
-                          <>
-                            <span className="text-primary/30 font-sans">•</span>
-                            <span>{cleanTitle(relBrandLabel)}</span>
-                          </>
-                        )}
-                      </div>
-                      <h3 className="text-base font-serif font-bold text-primary group-hover:text-accent transition-colors duration-300 line-clamp-1">
-                        {cleanTitle(p.title)}
-                      </h3>
-                      <p className="text-xs text-primary/75 leading-relaxed font-sans line-clamp-2">
-                        {cleanExcerpt(p.excerpt)}
-                      </p>
-                    </div>
-
-                    <div className="border-t border-primary/5 pt-3.5 flex items-center justify-between text-[10px] font-serif uppercase tracking-widest font-bold text-accent group-hover:translate-x-1 transition-transform duration-300">
-                      <span>Inspect Specs</span>
-                      <span>→</span>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-    </div>
+      </section>
+    </main>
   );
-};
-
-export default ProductDetailPage;
+}
