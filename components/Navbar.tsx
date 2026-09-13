@@ -151,7 +151,7 @@ const KNOWLEDGE_GROUPS: { title: string; icon: LucideIcon; links: MenuLink[] }[]
 ];
 
 const BOWYER_LINKS: MenuLink[] = [
-  { label: "Harvey Archery — Warrick Harvey", href: "/bowyer/harvey-archery", icon: Hammer, protectedName: true },
+  { label: "Harvey Archery — Warrick Harvey", href: "/bowyer/warrick-harvey", icon: Hammer, protectedName: true },
   { label: "Kadys Bows — Sergey Tolochko", href: "/bowyer/kadys-bows", icon: Hammer, protectedName: true },
   { label: "MR Bows — Miško Rovčanin", href: "/bowyer/mr-bows", icon: Hammer, protectedName: true },
 ];
@@ -544,7 +544,7 @@ export default function Navbar() {
             <DesktopMegaMenu id="academy" label="Academy" href="/academy" isCurrent={pathname.startsWith("/academy") || pathname === "/archery-games"} activeMenu={activeMenu} setActiveMenu={setActiveMenu} onEnter={openDesktopMenu} onLeave={scheduleDesktopClose}>
               <MegaPanel
                 feature={<FeatureCard image="/images/wp-assets/contact-bg.webp" imageAlt="Jan Franko practising traditional archery" badge="Academy Standard" title="Operational Verification" description="Mandatory safety audits and ESI environmental exposure metrics for all archers." href="/academy/certification" cta="View Certification" />}
-                footerText="Structured academy standards, progression, safety, governance, and events."
+                footerText="Mandatory safety audits and ESI environmental exposure metrics for all archers."
                 footerHref="/academy"
                 footerLabel="Academy Overview"
               >
@@ -567,10 +567,10 @@ export default function Navbar() {
 
             <DesktopMegaMenu id="equipment" label="Equipment" href="/equipment" isCurrent={pathname.startsWith("/equipment") || pathname.startsWith("/bowyer")} activeMenu={activeMenu} setActiveMenu={setActiveMenu} onEnter={openDesktopMenu} onLeave={scheduleDesktopClose}>
               <MegaPanel
-                feature={<FeatureCard image="/images/og-bg-workshop.jpg" imageAlt="Traditional bowyer workshop with bow-making tools" badge="Vetted Guild" title="Master Bowyers" description="Warrick Harvey, MR Bows, and Kadys Bows individual commission pathways." href="/about/partners" cta="View All Master Bowyers" />}
-                footerText="Browse every original equipment department or open the custom arrow builder."
+                feature={<FeatureCard image="/images/og-bg-workshop.jpg" imageAlt="Traditional bowyer workshop with bow-making tools" badge="Vetted Guild" title="Master Bowyers" description="Harvey Archery · Kadys Bows · MR Bows" href="/about/partners" cta="Partners & Bowyers" />}
+                footerText="Custom Arrow Builder · Master Bowyers"
                 footerHref="/equipment"
-                footerLabel="All Equipment"
+                footerLabel="Equipment"
               >
                 <MenuGroup title="Equipment Departments" icon={Target}><ul className="space-y-1">{equipmentLinks.map((item) => <MenuItem key={item.href} item={item} />)}</ul></MenuGroup>
                 <MenuGroup title="Interactive Tools" icon={SlidersHorizontal}><ul className="space-y-1"><MenuItem item={{ label: "Custom Arrow Builder", href: "/equipment/arrow-configurator", icon: SlidersHorizontal }} /></ul></MenuGroup>
@@ -581,9 +581,9 @@ export default function Navbar() {
             <DesktopMegaMenu id="knowledge" label="Knowledge" href="/knowledge" isCurrent={pathname.startsWith("/knowledge")} activeMenu={activeMenu} setActiveMenu={setActiveMenu} onEnter={openDesktopMenu} onLeave={scheduleDesktopClose}>
               <MegaPanel
                 feature={<FeatureCard image="/images/wp-assets/jan-franko-profile.jpeg" imageAlt="Jan Franko practising traditional archery in a forest" badge="Featured Monograph" title="Eastern Archery Lineages" description="Comprehensive immersion into the meditative and martial archery traditions of Asia." href="/knowledge/east-archery" cta="Read Monograph" />}
-                footerText="Explore the complete knowledge hierarchy, expedition volumes, and tactical studies."
+                footerText="Comprehensive immersion into the meditative and martial archery traditions of Asia."
                 footerHref="/knowledge"
-                footerLabel="Knowledge Directory"
+                footerLabel="Knowledge"
               >
                 {KNOWLEDGE_GROUPS.map((group) => <MenuGroup key={group.title} title={group.title} icon={group.icon}><ul className="space-y-1">{group.links.map((item) => <MenuItem key={item.href} item={item} />)}</ul></MenuGroup>)}
               </MegaPanel>
@@ -591,8 +591,8 @@ export default function Navbar() {
 
             <DesktopMegaMenu id="about" label="About" href="/about" isCurrent={pathname.startsWith("/about") || pathname === "/contact"} activeMenu={activeMenu} setActiveMenu={setActiveMenu} onEnter={openDesktopMenu} onLeave={scheduleDesktopClose}>
               <MegaPanel
-                feature={<FeatureCard image="/images/wp-assets/founder-gallery-1.png" imageAlt="Jan Franko in traditional archery attire" badge="Academy Profile" title="Jan Franko" description="Explore the chronology and martial bow studies of the academy founder." href="/about/jan-franko" cta="View Instructor Profile" protectedTitle />}
-                footerText="Follow expeditions and traditional bow studies from the field."
+                feature={<FeatureCard image="/images/wp-assets/founder-gallery-1.png" imageAlt="Jan Franko in traditional archery attire" badge="Academy Profile" title="Jan Franko" description="Explore the chronology and martial bow studies of our founder." href="/about/jan-franko" cta="Jan Franko (Instructor)" protectedTitle />}
+                footerText="Follow our expeditions and traditional bow reviews live from the field."
                 footerHref="/contact"
                 footerLabel="Direct Inquiries"
               >
@@ -634,7 +634,7 @@ export default function Navbar() {
                 <div id="language-mega-menu" className="absolute left-1/2 top-[calc(100%-0.2rem)] z-50 w-[min(96vw,78rem)] -translate-x-1/2 pt-3">
                   <div className="rounded-[1.75rem] border border-[#0e3b2e]/12 bg-[#f9fbf9] p-4 text-left shadow-[0_24px_70px_rgba(4,35,27,0.2)]">
                     <div className="mb-3 flex items-center justify-between gap-4 rounded-2xl border border-[#0e3b2e]/9 bg-white px-5 py-3">
-                      <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e8f2ed] text-[#0e624b]"><Languages className="h-4 w-4" /></span><div><h2 className="text-sm font-bold text-[#173b31]">Select Language</h2><p className="text-[10px] text-[#4b6e63]">Flag and language name are shown together.</p></div></div>
+                      <div className="flex items-center gap-3"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e8f2ed] text-[#0e624b]"><Languages className="h-4 w-4" /></span><h2 className="text-sm font-bold text-[#173b31]">Select Language</h2></div>
                       <div className="flex items-center gap-2 rounded-xl bg-[#eef5f1] px-3 py-2 text-xs font-bold text-[#0e624b]"><LanguageFlag code={activeLanguage} />{activeLanguageName}</div>
                     </div>
                     <div className="grid gap-3 lg:grid-cols-4">
@@ -717,7 +717,7 @@ export default function Navbar() {
         <div className="fixed inset-0 z-[120] flex items-end justify-center bg-[#03120e]/55 p-3 backdrop-blur-sm sm:items-center" onMouseDown={() => setMobileLanguageOpen(false)}>
           <section role="dialog" aria-modal="true" aria-labelledby="mobile-language-title" className="notranslate flex max-h-[88vh] w-full max-w-xl flex-col overflow-hidden rounded-[1.75rem] bg-[#f9fbf9] shadow-2xl" translate="no" onMouseDown={(event) => event.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-[#0e3b2e]/10 bg-white px-5 py-4">
-              <div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f2ed] text-[#0e624b]"><Languages className="h-4 w-4" /></span><div><h2 id="mobile-language-title" className="text-sm font-bold text-[#173b31]">Select Language</h2><p className="text-[10px] text-[#557268]">Choose a flag and language.</p></div></div>
+              <div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f2ed] text-[#0e624b]"><Languages className="h-4 w-4" /></span><h2 id="mobile-language-title" className="text-sm font-bold text-[#173b31]">Select Language</h2></div>
               <button type="button" onClick={() => setMobileLanguageOpen(false)} aria-label="Close language selector" className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#eef5f1] text-[#0e624b]"><X className="h-4 w-4" /></button>
             </div>
             <div className="space-y-5 overflow-y-auto p-4 sm:p-5">
